@@ -1,0 +1,24 @@
+
+name: "Build and run hello_vsi on Corstone SSE-310 VHT platform"
+workdir: ./
+backend:
+  aws:
+    ami-version: ~=1.1
+    instance-type: t2.xlarge
+upload:
+  - application/**/*
+  - arm2d/**/*
+  - Board_IO/**/*
+  - micro_logger/**/*
+  - micro_sensor_lib/**/*
+  - RTE/**/*
+  - VSI/**/*
+  - *.cprj
+  - data.txt
+  - vht_config.txt
+steps:
+  - run: |
+      cbuild.sh ./microspeech.Example.cprj
+      VHT_Corstone_SSE-310 -V ../VSI/sensor/python -f ./vht_config.txt --stat --simlimit 24 ./Objects/hello_vsi.axf > ./hello_vsi.log
+download:
+  - ./hello_vsi.log

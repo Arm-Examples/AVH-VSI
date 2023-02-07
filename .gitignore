@@ -50,3 +50,9 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Build Artifacts
+_deps
+Objects
+RTE
+__pycache__
