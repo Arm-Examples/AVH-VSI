@@ -2,11 +2,10 @@
 
 This repository contains a simple Hello World example for Arm Virtual Hardware.
 
-## Application Description
+## Examples Description
 
-| Application name                              | Description   |
+| Example name                              | Description   |
 |---                                            |---            |
-| [Hello VIO](./hello_vio)                      | Simple application showing how to use Virtual IO. Each frame, a value is set to an IO register, and read back on the console. | 
 | [Hello VSI](./hello_vsi)                     | A sample of using the Virtual Streaming Interface on AVH. Data is streamed to the application via the python interface.There are different versions such as GUI version and gated fetch for various use cases. |
 
 ## Arm Virtual Hardware (AVH) Setup
@@ -30,13 +29,13 @@ To make this permanent, you can add the line to your `~/.bashrc` file.
 1. Clone this project using git.
 
     ```bash
-    git clone <url to this project>
+    git clone https://github.com/Arm-Examples/Hello_AVH.git
     ```
 
 1. Enter the application dir
 
     ```bash
-    cd hello_avh/<example>
+    cd Hello_AVH/<example>
     ```
 
 1. Update the keil packs index
@@ -48,12 +47,18 @@ To make this permanent, you can add the line to your `~/.bashrc` file.
 1. Build the applicaiton
 
     ```bash
-    cbuild --packs <application>.cprj
+    cbuild --packs target/<platform>/<application>.cprj
     ```
 
-### Common errors
+## Run the Applicaiton using Virtual Hardware
 
-* Missing pack(s)
+```bash
+./run_example.sh
+```
+
+## Common Issues
+
+### Missing pack(s)
 
 If you experience the following error:
 
@@ -67,12 +72,6 @@ Note: replace `<vendor>`, `<package>` and `<version>` with the corresponding inf
 
 ```bash
 cpackget pack add https://www.keil.com/pack/<vendor>.<package>.<version>.pack -a
-```
-
-## Run the Applicaiton using Virtual Hardware
-
-```bash
-./run_example.sh
 ```
 
 ## Version History

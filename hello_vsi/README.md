@@ -6,34 +6,34 @@ This example uses the VSI ([https://arm-software.github.io/AVH/main/simulation/h
 
 Use the cbuild tool to build the application (See the project [README](../README.md) for information on setting up the AVH environment)
 
-All applications have been ported for Corstone-300 and Corstone-310. Replace `<Platform>` with the target you would like to test.
+All applications have been ported for Corstone-300 and Corstone-310. Replace `<platform>` with the target you would like to test.
 
 ### Application Without GUI
 
 Basic application. Streams data from the `data.txt` file and prints to the console. For each loop, the application will wait until it get an interrupt from the driver that a new item has been streamed, at that point the application will proceed to copy the data from the data buffer and print to the console.
 
-1. `cbuild --packs target/<Platform>/hello_vsi.cprj`
+1. `cbuild --packs target/<platform>/hello_vsi.cprj`
 2. `./run_example.sh`
 
 ### Application With GUI
 
 Streams data from the `data.txt` file and prints to the console as wel as draws graph on the virtual display. Similarily to the application above, the application will wait for the interrupt to come before attempting to copy data. However in this case instead of halting completely, we update the GUI while waiting for new data. This can be modified to do other tasks while waiting for new data samples.
 
-1. `cbuild --packs target/<Platform>/hello_vsi_gui.cprj`
+1. `cbuild --packs target/<platform>/hello_vsi_gui.cprj`
 2. `./run_example.sh`
 
 ### Gated Fetch flow
 
 Data will be streamed sample by sample when requested by the application. The data stream will be paused between each fetch. So when we do a `get_sample` call, the applicaiton will flag the peripheral to send a data sample, and when the data sample has been streamed, it will tell the peripheral to pause again.
 
-1. `cbuild --packs target/<Platform>/hello_vsi_gated.cprj`
+1. `cbuild --packs target/<platform>/hello_vsi_gated.cprj`
 2. `./run_example.sh`
 
 ### No Event Flow
 
 Sample will be streamed to the application, but the aplication will not interrup to fetch the sample data. Instead the application will naturally arrice at the data fetching, and if there is a new item available, it will be copied, otehrwise the application will wait until there is a new sample streamed.
 
-1. `cbuild --packs target/<Platform>/hello_vsi_noevent.cprj`
+1. `cbuild --packs target/<platform>/hello_vsi_noevent.cprj`
 2. `./run_example.sh`
 
 ## Run application Manually
@@ -42,11 +42,15 @@ You can also run the command manually by using the following command. Use the pl
 
 Corstone 300:
 
-`VHT_Corstone_SSE-300_Ethos-U55 -V "./source/VSI/data_sensor/python" -f fvp_config.txt -a Objects/hello_vsi.axf --stat --simlimit 24 $*`
+```bash
+VHT_Corstone_SSE-300_Ethos-U55 -V "./source/VSI/data_sensor/python" -f fvp_config.txt -a Objects/hello_vsi.axf --stat --simlimit 24 $*
+```
 
-Corstone 310
+Corstone 310:
 
-`VHT_Corstone_SSE-310 -V "./source/VSI/data_sensor/python" -f fvp_config.txt -a Objects/hello_vsi.axf --stat --simlimit 24 $*`
+```bash
+VHT_Corstone_SSE-310 -V "./source/VSI/data_sensor/python" -f fvp_config.txt -a Objects/hello_vsi.axf --stat --simlimit 24 $*
+```
 
 ### Explanation of Run Command Arguments
 
