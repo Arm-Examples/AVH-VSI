@@ -24,7 +24,7 @@ enum LOG_LEVEL
     INFO,
     DEBUG
 };
-static enum LOG_LEVEL log_level = INFO;
+static enum LOG_LEVEL log_level = DEBUG;
 
 void print_log_string_to_each_line(char* log_message, const char* log_type)
 {

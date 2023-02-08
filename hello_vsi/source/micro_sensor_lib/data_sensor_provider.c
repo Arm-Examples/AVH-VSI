@@ -16,27 +16,38 @@ limitations under the License.
 #include <stdio.h>
 #include <string.h>
 
+#include "app_cfg.h"
 #include "data_sensor_provider.h"
 #include "sensor_drv.h"
 #include "cmsis_os2.h"
 
 #define SENSOR_BLOCK_NUM (1)
-#define SENSOR_BLOCK_SIZE (10)
+#define SENSOR_BLOCK_SIZE (DATA_NUM_ELEMENTS)
 #define SENSOR_BUFFER_SIZE (SENSOR_BLOCK_NUM * SENSOR_BLOCK_SIZE)
 
-#define max_sample_size (64)
+#define MAX_SAMPLE_SIZE (256)
 
-
-int is_sensor_initialized = 0;
-int is_sensor_ready = 0;
 #ifdef __FVP_PY
     __attribute__((section(".ARM.__at_0x9FFF0000")))
 #endif
     __attribute__((aligned(4)))
+
+#if DATA_BITSIZE == 8U
 uint8_t sensor_buffer[SENSOR_BUFFER_SIZE];
-uint8_t sensor_data[max_sample_size];
-int32_t previous_data_pos = 0;
-int32_t current_data_pos = 0;
+uint8_t sensor_data[MAX_SAMPLE_SIZE];
+#elif DATA_BITSIZE == 16U
+uint16_t sensor_buffer[SENSOR_BUFFER_SIZE];
+uint16_t sensor_data[MAX_SAMPLE_SIZE];
+#elif DATA_BITSIZE == 32U
+uint32_t sensor_buffer[SENSOR_BUFFER_SIZE];
+uint32_t sensor_data[MAX_SAMPLE_SIZE];
+#endif
+
+
+uint8_t is_sensor_initialized = 0;
+uint8_t is_sensor_ready = 0;
+uint32_t previous_data_pos = 0;
+uint32_t current_data_pos = 0;
 
 
 void sensor_rx_event(void);
@@ -69,8 +80,8 @@ static int32_t sensor_driver_setup(void)
 
     ret = SensorDrv_Configure(SENSOR_DRV_INTERFACE_RX,
                               1U, /* single channel */
-                              8U, /* 8 sample bits */
-                              100); // sample rate 
+                              DATA_NUM_ELEMENTS, /* 8 sample bits */
+                              DATA_SAMPLE_RATE); // sample rate 
     if (ret != 0)
     {
         return ret;
@@ -101,7 +112,7 @@ static int32_t sensor_driver_setup(void)
 }
 
 
-// TODO: we migh need a timeout, if no data is retrieved before timeout, return an error code
+// TODO: we might need a timeout, if no data is retrieved before timeout, return an error code
 int get_sensor_samples(int num_samples,
                        int *sensor_samples_size, uint8_t **sensor_samples)
 {

@@ -52,7 +52,7 @@ Mkfile.old
 dkms.conf
 
 # Build Artifacts
-_deps
-Objects
-RTE
-__pycache__
+**/_deps
+**/Objects
+**/RTE
+**/__pycache__/
