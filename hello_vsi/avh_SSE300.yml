@@ -1,0 +1,22 @@
+
+name: "Build and run hello_vsi on Corstone SSE-300 VHT platform"
+workdir: ./
+backend:
+  aws:
+    ami-version: ~=1.3
+    instance-type: t2.micro
+upload:
+  - source/**/*
+  - target/**/*
+  - data.txt
+  - fvp_config.txt
+steps:
+  - run: |
+      cpackget update-index
+      cbuild --packs ./target/Corstone_300/hello_vsi.cprj
+      VHT_MPS3_Corstone_SSE-300 -V "./source/VSI/data_sensor/python" -f fvp_config.txt -a Objects/hello_vsi.axf --stat --simlimit 24 $* > hello_vsi.log
+download:
+  - hello_vsi.log
+  - Objects/hello_vsi.axf
+  - Objects/hello_vsi.axf.map
+  - data.txt
