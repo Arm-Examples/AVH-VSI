@@ -22,6 +22,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include "app_cfg.h"
 
 // This is an abstraction around an sensor source like a microphone, and is
 // expected to return 16-bit PCM sample data for a given point in time. The
@@ -33,7 +34,7 @@ extern "C" {
 // The reference implementation can have no platform-specific dependencies, so
 // it just returns an array filled with zeros. For real applications, you should
 // ensure there's a specialized implementation that accesses hardware APIs.
-int get_sensor_samples(int num_samples, int* sensor_samples_size, uint8_t** sensor_samples);
+int get_sensor_samples(int num_samples, int* sensor_samples_size, DATA_TYPE** sensor_samples);
 
 int get_total_fetched_sensor_data();
 

@@ -99,16 +99,8 @@ void display_task(void)
 
 }
 
-#if DATA_BITSIZE == 8U
-extern uint8_t* sensor_samples;
-void int_array_to_string(size_t num, uint8_t* src, char* dst)
-#elif DATA_BITSIZE == 16U
-extern uint16_t* sensor_samples;
-void int_array_to_string(size_t num, uint16_t* src, char* dst)
-#elif DATA_BITSIZE == 32U
-extern uint32_t* sensor_samples;
-void int_array_to_string(size_t num, uint32_t* src, char* dst)
-#endif
+extern DATA_TYPE* sensor_samples;
+void int_array_to_string(size_t num, DATA_TYPE* src, char* dst)
 {
     int num_chars = 0;
     

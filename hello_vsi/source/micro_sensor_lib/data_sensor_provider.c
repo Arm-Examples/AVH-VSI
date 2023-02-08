@@ -32,17 +32,8 @@ limitations under the License.
 #endif
     __attribute__((aligned(4)))
 
-#if DATA_BITSIZE == 8U
-uint8_t sensor_buffer[SENSOR_BUFFER_SIZE];
-uint8_t sensor_data[MAX_SAMPLE_SIZE];
-#elif DATA_BITSIZE == 16U
-uint16_t sensor_buffer[SENSOR_BUFFER_SIZE];
-uint16_t sensor_data[MAX_SAMPLE_SIZE];
-#elif DATA_BITSIZE == 32U
-uint32_t sensor_buffer[SENSOR_BUFFER_SIZE];
-uint32_t sensor_data[MAX_SAMPLE_SIZE];
-#endif
-
+DATA_TYPE sensor_buffer[SENSOR_BUFFER_SIZE];
+DATA_TYPE sensor_data[MAX_SAMPLE_SIZE];
 
 uint8_t is_sensor_initialized = 0;
 uint8_t is_sensor_ready = 0;
@@ -114,7 +105,7 @@ static int32_t sensor_driver_setup(void)
 
 // TODO: we might need a timeout, if no data is retrieved before timeout, return an error code
 int get_sensor_samples(int num_samples,
-                       int *sensor_samples_size, uint8_t **sensor_samples)
+                       int *sensor_samples_size, DATA_TYPE **sensor_samples)
 {
 
     if (!is_sensor_initialized)

@@ -29,13 +29,7 @@ limitations under the License.
 #include "data_sensor_provider.h"
 
 // Globals, used for compatibility with Arduino-style sketches.
-#if DATA_BITSIZE == 8U
-uint8_t sensor_samples[DATA_NUM_ELEMENTS];
-#elif DATA_BITSIZE == 16U
-uint16_t sensor_samples[DATA_NUM_ELEMENTS];
-#elif DATA_BITSIZE == 32U
-uint32_t sensor_samples[DATA_NUM_ELEMENTS];
-#endif
+DATA_TYPE sensor_samples[DATA_NUM_ELEMENTS];
 int32_t previous_sample = 0;
 
 // The name of this function is important for Arduino compatibility.
@@ -56,7 +50,7 @@ void loop()
 
     int sensor_samples_size = 0;
 
-    int sensor_status = get_sensor_samples(DATA_NUM_ELEMENTS, &sensor_samples_size, &sensor_samples);
+    int sensor_status = get_sensor_samples(DATA_NUM_ELEMENTS, &sensor_samples_size, (DATA_TYPE**)&sensor_samples);
     log_debug("sensor_status: %d", sensor_status);
 
     how_many_new_slices = sensor_samples_size;
