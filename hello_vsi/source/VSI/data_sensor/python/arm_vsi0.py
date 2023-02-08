@@ -13,7 +13,6 @@
 import logging
 import os
 
-
 ## Set verbosity level
 #verbosity = logging.DEBUG
 verbosity = logging.ERROR
@@ -22,7 +21,6 @@ verbosity = logging.ERROR
 level = { 10: "DEBUG",  20: "INFO",  30: "WARNING",  40: "ERROR" }
 logging.basicConfig(format='Py: VSI0: [%(levelname)s]\t%(message)s', level = verbosity)
 logging.info("Verbosity level is set to " + level[verbosity])
-
 
 # IRQ registers
 IRQ_Status = 0
@@ -60,23 +58,30 @@ CONTROL_ENABLE_Msk = 1<<0
 # Data buffer
 Data = bytearray()
 
-
 ## Open FILE file (store object into global FILE object)
 #  @param name name of FILE file to open
 def openFILE(name):
     global FILE
     logging.info("Open data file (read mode): {}".format(name))
-    FILE = open(name, 'rb')
+    
+    FILE = open(name, 'r')
     
     # get the file size for logging
-    old_file_position = FILE.tell()
     FILE.seek(0, os.SEEK_END)
     file_size = FILE.tell()
-    FILE.seek(old_file_position, os.SEEK_SET)
+    FILE.seek(0)
     logging.info("  Number of Bytes: {}".format(file_size))
-    #logging.info("  Sample bits: {}".format(FILE.getsampwidth() * 8))
-    #logging.info("  Sample rate: {}".format(FILE.getframerate()))
-    #logging.info("  Number of frames: {}".format(FILE.getnframes()))
+
+
+def readNextLine(n):
+    global FILE
+    
+    while True:
+        row = FILE.readline()
+        if len(row) > 0:
+            return bytearray([int(x) for x in row.split()])
+        FILE.seek(0)
+
 
 first = True
 ## Read FILE bytes (global FILE object) into global SensorFrames object
@@ -89,12 +94,12 @@ def readFILE(n):
     if first:
         first = False
         return b''
-    if FILE.peek(1) == b'':
-        FILE.seek(0);
-    frames = FILE.read(n)
     
-    logging.debug("data: {}".format(frames))
-    return frames
+    data = readNextLine(n)
+    
+    logging.debug("data: {}".format(data))
+    return data
+
 
 ## Close FILE file (global FILE object)
 def closeFILE():
@@ -218,7 +223,7 @@ def wrCONTROL(value):
     if ((value ^ CONTROL) & CONTROL_ENABLE_Msk) != 0:
         if (value & CONTROL_ENABLE_Msk) != 0:
             logging.info("Enable Receiver")
-            openFILE('data.txt')
+            openFILE('intdata.txt')
         else:
             logging.info("Disable Receiver")
             closeFILE()

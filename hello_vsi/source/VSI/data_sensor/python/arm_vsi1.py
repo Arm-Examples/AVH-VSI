@@ -1,17 +1,17 @@
 # Copyright (c) 2021 Arm Limited. All rights reserved.
 
-# Virtual Streaming Interface instance 1 Python script: Audio Output
+# Virtual Streaming Interface instance 1 Python script: Data Output
 
-##@addtogroup arm_vsi1_py_audio_out
+##@addtogroup arm_vsi1_py_data_out
 #  @{
 #
-##@package arm_vsi1_audio_out
-#Documentation for VSI Audio Output module.
+##@package arm_vsi1_data_out
+#Documentation for VSI Data Output module.
 #
 #More details.
 
 import logging
-import wave
+import os
 
 
 ## Set verbosity level
@@ -61,39 +61,46 @@ CONTROL_ENABLE_Msk = 1<<0
 Data = bytearray()
 
 
-## Open WAVE file (store object into global WAVE object)
-#  @param name name of WAVE file to open
-def openWAVE(name):
-    global WAVE
-    logging.info("Open WAVE file (write mode): {}".format(name))
-    WAVE = wave.open(name, 'wb')
-    WAVE.setnchannels(CHANNELS)
-    WAVE.setsampwidth((SAMPLE_BITS + 7) // 8)
-    WAVE.setframerate(SAMPLE_RATE)
-    logging.info("  Number of channels: {}".format(CHANNELS))
-    logging.info("  Sample bits: {}".format(SAMPLE_BITS))
-    logging.info("  Sample rate: {}".format(SAMPLE_RATE))
-
-## Write WAVE frames (global WAVE object)
-#  @param frames frames to write
-def writeWAVE(frames):
-    global WAVE
-    logging.info("Write WAVE frames")
-    WAVE.writeframes(frames)
-
-## Close WAVE file (global WAVE object)
-def closeWAVE():
-    global WAVE
-    logging.info("Close WAVE file")
-    WAVE.close()
+## Open FILE file (store object into global FILE object)
+#  @param name name of FILE file to open
+def openFILE(name):
+    global FILE
+    logging.info("Open data file (write mode): {}".format(name))
+    
+    FILE = open(name, 'w')
 
 
-## Store audio frames from global Data buffer
+def writeFILE(data):
+    global FILE
+    logging.info("Write FILE data")
+    if(SAMPLE_BITS == 8): # write each byte as an int
+        int8_vals = [x for x in frame]
+        FILE.writelines([" ".join(str(x) for x in int8_vals), "\n"])
+    if(SAMPLE_BITS == 16):
+        byte_tuple = [x for x in zip(frame[::2], frame[1::2])]
+        byte_list = [x[0].to_bytes(1, 'big') + x[1].to_bytes(1, 'big') for x in byte_tuple]
+        int16_vals = [int.from_bytes(x, 'big') for x in byte_list]
+        FILE.writelines([" ".join(str(x) for x in int16_vals), "\n"])
+    if(SAMPLE_BITS == 16):
+        byte_tuple = [x for x in zip(frame[::4], frame[1::4], frame[2::4], frame[3::4])]
+        byte_list = [x[0].to_bytes(1, 'big') + x[1].to_bytes(1, 'big') + x[2].to_bytes(1, 'big') + x[3].to_bytes(1, 'big') for x in byte_tuple]
+        int32_vals = [int.from_bytes(x, 'big') for x in byte_list]
+        FILE.writelines([" ".join(str(x) for x in int32_vals), "\n"])
+
+
+## Close FILE file (global FILE object)
+def closeFILE():
+    global FILE
+    logging.info("Close FILE file")
+    FILE.close()
+
+
+## Store data frames from global Data buffer
 #  @param block_size size of block to store (in bytes)
-def storeAudioFrames(block_size):
+def storeDataFrames(block_size):
     global Data
-    logging.info("Store audio frames from data buffer")
-    writeWAVE(Data)
+    logging.info("Store data frames from data buffer")
+    writeFILE(Data)
 
 
 ## Initialize
@@ -189,7 +196,7 @@ def wrDataDMA(data, size):
     Data = data
     logging.debug("Write data ({} bytes)".format(size))
 
-    storeAudioFrames(size)
+    storeDataFrames(size)
 
     return
 
@@ -201,10 +208,10 @@ def wrCONTROL(value):
     if ((value ^ CONTROL) & CONTROL_ENABLE_Msk) != 0:
         if (value & CONTROL_ENABLE_Msk) != 0:
             logging.info("Enable Transmitter")
-            openWAVE('test.wav')
+            openFILE('test.txt')
         else:
             logging.info("Disable Transmitter")
-            closeWAVE()
+            closeFILE()
     CONTROL = value
 
 ## Write CHANNELS register (user register)

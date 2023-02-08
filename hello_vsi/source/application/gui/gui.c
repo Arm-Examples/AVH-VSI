@@ -6,6 +6,8 @@
 
 #include "draw_line.h"
 
+#include <stdint.h>
+
 /*============================ MACROS ========================================*/
 #ifndef __STR
 #   define __STR(__A)      #__A
@@ -36,8 +38,6 @@ static char s_chPerformanceInfo[MAX(((GLCD_WIDTH/6)+1), 54)] = {0};
 
 extern osEventFlagsId_t s_evt2DTaskAvailable;
 extern osEventFlagsId_t s_evt2DResourceAvailable;
-
-extern const char* test;
 
 static ARM_NOINIT arm_2d_helper_pfb_t s_tExamplePFB;
 
@@ -99,7 +99,32 @@ void display_task(void)
 
 }
 
-extern char* printing_text;
+#if DATA_BITSIZE == 8U
+extern uint8_t* sensor_samples;
+void int_array_to_string(size_t num, uint8_t* src, char* dst)
+#elif DATA_BITSIZE == 16U
+extern uint16_t* sensor_samples;
+void int_array_to_string(size_t num, uint16_t* src, char* dst)
+#elif DATA_BITSIZE == 32U
+extern uint32_t* sensor_samples;
+void int_array_to_string(size_t num, uint32_t* src, char* dst)
+#endif
+{
+    int num_chars = 0;
+    
+    for(int x = 0; x < num; x++)
+    {
+        uint32_t val = (uint32_t)src[x];
+        sprintf(&dst[num_chars], "%d ", val);
+        num_chars += 2;
+
+        while(val > 10)
+        {
+            num_chars += 1;
+            val /= 10;
+        }
+    }
+}
 
 __OVERRIDE_WEAK 
 void example_gui_on_refresh_evt_handler(const arm_2d_tile_t *ptFrameBuffer)
@@ -115,30 +140,37 @@ void example_gui_on_refresh_evt_handler(const arm_2d_tile_t *ptFrameBuffer)
                 " PFB: " STR(PFB_BLOCK_WIDTH) "*"
                 STR(PFB_BLOCK_HEIGHT)
                 " System Freq: %dMHz\r\n",
-                (int32_t)SystemCoreClock / 1000000);
-    //lcd_text_location( 0, 0);
+                (int32_t)SystemCoreClock / 1000000);       
     arm_lcd_puts(s_chPerformanceInfo);
 
+    // print data samples on the top of the screen
+    char string_buf[265];
+    int_array_to_string(DATA_NUM_ELEMENTS, sensor_samples, string_buf);
+    
     arm_lcd_text_location(1, 1);
-    arm_lcd_printf(printing_text);
+    arm_lcd_printf(string_buf);
 
-    arm_2d_region_t r = {{50,50}, {200,150}};
+    // draw box for graph
+    arm_2d_region_t r = {{50,40}, {200,170}};
     arm_2d_draw_box(ptFrameBuffer, &r, 1, GLCD_COLOR_MAROON, 255);
 
+    // Draw data as graph
     GLCD_SetForegroundColor(GLCD_COLOR_MAGENTA);
 
     arm_2d_location_t start = { r.tLocation.iX, r.tLocation.iY + r.tSize.iHeight };
     arm_2d_location_t end;
 
-    for(int i = 0; i < 10; i++)
+    float height_step = r.tSize.iHeight / 255.f;
+    for(int i = 0; i < DATA_NUM_ELEMENTS; i++)
     {
-        end.iX = start.iX + (r.tSize.iWidth / 10);
-        end.iY = (r.tLocation.iY + r.tSize.iHeight) - printing_text[i];
+        end.iX = start.iX + (r.tSize.iWidth / DATA_NUM_ELEMENTS);
+        end.iY = (r.tLocation.iY + r.tSize.iHeight) - (int)(height_step * sensor_samples[i]);
 
         draw_line_between_points(start, end);
 
         start = end;
     }
+
 #endif
 }
 
