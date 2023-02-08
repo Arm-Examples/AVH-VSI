@@ -75,17 +75,17 @@ def writeFILE(data):
     logging.info("Write FILE data")
     if(SAMPLE_BITS == 8): # write each byte as an int
         int8_vals = [x for x in frame]
-        FILE.writelines([" ".join(str(x) for x in int8_vals), "\n"])
+        FILE.writelines(["\t".join(str(x) for x in int8_vals), "\n"])
     if(SAMPLE_BITS == 16):
         byte_tuple = [x for x in zip(frame[::2], frame[1::2])]
         byte_list = [x[0].to_bytes(1, 'big') + x[1].to_bytes(1, 'big') for x in byte_tuple]
         int16_vals = [int.from_bytes(x, 'big') for x in byte_list]
-        FILE.writelines([" ".join(str(x) for x in int16_vals), "\n"])
+        FILE.writelines(["\t".join(str(x) for x in int16_vals), "\n"])
     if(SAMPLE_BITS == 16):
         byte_tuple = [x for x in zip(frame[::4], frame[1::4], frame[2::4], frame[3::4])]
         byte_list = [x[0].to_bytes(1, 'big') + x[1].to_bytes(1, 'big') + x[2].to_bytes(1, 'big') + x[3].to_bytes(1, 'big') for x in byte_tuple]
         int32_vals = [int.from_bytes(x, 'big') for x in byte_list]
-        FILE.writelines([" ".join(str(x) for x in int32_vals), "\n"])
+        FILE.writelines(["\t".join(str(x) for x in int32_vals), "\n"])
 
 
 ## Close FILE file (global FILE object)

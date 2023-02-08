@@ -63,8 +63,8 @@
 
 /*============================ TYPES =========================================*/
 /*============================ GLOBAL VARIABLES ==============================*/
-#define DATA_NUM_ELEMENTS (10)
-#define DATA_SAMPLE_RATE (10 * DATA_NUM_ELEMENTS)
+#define DATA_NUM_ELEMENTS (20)
+#define DATA_SAMPLE_RATE (50)
 
 #define DATA_TYPE uint8_t
 /*============================ PROTOTYPES ====================================*/
