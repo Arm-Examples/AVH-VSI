@@ -102,7 +102,7 @@ static int32_t sensor_driver_setup(void)
 
 
 // TODO: we might need a timeout, if no data is retrieved before timeout, return an error code
-uint32_t get_sensor_data(uint32_t num_samples, uint32_t *sensor_samples_size, DATA_TYPE **sensor_data)
+uint32_t get_sensor_data(uint32_t num_data, uint32_t *sensor_data_size, DATA_TYPE **sensor_data)
 {
     if (!is_sensor_initialized)
     {
@@ -127,8 +127,8 @@ uint32_t get_sensor_data(uint32_t num_samples, uint32_t *sensor_samples_size, DA
     SensorDrv_Control(SENSOR_DRV_CONTROL_RX_PAUSE);
 #endif
 
-    *sensor_samples_size = sizeof(**sensor_data) * num_samples;
-    memcpy(*sensor_data, sensor_buffer, *sensor_samples_size);
+    *sensor_data_size = sizeof(**sensor_data) * num_data;
+    memcpy(*sensor_data, sensor_buffer, *sensor_data_size);
 
     previous_data_count = current_data_count;
 
