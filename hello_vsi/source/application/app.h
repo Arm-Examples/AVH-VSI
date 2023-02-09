@@ -16,12 +16,11 @@
  * limitations under the License.
  *---------------------------------------------------------------------------*/
 
-#ifndef MAIN_H__
-#define MAIN_H__
+#ifndef __APP_H__
+#define __APP_H__
 
 #include "cmsis_os2.h"
 
-extern void stdio_init(void);
 extern void app_initialize ();
 
-#endif
+#endif // __APP_H__
