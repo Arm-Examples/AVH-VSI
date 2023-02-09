@@ -25,8 +25,6 @@ limitations under the License.
 #define SENSOR_BLOCK_SIZE (DATA_NUM_ELEMENTS)
 #define SENSOR_BUFFER_SIZE (SENSOR_BLOCK_NUM * SENSOR_BLOCK_SIZE)
 
-#define MAX_SAMPLE_SIZE (256)
-
 #ifdef __FVP_PY
     __attribute__((section(".ARM.__at_0x9FFF0000")))
 #endif
@@ -69,7 +67,7 @@ static int32_t sensor_driver_setup(void)
 
     ret = SensorDrv_Configure(SENSOR_DRV_INTERFACE_RX,
                               1U, /* single channel */
-                              DATA_NUM_ELEMENTS, /* 8 sample bits */
+                              sizeof(DATA_TYPE) * 8, /* sample bits */
                               DATA_SAMPLE_RATE); // sample rate 
     if (ret != 0)
     {

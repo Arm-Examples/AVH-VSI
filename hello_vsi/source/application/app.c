@@ -31,20 +31,14 @@ limitations under the License.
 #include "micro_logger.h"
 #include "data_sensor_provider.h"
 
-#if DATA_BITSIZE == 8U
-uint8_t* sensor_data;
-#elif DATA_BITSIZE == 16U
-uint16_t* sensor_data;
-#elif DATA_BITSIZE == 32U
-uint32_t* sensor_data;
-#endif
+DATA_TYPE* sensor_data;
 
 uint32_t previous_data_pos;
 
 void init()
 {
     previous_data_pos = 0;
-    sensor_data = (uint8_t*)malloc(DATA_NUM_ELEMENTS * sizeof(uint8_t));
+    sensor_data = (DATA_TYPE*)malloc(DATA_NUM_ELEMENTS * sizeof(DATA_TYPE));
 }
 
 void run()
