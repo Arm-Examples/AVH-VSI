@@ -33,13 +33,11 @@ limitations under the License.
     __attribute__((aligned(4)))
 
 DATA_TYPE sensor_buffer[SENSOR_BUFFER_SIZE];
-DATA_TYPE sensor_data[MAX_SAMPLE_SIZE];
 
 uint8_t is_sensor_initialized = 0;
 uint8_t is_sensor_ready = 0;
-uint32_t previous_data_pos = 0;
-uint32_t current_data_pos = 0;
-
+uint32_t previous_data_count = 0;
+uint32_t current_data_count = 0;
 
 void sensor_rx_event(void);
 
@@ -52,7 +50,7 @@ static void sensor_event(uint32_t event)
     }
     if (event & SENSOR_DRV_EVENT_RX_DATA)
     {
-        current_data_pos += (SENSOR_BLOCK_SIZE);
+        current_data_count += (SENSOR_BLOCK_SIZE);
 #ifdef __EVENT_DRIVEN
         sensor_rx_event();
 #endif
@@ -104,10 +102,8 @@ static int32_t sensor_driver_setup(void)
 
 
 // TODO: we might need a timeout, if no data is retrieved before timeout, return an error code
-int get_sensor_samples(int num_samples,
-                       int *sensor_samples_size, DATA_TYPE **sensor_samples)
+uint32_t get_sensor_data(uint32_t num_samples, uint32_t *sensor_samples_size, DATA_TYPE **sensor_data)
 {
-
     if (!is_sensor_initialized)
     {
         int32_t ret = sensor_driver_setup();
@@ -119,12 +115,11 @@ int get_sensor_samples(int num_samples,
         return 0;
     }
 
-// I'mnot sure what to name this flow, currently called Shuffer fetch
 #ifdef __GATED_FETCH
     SensorDrv_Control(SENSOR_DRV_CONTROL_RX_RESUME);
 #endif
 
-    while(current_data_pos <= previous_data_pos)
+    while(current_data_count <= previous_data_count)
     {
         osDelay(10U);
     }
@@ -132,16 +127,15 @@ int get_sensor_samples(int num_samples,
     SensorDrv_Control(SENSOR_DRV_CONTROL_RX_PAUSE);
 #endif
 
-    *sensor_samples_size = sizeof(**sensor_samples) * num_samples;
-    memcpy(sensor_data, sensor_buffer, *sensor_samples_size);
-    *sensor_samples = sensor_data;
+    *sensor_samples_size = sizeof(**sensor_data) * num_samples;
+    memcpy(*sensor_data, sensor_buffer, *sensor_samples_size);
 
-    previous_data_pos = current_data_pos;
+    previous_data_count = current_data_count;
 
     return 0;
 }
 
-int get_total_fetched_sensor_data()
+uint32_t get_total_fetched_sensor_data()
 {
-    return current_data_pos;
+    return current_data_count;
 }
