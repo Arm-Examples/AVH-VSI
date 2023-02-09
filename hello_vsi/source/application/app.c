@@ -23,6 +23,8 @@ limitations under the License.
 #endif
 #endif
 
+#include <stdlib.h>
+
 #include "app.h"
 
 #include "app_cfg.h"
@@ -30,51 +32,47 @@ limitations under the License.
 #include "data_sensor_provider.h"
 
 #if DATA_BITSIZE == 8U
-uint8_t sensor_samples[DATA_NUM_ELEMENTS];
+uint8_t* sensor_data;
 #elif DATA_BITSIZE == 16U
-uint16_t sensor_samples[DATA_NUM_ELEMENTS];
+uint16_t* sensor_data;
 #elif DATA_BITSIZE == 32U
-uint32_t sensor_samples[DATA_NUM_ELEMENTS];
+uint32_t* sensor_data;
 #endif
 
-int32_t previous_sample;
+uint32_t previous_data_pos;
 
 void init()
 {
-    previous_sample = 0;
+    previous_data_pos = 0;
+    sensor_data = (uint8_t*)malloc(DATA_NUM_ELEMENTS * sizeof(uint8_t));
 }
 
 void run()
 {
-    const int32_t current_sample = get_total_fetched_sensor_data();
-    log_debug("current_sample: %d", current_sample);
+    uint32_t current_data_pos = get_total_fetched_sensor_data();
+    log_debug("current_data_pos: %d", current_data_pos);
 
-    int how_many_new_slices = 0;
-    EventStartCv(0, current_sample, previous_sample);
+    EventStartCv(0, current_data_pos, previous_data_pos);
 
-    int sensor_samples_size = 0;
+    uint32_t sensor_data_size = 0;
 
     // Fetch the data from the sensor.
-    int sensor_status = get_sensor_samples(DATA_NUM_ELEMENTS, &sensor_samples_size, &sensor_samples);
+    uint32_t sensor_status = get_sensor_data(DATA_NUM_ELEMENTS, &sensor_data_size, &sensor_data);
     log_debug("sensor_status: %d", sensor_status);
+    log_debug("sensor_data_size: %d", sensor_data_size);
 
-    how_many_new_slices = sensor_samples_size;
-    log_debug("sensor_samples_size: %d", how_many_new_slices);
-
-    EventStopCv(0, sensor_status, how_many_new_slices);
+    EventStopCv(0, sensor_status, sensor_data_size);
 
     if (sensor_status != 0)
     {
         log_error("Something wrong with the sensor. Sensor status: %d", sensor_status);
         return;
     }
-
-    // If no new sensor samples have been received since last time, don't bother
-    // printing
-    if (how_many_new_slices == 0)
+    
+    if (sensor_data_size == 0)
     {
         return;
     }
-    previous_sample = current_sample;
+    previous_data_pos = current_data_pos;
     
 }

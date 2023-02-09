@@ -117,7 +117,8 @@ void display_task(void)
 
 }
 
-extern DATA_TYPE* sensor_samples;
+extern DATA_TYPE* sensor_data;
+
 void int_array_to_string(size_t num, DATA_TYPE* src, char* dst)
 {
     int num_chars = 0;
@@ -155,7 +156,7 @@ void example_gui_on_refresh_evt_handler(const arm_2d_tile_t *ptFrameBuffer)
 
     // print data samples on the top of the screen
     char string_buf[265];
-    int_array_to_string(DATA_NUM_ELEMENTS, sensor_samples, string_buf);
+    int_array_to_string(DATA_NUM_ELEMENTS, sensor_data, string_buf);
     
     arm_lcd_text_location(1, 1);
     arm_lcd_printf(string_buf);
@@ -174,7 +175,7 @@ void example_gui_on_refresh_evt_handler(const arm_2d_tile_t *ptFrameBuffer)
     for(int i = 0; i < DATA_NUM_ELEMENTS; i++)
     {
         end.iX = start.iX + (r.tSize.iWidth / DATA_NUM_ELEMENTS);
-        end.iY = (r.tLocation.iY + r.tSize.iHeight) - (int)(height_step * sensor_samples[i]);
+        end.iY = (r.tLocation.iY + r.tSize.iHeight) - (int)(height_step * sensor_data[i]);
 
         draw_line_between_points(start, end);
 

@@ -34,9 +34,9 @@ extern "C" {
 // The reference implementation can have no platform-specific dependencies, so
 // it just returns an array filled with zeros. For real applications, you should
 // ensure there's a specialized implementation that accesses hardware APIs.
-int get_sensor_samples(int num_samples, int* sensor_samples_size, DATA_TYPE** sensor_samples);
+uint32_t get_sensor_data(uint32_t num_samples, uint32_t* sensor_samples_size, DATA_TYPE** sensor_data);
 
-int get_total_fetched_sensor_data();
+uint32_t get_total_fetched_sensor_data();
 
 #ifdef __cplusplus
 }
