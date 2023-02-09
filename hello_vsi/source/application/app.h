@@ -21,6 +21,9 @@
 
 #include "cmsis_os2.h"
 
-extern void app_initialize ();
+extern void initialize_threads();
+
+extern void init();
+extern void run();
 
 #endif // __APP_H__

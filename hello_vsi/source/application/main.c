@@ -33,8 +33,6 @@ extern void stdio_init(void);
 #include "arm_2d_helper.h"
 #include "example_gui.h"
 
-extern void init_gui();
-
 #endif
 
 int main(void)
@@ -46,8 +44,6 @@ int main(void)
         arm_2d_init();
         example_gui_init();
     }
-
-    init_gui();
 #endif
 
     // System Initialization
@@ -63,7 +59,7 @@ int main(void)
 #endif
 
     osKernelInitialize();   // Initialize CMSIS-RTOS2
-    app_initialize();       // Initialize application
+    initialize_threads();       // Initialize application
     osKernelStart();        // Start thread execution
 
     for (;;) {}

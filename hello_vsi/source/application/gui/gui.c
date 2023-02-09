@@ -288,37 +288,8 @@ void arm_2d_notif_aync_sub_task_cpl(uintptr_t pUserParam)
     osEventFlagsSet(s_evt2DResourceAvailable, 0x01); 
 }
 
-
-static arm_2d_task_t tTaskCB = {0};
-
-void setup_gui(void* argument)
+void init_gui(void* argument)
 {    
-    init_task_cycle_counter();
-    register_task_cycle_agent(&s_tArm2DTaskInfo, &s_tArm2DTaskInfoAgent);
-
-    ARM_2D_UNUSED(argument);
-    //! draw background first
-    while(arm_fsm_rt_cpl != arm_2d_helper_pfb_task(&s_tExamplePFB,NULL));
-    
-    //! update draw function
-    ARM_2D_HELPER_PFB_UPDATE_ON_DRAW_HANDLER(   &s_tExamplePFB, 
-                                                &__pfb_draw_handler);
-
-
-}
-
-void loop_gui(void)
-{
-    //! retrieve the number of system ticks
-    uint32_t wTick = osKernelGetTickCount();        
-    display_task();
-    
-    //! lock frame rate
-    osDelayUntil(wTick + (1000 / APP_TARGET_FPS));
-}
-
-void init_gui()
-{
     //! initialise FPB helper
     if (ARM_2D_HELPER_PFB_INIT( 
         &s_tExamplePFB,                 //!< FPB Helper object
@@ -344,4 +315,24 @@ void init_gui()
     }
     
     init_task_cycle_info(&s_tArm2DTaskInfo);
+    init_task_cycle_counter();
+    register_task_cycle_agent(&s_tArm2DTaskInfo, &s_tArm2DTaskInfoAgent);
+
+    ARM_2D_UNUSED(argument);
+    //! draw background first
+    while(arm_fsm_rt_cpl != arm_2d_helper_pfb_task(&s_tExamplePFB,NULL));
+    
+    //! update draw function
+    ARM_2D_HELPER_PFB_UPDATE_ON_DRAW_HANDLER(   &s_tExamplePFB, 
+                                                &__pfb_draw_handler);
+}
+
+void run_gui(void)
+{
+    //! retrieve the number of system ticks
+    uint32_t wTick = osKernelGetTickCount();        
+    display_task();
+    
+    //! lock frame rate
+    osDelayUntil(wTick + (1000 / APP_TARGET_FPS));
 }
