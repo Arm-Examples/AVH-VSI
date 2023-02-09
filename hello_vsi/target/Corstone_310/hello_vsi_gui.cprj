@@ -91,6 +91,10 @@
       <file category="header" name="../../source/application/app.h"/>
       <file category="sourceC" name="../../source/application/app.c"/>
     </group>
+    <group name="Utils">
+      <file category="sourceC" name="../../source/application/util.c"/>
+      <file category="header" name="../../source/application/app_cfg.h"/>
+    </group>
     <group name="Gui">
       <file category="sourceC" name="../../source/application/gui/example_gui.c"/>
       <file category="header" name="../../source/application/gui/example_gui.h"/>
@@ -98,7 +102,6 @@
       <file category="header" name="../../source/application/gui/gui.h"/>
       <file category="sourceC" name="../../source/application/gui/draw_line.c"/>
       <file category="header" name="../../source/application/gui/draw_line.h"/>
-      <file category="header" name="../../source/application/gui/app_cfg.h"/>
       <file category="sourceC" name="../../source/arm2d/common/asset/background.c"/>
     </group>
     <group name="Board IO">

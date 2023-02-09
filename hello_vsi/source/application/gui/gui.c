@@ -117,25 +117,9 @@ void display_task(void)
 
 }
 
+extern void int_array_to_string(size_t num, DATA_TYPE* src, char* dst);
+
 extern DATA_TYPE* sensor_data;
-
-void int_array_to_string(size_t num, DATA_TYPE* src, char* dst)
-{
-    int num_chars = 0;
-    
-    for(int x = 0; x < num; x++)
-    {
-        uint32_t val = (uint32_t)src[x];
-        sprintf(&dst[num_chars], "%d ", val);
-        num_chars += 2;
-
-        while(val > 10)
-        {
-            num_chars += 1;
-            val /= 10;
-        }
-    }
-}
 
 __OVERRIDE_WEAK 
 void example_gui_on_refresh_evt_handler(const arm_2d_tile_t *ptFrameBuffer)
