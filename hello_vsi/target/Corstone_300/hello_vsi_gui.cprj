@@ -82,9 +82,10 @@
 
   <files>
     <group name="App">
-      <file category="sourceC" name="../../source/application/app.c"/>
+      <file category="sourceC" name="../../source/application/app_initialize.c"/>
       <file category="sourceC" name="../../source/application/main.c"/>
-      <file category="header" name="../../source/application/main.h"/>
+      <file category="header" name="../../source/application/app.h"/>
+      <file category="sourceC" name="../../source/application/app.c"/>
     </group>
     <group name="Gui">
       <file category="sourceC" name="../../source/application/gui/example_gui.c"/>
@@ -102,7 +103,6 @@
     <group name="Driver">
       <file category="sourceC" name="../../source/VSI/data_sensor/driver/sensor_drv.c"/>
       <file category="sourceC" name="../../source/micro_sensor_lib/data_sensor_provider.c"/>
-      <file category="sourceC" name="../../source/micro_sensor_lib/main_functions.c"/>
     </group>
     <group name="micro_logger">
       <file category="sourceC" name="../../source/micro_logger/micro_logger.c"/>

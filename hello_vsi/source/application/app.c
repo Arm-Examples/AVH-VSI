@@ -1,102 +1,80 @@
-/*---------------------------------------------------------------------------
- * Copyright (c) 2020-2021 Arm Limited (or its affiliates). All rights reserved.
- *
- * SPDX-License-Identifier: Apache-2.0
- *
- * Licensed under the Apache License, Version 2.0 (the License); you may
- * not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *---------------------------------------------------------------------------*/
+/* Copyright 2022 Arm Limited. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+#ifdef _RTE_
+#include "RTE_Components.h"
+#ifdef RTE_Compiler_EventRecorder
+#include "EventRecorder.h"
+#else
+#define EventStartCv(slot, v1, v2)
+#define EventStopCv(slot, v1, v2)
+#endif
+#endif
 
 #include "app.h"
-#include "main_functions.h"
 
+#include "app_cfg.h"
+#include "micro_logger.h"
+#include "data_sensor_provider.h"
 
-#ifdef __USE_GUI
-#include "gui.h"
-#include "arm_2d_helper.h"
-
-osEventFlagsId_t s_evt2DTaskAvailable = NULL;
-osEventFlagsId_t s_evt2DResourceAvailable = NULL;
-
-const osThreadAttr_t gui_main_attr = {
-    .stack_size = 4096U };
-
-osThreadId_t gui_main_tid;
-
+#if DATA_BITSIZE == 8U
+uint8_t sensor_samples[DATA_NUM_ELEMENTS];
+#elif DATA_BITSIZE == 16U
+uint16_t sensor_samples[DATA_NUM_ELEMENTS];
+#elif DATA_BITSIZE == 32U
+uint32_t sensor_samples[DATA_NUM_ELEMENTS];
 #endif
 
-static const osThreadAttr_t app_main_attr = {
-    .stack_size = 4096U };
+int32_t previous_sample;
 
-osThreadId_t app_main_tid;
-
-#ifdef __EVENT_DRIVEN
-void sensor_rx_event(void)
+void init()
 {
-    osThreadFlagsSet(app_main_tid, 0x00000001U);
+    previous_sample = 0;
 }
-#endif
 
-/*---------------------------------------------------------------------------
- * Application main thread
- *---------------------------------------------------------------------------*/
-__NO_RETURN
-void app_main(void *argument)
+void run()
 {
-    (void)argument;
+    const int32_t current_sample = get_total_fetched_sensor_data();
+    log_debug("current_sample: %d", current_sample);
 
-    setup();
+    int how_many_new_slices = 0;
+    EventStartCv(0, current_sample, previous_sample);
 
-    for (;;)
+    int sensor_samples_size = 0;
+
+    // Fetch the data from the sensor.
+    int sensor_status = get_sensor_samples(DATA_NUM_ELEMENTS, &sensor_samples_size, &sensor_samples);
+    log_debug("sensor_status: %d", sensor_status);
+
+    how_many_new_slices = sensor_samples_size;
+    log_debug("sensor_samples_size: %d", how_many_new_slices);
+
+    EventStopCv(0, sensor_status, how_many_new_slices);
+
+    if (sensor_status != 0)
     {
-#ifdef __EVENT_DRIVEN
-        osThreadFlagsWait(0x00000001U, osFlagsWaitAny, osWaitForever);
-#endif
-        loop();
-        
-#ifdef __USE_GUI
-        osThreadFlagsSet(gui_main_tid, 0x00000001U);
-#endif
+        log_error("Something wrong with the sensor. Sensor status: %d", sensor_status);
+        return;
     }
-}
 
-/*---------------------------------------------------------------------------
- * Gui thread
- *---------------------------------------------------------------------------*/
-#ifdef __USE_GUI
-__NO_RETURN
-void gui_main(void *argument)
-{
-    (void)argument;
-
-    setup_gui(argument);
-
-    for (;;)
+    // If no new sensor samples have been received since last time, don't bother
+    // printing
+    if (how_many_new_slices == 0)
     {
-        loop_gui();
+        return;
     }
-}
-#endif
-
-/*---------------------------------------------------------------------------
- * Application initialization
- *---------------------------------------------------------------------------*/
-void app_initialize(void)
-{
-    app_main_tid = osThreadNew(app_main, NULL, &app_main_attr);
-    osThreadFlagsSet(app_main_tid, 0x00000001U); // Set app main as active thread
-
-#ifdef __USE_GUI
-    gui_main_tid = osThreadNew(gui_main, NULL, &gui_main_attr);
-#endif
-
+    previous_sample = current_sample;
+    
 }
