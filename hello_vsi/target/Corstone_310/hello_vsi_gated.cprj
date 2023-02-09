@@ -79,6 +79,10 @@
       <file category="header" name="../../source/application/app.h"/>
       <file category="sourceC" name="../../source/application/app.c"/>
     </group>
+    <group name="Utils">
+      <file category="sourceC" name="../../source/application/util.c"/>
+      <file category="header" name="../../source/application/app_cfg.h"/>
+    </group>
     <group name="Board IO">
       <file category="sourceC" name="../../source/Board_IO/retarget_stdio.c"/>
     </group>

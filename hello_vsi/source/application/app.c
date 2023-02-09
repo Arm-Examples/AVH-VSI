@@ -31,6 +31,8 @@ limitations under the License.
 #include "micro_logger.h"
 #include "data_sensor_provider.h"
 
+extern void int_array_to_string(size_t num, DATA_TYPE* src, char* dst);
+
 DATA_TYPE* sensor_data;
 
 uint32_t previous_data_pos;
@@ -67,6 +69,12 @@ void run()
     {
         return;
     }
+
+    char printing_text[265];
+    int_array_to_string(DATA_NUM_ELEMENTS, sensor_data, printing_text);
+
+    log_info("Received data: %s", printing_text);
+
     previous_data_pos = current_data_pos;
     
 }
