@@ -16,7 +16,7 @@
  * limitations under the License.
  *---------------------------------------------------------------------------*/
 
-#include "main.h"
+#include "app.h"
 #include "main_functions.h"
 
 

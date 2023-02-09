@@ -23,7 +23,9 @@
 #include "EventRecorder.h"
 #endif
 
-#include "main.h"
+#include "app.h"
+
+extern void stdio_init(void);
 
 #ifdef __USE_GUI
 
