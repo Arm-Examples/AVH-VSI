@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------
- * Copyright (c) 2022 Tobias Andersson @Arm Limited. All rights reserved.
+ * Copyright (c) 2022 Tobias Andersson. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
