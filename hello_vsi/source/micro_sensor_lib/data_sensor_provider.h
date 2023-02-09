@@ -13,33 +13,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#ifndef TENSORFLOW_LITE_MICRO_EXAMPLES_MICRO_SPEECH_SENSOR_PROVIDER_H_
-#define TENSORFLOW_LITE_MICRO_EXAMPLES_MICRO_SPEECH_SENSOR_PROVIDER_H_
-
-// Expose a C friendly interface for main functions.
-#ifdef __cplusplus
-extern "C" {
-#endif
+#ifndef __DATA_SENSOR_PROVIDER_H__
+#define __DATA_SENSOR_PROVIDER_H__
 
 #include <stdint.h>
 #include "app_cfg.h"
 
-// This is an abstraction around an sensor source like a microphone, and is
-// expected to return 16-bit PCM sample data for a given point in time. The
-// sample data itself should be used as quickly as possible by the caller, since
-// to allow memory optimizations there are no guarantees that the samples won't
-// be overwritten by new data in the future. In practice, implementations should
-// ensure that there's a reasonable time allowed for clients to access the data
-// before any reuse.
-// The reference implementation can have no platform-specific dependencies, so
-// it just returns an array filled with zeros. For real applications, you should
-// ensure there's a specialized implementation that accesses hardware APIs.
-uint32_t get_sensor_data(uint32_t num_samples, uint32_t* sensor_samples_size, DATA_TYPE** sensor_data);
+// This function will read from the sensor buffer to retrive a small amount
+// of data. In this example, the data should be used as soon as possible since 
+// it might be overwritten. In a real application, you should allow the application
+// enough time to use the data before it being overwritten..
+uint32_t get_sensor_data(uint32_t num_data, uint32_t *sensor_data_size, DATA_TYPE **sensor_data);
 
+// Returns the amount of data that has been fetched from the Sensor
 uint32_t get_total_fetched_sensor_data();
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif  // TENSORFLOW_LITE_MICRO_EXAMPLES_MICRO_SPEECH_SENSOR_PROVIDER_H_
+#endif  // __DATA_SENSOR_PROVIDER_H__
