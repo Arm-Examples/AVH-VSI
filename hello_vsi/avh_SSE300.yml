@@ -19,4 +19,4 @@ download:
   - hello_vsi.log
   - Objects/hello_vsi.axf
   - Objects/hello_vsi.axf.map
-  - data.txt
+  - intdata.txt

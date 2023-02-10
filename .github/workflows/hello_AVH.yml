@@ -63,13 +63,13 @@ jobs:
         pip install git+https://github.com/ARM-software/avhclient.git@v0.1
     - uses: ammaraskar/gcc-problem-matcher@master
 
-    - name: Run [check data count] test for SSE300 platform
+    - name: Run [check 199 count] test for SSE300 platform
       run: |
         avhclient -b aws execute --specfile hello_vsi/avh_SSE300.yml
-        count=$(grep -c "data" hello_vsi/hello_vsi.log)
-        echo "Found 'data' ${count} times in hello_vsi.log ..."
+        count=$(grep -c "199" hello_vsi/hello_vsi.log)
+        echo "Found '199' ${count} times in hello_vsi.log ..."
         if [[ $count < 1 ]]; then
-          echo "... seems 'data' word is not included in the data.txt"
+          echo "... seems 199 is not included in the intdata.txt"
           exit 1
         fi
     - name: Archive results
@@ -80,7 +80,7 @@ jobs:
           hello_vsi/hello_vsi.log
           hello_vsi/Objects/hello_vsi.axf
           hello_vsi/Objects/hello_vsi.axf.map
-          hello_vsi/data.txt
+          hello_vsi/intdata.txt
         retention-days: 1
         if-no-files-found: error
       if: always()
