@@ -8,7 +8,7 @@ backend:
 upload:
   - source/**/*
   - target/**/*
-  - data.txt
+  - intdata.txt
   - fvp_config.txt
 steps:
   - run: |
