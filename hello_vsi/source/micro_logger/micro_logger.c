@@ -45,7 +45,7 @@ extern void log_error(const char* format, ...)
 {
     if (log_level <  ERROR)
         return;
-    char *log_buffer;
+    char log_buffer[1024];
     va_list args;
     va_start(args, format);
 
@@ -60,7 +60,7 @@ extern void log_warning(const char* format, ...)
 {
     if (log_level < WARNING)
         return;
-    char *log_buffer = 0;
+    char log_buffer[1024];
     va_list args;
     va_start(args, format);
 
@@ -75,7 +75,7 @@ extern void log_info(const char* format, ...)
 {
     if (log_level < INFO)
         return;
-    char *log_buffer = 0;
+    char log_buffer[1024];
     va_list args;
     va_start(args, format);
 
@@ -91,7 +91,7 @@ extern void log_debug(const char* format, ...)
 {
     if (log_level < DEBUG)
         return;
-    char *log_buffer = 0;
+    char log_buffer[1024];
     va_list args;
     va_start(args, format);
 
