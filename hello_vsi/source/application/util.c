@@ -12,7 +12,7 @@ void int_array_to_string(size_t num, DATA_TYPE* src, char* dst)
         sprintf(&dst[num_chars], "%d ", val);
         num_chars += 2;
 
-        while(val > 10)
+        while(val >= 10)
         {
             num_chars += 1;
             val /= 10;
