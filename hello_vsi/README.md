@@ -124,3 +124,31 @@ sequenceDiagram
         Main->>+Main: Print Data
     end
 ```
+
+## Continuous Integration (CI) 
+You can use [avhclient](https://github.com/ARM-software/avhclient) to implement your CI pipeline with this example.
+
+`avh_SSE300.yml` is a simple template to build and run this example on Arm Corstone 300 virtual hardware platform.
+This yml file will launch an [AVH v1.3](https://aws.amazon.com/marketplace/pp/prodview-urbpq7yo5va7g) with [t2 micro instance type](https://aws.amazon.com/ec2/instance-types/t2/?nc1=h_ls) and upload nessasary files for building with Arm Corstone 300 platform.
+
+| Path/Files to upload | Details |
+| ---       | ---     |
+| `source/*` | Project source code |
+| `target/*` | Target project files |
+| `intdata.txt` | External integer data for read |
+| `fvp_config.txt` | Virtual hardware configure file |
+
+Once uploading the files into AVH instnace and building , it will run the [object file](Objects/hello_vsi.axf) with Corstone 300 virtual hardware.
+And the running log will be recorded with `hello_vsi.log`.
+
+The following files will be downloaded from the instance before the instance is terminated.
+| Path/Files to download | Details |
+| ---       | ---     |
+| `hello_vsi.log` | Running log |
+| `Objects/hello_vsi.axf` | Obeject file |
+| `Objects/hello_vsi.axf.map` | Mapping file for the object file |
+| `intdata.txt` | External integer data |
+
+Refer [here](https://arm-software.github.io/AVH/main/infrastructure/html/run_ami_github.html) to learn more about how to setup CI workflows with Github Actions.
+
+[hello_AVH.yml](../.github/workflows/hello_AVH.yml) is the CI workflow example working with Github Actions to check the count of the number `199` in the data stream.
