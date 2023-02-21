@@ -10,14 +10,14 @@ All applications have been ported for Corstone-300 and Corstone-310. Replace `<p
 
 ### Application Without GUI
 
-Basic application. Streams data from the `data.txt` file and prints to the console. For each loop, the application will wait until it get an interrupt from the driver that a new item has been streamed, at that point the application will proceed to copy the data from the data buffer and print to the console.
+Basic application. Streams data from the `intdata.txt` file and prints to the console. For each loop, the application will wait until it get an interrupt from the driver that a new item has been streamed, at that point the application will proceed to copy the data from the data buffer and print to the console.
 
 1. `cbuild --packs target/<platform>/hello_vsi.cprj`
 2. `./run_example.sh`
 
 ### Application With GUI
 
-Streams data from the `data.txt` file and prints to the console as wel as draws graph on the virtual display. Similarily to the application above, the application will wait for the interrupt to come before attempting to copy data. However in this case instead of halting completely, we update the GUI while waiting for new data. This can be modified to do other tasks while waiting for new data samples.
+Streams data from the `intdata.txt` file and prints to the console as wel as draws graph on the virtual display. Similarily to the application above, the application will wait for the interrupt to come before attempting to copy data. However in this case instead of halting completely, we update the GUI while waiting for new data. This can be modified to do other tasks while waiting for new data samples.
 
 1. `cbuild --packs target/<platform>/hello_vsi_gui.cprj`
 2. `./run_example.sh`
