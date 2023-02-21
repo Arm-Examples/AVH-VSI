@@ -13,14 +13,14 @@
 #                               armlm activate --server <URL> --product <PRODUCT> --as-user ubuntu --to-file ubuntu-ubl.binlic
 #                               bzip2 -c ubuntu-ubl.binlic | base64 > ubuntu-ubl.binlic.bz2.b64
 
-name: Arm Virtual Hardware hello_AVH example - github hosted - remote AWS via GH plugin
+name: Arm Virtual Hardware hello_vsi example - github hosted - remote AWS via avhclient
 on:
 # Uncomment the following lines to enable CI task trigger condition
 #  push:
 #    branches: [ main ]
 #  pull_request:
 #    paths:
-#      - .github/workflows/hello_AVH.yml
+#      - .github/workflows/hello_vsi.yml
 #      - hello_vsi/source/**/*
 #      - hello_vsi/target/**/*
 
