@@ -151,4 +151,4 @@ The following files will be downloaded from the instance before the instance is 
 
 Refer [here](https://arm-software.github.io/AVH/main/infrastructure/html/run_ami_github.html) to learn more about how to setup CI workflows with Github Actions.
 
-[hello_AVH.yml](../.github/workflows/hello_AVH.yml) is the CI workflow example working with Github Actions to check the count of the number `199` in the data stream.
+[hello_vsi.yml](../.github/workflows/hello_vsi.yml) is the CI workflow example working with Github Actions to check the count of the number `199` in the data stream.
