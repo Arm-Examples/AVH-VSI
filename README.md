@@ -14,7 +14,7 @@ Follow the [Infrasructure documentation](https://arm-software.github.io/AVH/main
 
 ### Change the Arm Tool Variant
 
-In order to build applications for Corstone-310 (https://developer.arm.com/Processors/Corstone-310), you need to use the `ult` tool variant. This is not necessary for Corstone-300 applications.
+In order to build applications for [Arm Corstone-310](https://developer.arm.com/Processors/Corstone-310), you need to use the `ult` tool variant. This is not necessary for Corstone-300 applications.
 
 Change the tool variant by setting the following environment variable on the cloud or local build environment:
 
