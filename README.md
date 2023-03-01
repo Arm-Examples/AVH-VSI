@@ -78,4 +78,4 @@ cpackget pack add https://www.keil.com/pack/<vendor>.<package>.<version>.pack -a
 
 | Version | Date | Release notes |
 |---      |---   |---            |
-|  |  | Arm VSI demo for Arm Virtual Hardware. |
+| [v0.1](https://github.com/Arm-Examples/Hello_AVH/releases/tag/v0.1) | 2023.3.1 | Arm VSI demo for Arm Virtual Hardware. |
