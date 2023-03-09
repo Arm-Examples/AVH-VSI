@@ -32,23 +32,31 @@ To make this permanent, you can add the line to your `~/.bashrc` file.
     git clone https://github.com/Arm-Examples/Hello_AVH.git
     ```
 
-1. Enter the application dir
+2. Enter the application dir
 
     ```bash
     cd Hello_AVH/<example>
     ```
 
-1. Update the keil packs index
+3. Update the keil packs index
 
     ```bash
     cpackget update-index
     ```
 
-1. Build the applicaiton
+4. Build the applicaiton (with CMSIS Toolbox v1.3 or less)
 
     ```bash
     cbuild --packs target/<platform>/<application>.cprj
     ```
+
+5. Build the applicaiton (with CMSIS Toolbox v1.4 or later)
+
+    ```bash
+    cbuild --packs --update-rte target/<platform>/<application>.cprj
+    ```
+    
+> You can run `cbuild --version` to check CMSIS Toolbox version
 
 ## Run the Applicaiton using Virtual Hardware
 
@@ -78,4 +86,4 @@ cpackget pack add https://www.keil.com/pack/<vendor>.<package>.<version>.pack -a
 
 | Version | Date | Release notes |
 |---      |---   |---            |
-| [v0.1](https://github.com/Arm-Examples/Hello_AVH/releases/tag/v0.1) | 2023.3.1 | Arm VSI demo for Arm Virtual Hardware. |
+| [v0.0.1](https://github.com/Arm-Examples/Hello_AVH/releases/tag/v0.0.1) | 2023.3.9 | Arm VSI demo for Arm Virtual Hardware. |
