@@ -10,7 +10,7 @@ This repository contains a simple Hello World example for Arm Virtual Hardware.
 
 ## Arm Virtual Hardware (AVH) Setup
 
-Follow the [Infrasructure documentation](https://arm-software.github.io/AVH/main/infrastructure/html/index.html) on how to setup AVH on the cloud or locally.
+Follow the [Infrastructure documentation](https://arm-software.github.io/AVH/main/infrastructure/html/index.html) on how to setup AVH on the cloud or locally.
 
 ### Change the Arm Tool Variant
 
@@ -44,19 +44,17 @@ To make this permanent, you can add the line to your `~/.bashrc` file.
     cpackget update-index
     ```
 
-4. Build the applicaiton (with CMSIS Toolbox v1.3 or less)
+4. Build the applicaiton
 
-    ```bash
-    cbuild --packs target/<platform>/<application>.cprj
-    ```
-
-5. Build the applicaiton (with CMSIS Toolbox v1.4 or later)
-
-    ```bash
-    cbuild --packs --update-rte target/<platform>/<application>.cprj
-    ```
-    
-> You can run `cbuild --version` to check CMSIS Toolbox version
+    * Build with CMSIS Toolbox v1.3 or early
+      ```bash
+      cbuild --packs target/<platform>/<application>.cprj
+      ```
+    * Build with CMSIS Toolbox v1.4 or later
+      ```bash
+      cbuild --packs --update-rte target/<platform>/<application>.cprj
+      ``` 
+    > You can run `cbuild --version` to check CMSIS Toolbox version
 
 ## Run the Applicaiton using Virtual Hardware
 
@@ -86,4 +84,4 @@ cpackget pack add https://www.keil.com/pack/<vendor>.<package>.<version>.pack -a
 
 | Version | Date | Release notes |
 |---      |---   |---            |
-| [v0.0.1](https://github.com/Arm-Examples/Hello_AVH/releases/tag/v0.0.1) | 2023.3.9 | Arm VSI demo for Arm Virtual Hardware. |
+| [v0.0.1](https://github.com/Arm-Examples/Hello_AVH/releases/tag/v0.0.1) | 2023.3.13 | Arm VSI demo for Arm Virtual Hardware. |
