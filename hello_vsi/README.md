@@ -35,7 +35,7 @@ For example, to build and run on Corstone-310, use:
 cbuild --packs target/Corstone-310/hello_vsi_gui.cprj
 ```
 ```bash
-./run_example.sh -C mps3_board.visualisation.disable-visualisation=1
+./run_example.sh
 ```
 
 ### Gated Fetch Flow
