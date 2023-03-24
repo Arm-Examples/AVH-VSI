@@ -15,12 +15,28 @@ Streams data from the `intdata.txt` file and prints to the console. For each loo
 1. `cbuild --packs target/<platform>/hello_vsi.cprj`
 2. `./run_example.sh`
 
+For example, to build and run on Corstone-310, use:
+```bash
+cbuild --packs target/Corstone-310/hello_vsi.cprj
+```
+```bash
+./run_example.sh -C mps3_board.visualisation.disable-visualisation=1
+```
+
 ### Application With GUI
 
 Streams data from the `intdata.txt` file and prints to the console as well as drawing a graph on the virtual display. Similarily to the application above, the application will wait for the interrupt to come before attempting to copy data. The GUI will update in a separate task while waiting for new data.
 
 1. `cbuild --packs target/<platform>/hello_vsi_gui.cprj`
 2. `./run_example.sh`
+
+For example, to build and run on Corstone-310, use:
+```bash
+cbuild --packs target/Corstone-310/hello_vsi_gui.cprj
+```
+```bash
+./run_example.sh -C mps3_board.visualisation.disable-visualisation=1
+```
 
 ### Gated Fetch Flow
 
@@ -29,30 +45,32 @@ Data will be streamed sample by sample when requested by the application. The pe
 1. `cbuild --packs target/<platform>/hello_vsi_gated.cprj`
 2. `./run_example.sh`
 
+For example, to build and run on Corstone-310, use:
+```bash
+cbuild --packs target/Corstone-310/hello_vsi_gated.cprj
+```
+```bash
+./run_example.sh -C mps3_board.visualisation.disable-visualisation=1
+```
+
 ### No Event Flow
 
-Sample will be streamed to the application, but the aplication will not interrup to fetch the sample data. Instead the application will naturally arrive at the data fetching, and if there is a new item available, it will be copied, otherwise the application will wait until there is a new sample available.
+Sample will be streamed to the application, but the aplication will not interrupt to fetch the sample data. Instead the application will naturally arrive at the data fetching, and if there is a new item available, it will be copied, otherwise the application will wait until there is a new sample available.
 
 1. `cbuild --packs target/<platform>/hello_vsi_noevent.cprj`
 2. `./run_example.sh`
 
-## Run application Manually
-
-Instead of using the `run_example.sh` script, it is also possible to run the command manually by using the following command. Use the platform the application was built for (Corstone 300 or Corstone 310 for example).
-
-Corstone 300:
-
+For example, to build and run on Corstone-310, use:
 ```bash
-VHT_Corstone_SSE-300_Ethos-U55 -V "./source/VSI/data_sensor/python" -f fvp_config.txt -a Objects/hello_vsi.axf --stat --simlimit 24 $*
+cbuild --packs target/Corstone-310/hello_vsi_noevent.cprj
+```
+```bash
+./run_example.sh -C mps3_board.visualisation.disable-visualisation=1
 ```
 
-Corstone 310:
+## Explanation of Run Command Arguments
 
-```bash
-VHT_Corstone_SSE-310 -V "./source/VSI/data_sensor/python" -f fvp_config.txt -a Objects/hello_vsi.axf --stat --simlimit 24 $*
-```
-
-### Explanation of Run Command Arguments
+Instead of using the `run_example.sh` script, it is also possible to run the command manually, your can refer the following table for each command arguments
 
 | Argument  | Details |
 | ---       | ---     |
@@ -61,6 +79,7 @@ VHT_Corstone_SSE-310 -V "./source/VSI/data_sensor/python" -f fvp_config.txt -a O
 | `-a <application.axf>` | The application that will run on the FVP |
 | `--stat` | Print out stats about run times, cycle count, etc. at the end of the run |
 | `--simlimit 24` | Limit the run to 24 simulated seconds. |
+| `-C mps3_board.visualisation.disable-visualisation=1` | Disable MPS3 AVH visualisation. |
 
 ## Application flows
 

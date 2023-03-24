@@ -44,7 +44,7 @@ To make this permanent, you can add the line to your `~/.bashrc` file.
     cpackget update-index
     ```
 
-4. Build the applicaiton
+4. Build the application
 
     * Build with CMSIS Toolbox v1.3 or early
       ```bash
@@ -56,7 +56,7 @@ To make this permanent, you can add the line to your `~/.bashrc` file.
       ``` 
     > You can run `cbuild --version` to check CMSIS Toolbox version
 
-## Run the Applicaiton using Virtual Hardware
+## Run the Application using Virtual Hardware
 
 ```bash
 ./run_example.sh
