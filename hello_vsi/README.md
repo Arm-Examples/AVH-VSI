@@ -17,7 +17,7 @@ Streams data from the `intdata.txt` file and prints to the console. For each loo
 
 For example, to build and run on Corstone-310, use:
 ```bash
-cbuild --packs target/Corstone-310/hello_vsi.cprj
+cbuild --packs target/Corstone_310/hello_vsi.cprj
 ```
 ```bash
 ./run_example.sh -C mps3_board.visualisation.disable-visualisation=1
@@ -32,7 +32,7 @@ Streams data from the `intdata.txt` file and prints to the console as well as dr
 
 For example, to build and run on Corstone-310, use:
 ```bash
-cbuild --packs target/Corstone-310/hello_vsi_gui.cprj
+cbuild --packs target/Corstone_310/hello_vsi_gui.cprj
 ```
 ```bash
 ./run_example.sh
@@ -47,7 +47,7 @@ Data will be streamed sample by sample when requested by the application. The pe
 
 For example, to build and run on Corstone-310, use:
 ```bash
-cbuild --packs target/Corstone-310/hello_vsi_gated.cprj
+cbuild --packs target/Corstone_310/hello_vsi_gated.cprj
 ```
 ```bash
 ./run_example.sh -C mps3_board.visualisation.disable-visualisation=1
@@ -62,7 +62,7 @@ Sample will be streamed to the application, but the aplication will not interrup
 
 For example, to build and run on Corstone-310, use:
 ```bash
-cbuild --packs target/Corstone-310/hello_vsi_noevent.cprj
+cbuild --packs target/Corstone_310/hello_vsi_noevent.cprj
 ```
 ```bash
 ./run_example.sh -C mps3_board.visualisation.disable-visualisation=1
