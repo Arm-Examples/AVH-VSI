@@ -26,11 +26,20 @@ cbuild --packs target/Corstone_310/hello_vsi.cprj
 ### Application With GUI
 
 Streams data from the `intdata.txt` file and prints to the console as well as drawing a graph on the virtual display. Similarily to the application above, the application will wait for the interrupt to come before attempting to copy data. The GUI will update in a separate task while waiting for new data.
+This example is refering [Arm 2D library](https://github.com/ARM-software/Arm-2D) to drawing a graph on the virtual display. Need to copy Arm 2D library to [arm2d forder](source/arm2d/) before building the project.
 
-1. `cbuild --packs target/<platform>/hello_vsi_gui.cprj`
-2. `./run_example.sh`
+1. `git clone https://github.com/ARM-software/Arm-2D.git -b v1.1.0`
+2. `cp -rf ./Arm-2D/examples/common ./source/arm2d/ && rm -rf ./Arm-2D`
+3. `cbuild --packs target/<platform>/hello_vsi_gui.cprj`
+4. `./run_example.sh`
 
 For example, to build and run on Corstone-310, use:
+```bash
+git clone https://github.com/ARM-software/Arm-2D.git -b v1.1.0
+```
+```bash
+cp -rf ./Arm-2D/examples/common ./source/arm2d/ && rm -rf ./Arm-2D
+```
 ```bash
 cbuild --packs target/Corstone_310/hello_vsi_gui.cprj
 ```
