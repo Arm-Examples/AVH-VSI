@@ -26,7 +26,7 @@
     <cflags add="-Os -Wno-documentation -Wno-documentation-unknown-command -Wno-license-management -Wno-missing-noreturn -Wno-missing-prototypes -Wno-missing-variable-declarations -Wno-nonportable-include-path -Wno-packed -Wno-parentheses-equality -Wno-reserved-id-macro -Wno-reserved-identifier -Wno-sign-conversion -Wno-unused-macros -ffunction-sections -fno-rtti -fshort-enums -fshort-wchar -funsigned-char -gdwarf-4 -std=gnu11 -xc" compiler="AC6"/>
     <cxxflags add="-Os -Wno-documentation -Wno-documentation-unknown-command -Wno-license-management -Wno-missing-noreturn -Wno-missing-prototypes -Wno-missing-variable-declarations -Wno-nonportable-include-path -Wno-packed -Wno-parentheses-equality -Wno-reserved-id-macro -Wno-reserved-identifier -Wno-sign-conversion -Wno-unused-macros -ffunction-sections -fno-exceptions -fno-rtti -fshort-enums -fshort-wchar -funsigned-char -gdwarf-4 -std=c++14 -xc++" compiler="AC6"/>
     <asflags add="-gdwarf-4 -masm=gnu" compiler="AC6"/>
-    <includes>../../source/arm2d/common/platform;../../source/arm2d/common/platform/lib;../../source/arm2d/common/platform/mps3;../../source/arm2d/common/platform/mps3/v2m_mps3;../../source/VSI/data_sensor/include;../../source/VSI/include;../../source/micro_sensor_lib</includes>
+    <includes>../../source/arm2d/examples/common/platform;../../source/arm2d/examples/common/platform/lib;../../source/arm2d/examples/common/platform/mps3;../../source/arm2d/examples/common/platform/mps3/v2m_mps3;../../source/VSI/data_sensor/include;../../source/VSI/include;../../source/micro_sensor_lib</includes>
     <defines>GLCD_MIRROR_Y=0;LCD_MIRROR_X=1;__USE_AN547__;__ARM_FP=0xe;__EVENT_DRIVEN;__FVP_PY;__USE_GUI</defines>
   </target>
 
@@ -102,7 +102,7 @@
       <file category="header" name="../../source/application/gui/gui.h"/>
       <file category="sourceC" name="../../source/application/gui/draw_line.c"/>
       <file category="header" name="../../source/application/gui/draw_line.h"/>
-      <file category="sourceC" name="../../source/arm2d/common/asset/background.c"/>
+      <file category="sourceC" name="../../source/arm2d/examples/common/asset/background.c"/>
     </group>
     <group name="Board IO">
       <file category="sourceC" name="../../source/Board_IO/retarget_stdio.c"/>
@@ -116,15 +116,15 @@
       <file category="header" name="../../source/micro_logger/micro_logger.h"/>
     </group>
     <group name="platform">
-      <file category="sourceC" name="../../source/arm2d/common/platform/app_platform.c"/>
-      <file category="header" name="../../source/arm2d/common/platform/platform.h"/>
-      <file category="library" name="../../source/arm2d/common/platform/lib/perf_counter.lib"/>
-      <file category="sourceC" name="../../source/arm2d/common/platform/lib/perf_os_patch_rtx5.c"/>
+      <file category="sourceC" name="../../source/arm2d/examples/common/platform/app_platform.c"/>
+      <file category="header" name="../../source/arm2d/examples/common/platform/platform.h"/>
+      <file category="library" name="../../source/arm2d/examples/common/platform/lib/perf_counter.lib"/>
+      <file category="sourceC" name="../../source/arm2d/examples/common/platform/lib/perf_os_patch_rtx5.c"/>
     </group>
     <group name="bsp_mps3">
-      <file category="sourceC" name="../../source/arm2d/common/platform/mps3/GLCD_V2M-MPS3_AN540.c"/>
-      <file category="sourceC" name="../../source/arm2d/common/platform/mps3/platform_mps3.c"/>
-      <file category="sourceC" name="../../source/arm2d/common/platform/mps3/stdout_USART.c"/>
+      <file category="sourceC" name="../../source/arm2d/examples/common/platform/mps3/GLCD_V2M-MPS3_AN540.c"/>
+      <file category="sourceC" name="../../source/arm2d/examples/common/platform/mps3/platform_mps3.c"/>
+      <file category="sourceC" name="../../source/arm2d/examples/common/platform/mps3/stdout_USART.c"/>
     </group>
   </files>
 
