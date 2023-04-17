@@ -12,12 +12,16 @@ All applications have been ported for Corstone-300 and Corstone-310. Replace `<p
 
 Streams data from the `intdata.txt` file and prints to the console. For each loop, the application will wait until it get an interrupt from the driver that a new item has been streamed, at that point the application will proceed to copy the data from a data buffer and print out to the console.
 
-1. `cbuild --packs target/<platform>/hello_vsi.cprj`
-2. `./run_example.sh`
+1. `csolution convert -s target/<platform>/hello_vsi.csolution.yml`
+2. `cbuild --packs --rebuild target/<platform>/hello_vsi+hello_vsi.cprj`
+3. `./run_example.sh`
 
 For example, to build and run on Corstone-310, use:
 ```bash
-cbuild --packs target/Corstone_310/hello_vsi.cprj
+csolution convert -s target/Corstone_310/hello_vsi.csolution.yml
+```
+```bash
+cbuild --packs --rebuild target/Corstone_310/hello_vsi+hello_vsi.cprj
 ```
 ```bash
 ./run_example.sh -C mps3_board.visualisation.disable-visualisation=1
@@ -29,15 +33,19 @@ Streams data from the `intdata.txt` file and prints to the console as well as dr
 This example is refering [Arm 2D library](https://github.com/ARM-software/Arm-2D) to draw a graph on the virtual display. Need to copy Arm 2D library to [arm2d forder](source/arm2d/) before building the project.
 
 1. `git clone https://github.com/ARM-software/Arm-2D.git -b v1.1.0 ./source/arm2d/`
-2. `cbuild --packs target/<platform>/hello_vsi_gui.cprj`
-3. `./run_example.sh`
+2. `csolution convert -s target/<platform>/hello_vsi_gui.csolution.yml`
+3. `cbuild --packs --rebuild target/<platform>/hello_vsi_gui+hello_vsi.cprj`
+4. `./run_example.sh`
 
 For example, to build and run on Corstone-310, use:
 ```bash
 git clone https://github.com/ARM-software/Arm-2D.git -b v1.1.0 ./source/arm2d/
 ```
 ```bash
-cbuild --packs target/Corstone_310/hello_vsi_gui.cprj
+csolution convert -s target/Corstone_310/hello_vsi_gui.csolution.yml
+```
+```bash
+cbuild --packs --rebuild target/Corstone_310/hello_vsi_gui+hello_vsi.cprj
 ```
 ```bash
 ./run_example.sh
@@ -47,12 +55,16 @@ cbuild --packs target/Corstone_310/hello_vsi_gui.cprj
 
 Data will be streamed sample by sample when requested by the application. The peripheral will be paused between each data fetch. So when we do a `get_sample` call, the applicaiton will resume the peripheral, and when the data sample has finished being streamed, it will pause the peripheral again.
 
-1. `cbuild --packs target/<platform>/hello_vsi_gated.cprj`
-2. `./run_example.sh`
+1. `csolution convert -s target/<platform>/hello_vsi_gated.csolution.yml`
+2. `cbuild --packs target/<platform>/hello_vsi_gated+hello_vsi.cprj`
+3. `./run_example.sh`
 
 For example, to build and run on Corstone-310, use:
 ```bash
-cbuild --packs target/Corstone_310/hello_vsi_gated.cprj
+csolution convert -s target/Corstone_310/hello_vsi_gated.csolution.yml
+```
+```bash
+cbuild --packs --rebuild target/Corstone_310/hello_vsi_gated+hello_vsi.cprj
 ```
 ```bash
 ./run_example.sh -C mps3_board.visualisation.disable-visualisation=1
@@ -62,12 +74,16 @@ cbuild --packs target/Corstone_310/hello_vsi_gated.cprj
 
 Sample will be streamed to the application, but the aplication will not interrupt to fetch the sample data. Instead the application will naturally arrive at the data fetching, and if there is a new item available, it will be copied, otherwise the application will wait until there is a new sample available.
 
-1. `cbuild --packs target/<platform>/hello_vsi_noevent.cprj`
-2. `./run_example.sh`
+1. `csolution convert -s target/<platform>/hello_vsi_noevent.csolution.yml`
+2. `cbuild --packs target/<platform>/hello_vsi_noevent+hello_vsi.cprj`
+3. `./run_example.sh`
 
 For example, to build and run on Corstone-310, use:
 ```bash
-cbuild --packs target/Corstone_310/hello_vsi_noevent.cprj
+csolution convert -s target/Corstone_310/hello_vsi_noevent.csolution.yml
+```
+```bash
+cbuild --packs --rebuild target/Corstone_310/hello_vsi_noevent+hello_vsi.cprj
 ```
 ```bash
 ./run_example.sh -C mps3_board.visualisation.disable-visualisation=1
@@ -170,8 +186,8 @@ The following files will be downloaded from the instance before the instance is 
 | Path/Files to download | Details |
 | ---       | ---     |
 | `hello_vsi.log` | Running log |
-| `Objects/hello_vsi.axf` | Obeject file |
-| `Objects/hello_vsi.axf.map` | Mapping file for the object file |
+| `Objects/hello_vsi+hello_vsi.axf` | Obeject file |
+| `Objects/hello_vsi+hello_vsi.axf.map` | Mapping file for the object file |
 | `intdata.txt` | External integer data |
 
 Refer [here](https://arm-software.github.io/AVH/main/infrastructure/html/run_ami_github.html) to learn more about how to setup CI workflows with Github Actions.

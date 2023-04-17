@@ -12,11 +12,14 @@ upload:
   - fvp_config.txt
 steps:
   - run: |
+      csolution list packs -s target/Corstone_300/hello_vsi.csolution.yml -m > packs.txt
       cpackget update-index
-      cbuild --packs ./target/Corstone_300/hello_vsi.cprj
-      VHT_MPS3_Corstone_SSE-300 -V "./source/VSI/data_sensor/python" -f fvp_config.txt -a Objects/hello_vsi.axf --stat --simlimit 24 $* > hello_vsi.log
+      cpackget add -f packs.txt
+      csolution convert -s target/Corstone_300/hello_vsi.csolution.yml
+      cbuild --packs --rebuild ./target/Corstone_300/hello_vsi+hello_vsi.cprj
+      VHT_MPS3_Corstone_SSE-300 -V "./source/VSI/data_sensor/python" -f fvp_config.txt -a Objects/hello_vsi*.axf --stat --simlimit 24 $* > hello_vsi.log
 download:
   - hello_vsi.log
-  - Objects/hello_vsi.axf
-  - Objects/hello_vsi.axf.map
+  - Objects/hello_vsi*.axf
+  - Objects/hello_vsi*.axf.map
   - intdata.txt

@@ -78,8 +78,8 @@ jobs:
         name: results
         path: |
           hello_vsi/hello_vsi.log
-          hello_vsi/Objects/hello_vsi.axf
-          hello_vsi/Objects/hello_vsi.axf.map
+          hello_vsi/Objects/hello_vsi*.axf
+          hello_vsi/Objects/hello_vsi*.axf.map
           hello_vsi/intdata.txt
         retention-days: 1
         if-no-files-found: error
