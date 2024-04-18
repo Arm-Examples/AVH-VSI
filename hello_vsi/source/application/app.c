@@ -24,7 +24,6 @@ limitations under the License.
 #endif
 
 #include <stdlib.h>
-
 #include "app.h"
 
 #include "app_cfg.h"

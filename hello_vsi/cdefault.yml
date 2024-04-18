@@ -1,0 +1,66 @@
+#  SPDX-FileCopyrightText: Copyright 2023 Arm Limited and/or its
+#  affiliates <open-source-office@arm.com>
+#  SPDX-License-Identifier: Apache-2.0
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Open-CMSIS-Pack/devtools/schemas/projmgr/2.0.0/tools/projmgr/schemas/cdefault.schema.json
+
+default:
+  # Note that we need AC6@6.18 or higher to compile for Corstone-310 target.
+  compiler: AC6
+  misc:
+    - for-compiler: AC6
+      C:
+        - -std=gnu11
+        - -Wno-license-management
+      C-CPP:
+        - -Wno-documentation
+        - -Wno-documentation-unknown-command
+        - -Wno-license-management
+        - -Wno-missing-noreturn
+        - -Wno-missing-prototypes
+        - -Wno-missing-variable-declarations
+        - -Wno-nonportable-include-path
+        - -Wno-packed
+        - -Wno-parentheses-equality
+        - -Wno-reserved-id-macro
+        - -Wno-reserved-identifier
+        - -Wno-unused-macros
+        - -fno-exceptions
+        - -fno-rtti
+        - -funsigned-char
+        - -fshort-enums
+        - -fshort-wchar
+        - -ffunction-sections
+        - -Wno-sign-conversion
+      CPP:
+        - -xc++
+        - -std=c++14
+      ASM:
+        - -masm=auto
+      Link:
+        - --map
+        - --load_addr_map_info
+        - --xref
+        - --callgraph
+        - --symbols
+        - --info sizes
+        - --info totals
+        - --info unused
+        - --info veneers
+        - --summary_stderr
+        - --info summarysizes
+        - --entry=Reset_Handler
+        - --strict
+        - --diag_suppress=6314,6848

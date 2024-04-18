@@ -68,11 +68,6 @@ To make this permanent, you can add the line to your `~/.bashrc` file.
       ``` 
     > You can run `cbuild --version` to check CMSIS Toolbox version
 
-## Run the Application using Virtual Hardware
-
-```bash
-./run_example.sh
-```
 
 ## Common Issues
 
