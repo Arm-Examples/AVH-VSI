@@ -1,0 +1,76 @@
+project:
+  components:
+    - component: ARM::Acceleration:Arm-2D Extras:Controls
+    - component: ARM::Acceleration:Arm-2D Extras:LCD ASCII Printf
+    - component: ARM::Acceleration:Arm-2D Helper:PFB
+    - component: ARM::Acceleration:Arm-2D:Alpha-Blending
+    - component: ARM::Acceleration:Arm-2D:Core
+    - component: ARM::Acceleration:Arm-2D:Transform
+    - component: ARM::CMSIS Driver:MPC
+    - component: ARM::CMSIS Driver:PPC
+    - component: ARM::CMSIS Driver:SPI
+    - component: ARM::CMSIS Driver:USART
+    - component: ARM::CMSIS:CORE
+    - component: ARM::CMSIS:DSP&Source
+    - component: ARM::CMSIS:RTOS2:Keil RTX5&Source
+    - component: ARM::Device:Definition
+    - component: ARM::Device:Startup&Baremetal
+    - component: ARM::Native Driver:DMA350 Remap:SSE-310 Remap
+    - component: ARM::Native Driver:DMA350
+    - component: ARM::Native Driver:GPIO
+    - component: ARM::Native Driver:IO
+    - component: ARM::Native Driver:MPC
+    - component: ARM::Native Driver:PPC
+    - component: ARM::Native Driver:SPI
+    - component: ARM::Native Driver:SysCounter
+    - component: ARM::Native Driver:SysTimer
+    - component: ARM::Native Driver:Timeout
+    - component: ARM::Native Driver:UART
+    - component: ARM::Native Driver:Watch Dog
+    - component: Keil::Compiler&ARM Compiler:Event Recorder&DAP
+    - component: Keil::Compiler&ARM Compiler:I/O:STDOUT&User
+  groups:
+    - files:
+        - file: ../../source/application/app_initialize.c
+        - file: ../../source/application/main.c
+        - file: ../../source/application/app.h
+        - file: ../../source/application/app.c
+      group: App
+    - files:
+        - file: ../../source/application/util.c
+        - file: ../../source/application/app_cfg.h
+      group: Utils
+    - files:
+        - file: ../../source/application/gui/example_gui.c
+        - file: ../../source/application/gui/example_gui.h
+        - file: ../../source/application/gui/gui.c
+        - file: ../../source/application/gui/gui.h
+        - file: ../../source/application/gui/draw_line.c
+        - file: ../../source/application/gui/draw_line.h
+        - file: ../../source/arm2d/examples/common/asset/background.c
+      group: Gui
+    - files:
+        - file: ../../source/Board_IO/retarget_stdio.c
+      group: Board IO
+    - files:
+        - file: ../../source/VSI/data_sensor/driver/sensor_drv.c
+        - file: ../../source/micro_sensor_lib/data_sensor_provider.c
+      group: Driver
+    - files:
+        - file: ../../source/micro_logger/micro_logger.c
+        - file: ../../source/micro_logger/micro_logger.h
+      group: micro_logger
+    - files:
+        - file: ../../source/arm2d/examples/common/platform/app_platform.c
+        - file: ../../source/arm2d/examples/common/platform/platform.h
+        - file: ../../source/arm2d/examples/common/platform/lib/perf_counter.lib
+        - file: ../../source/arm2d/examples/common/platform/lib/perf_os_patch_rtx5.c
+      group: platform
+    - files:
+        - file: ../../source/arm2d/examples/common/platform/mps3/GLCD_V2M-MPS3_AN540.c
+        - file: ../../source/arm2d/examples/common/platform/mps3/platform_mps3.c
+        - file: ../../source/arm2d/examples/common/platform/mps3/stdout_USART.c
+      group: bsp_mps3
+    - files:
+        - file: RTE/Device/SSE-310-MPS3/corstone310_mps3_s.sct
+      group: Scatter File

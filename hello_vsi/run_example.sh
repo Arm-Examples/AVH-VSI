@@ -15,5 +15,5 @@ else
 fi
 
 # Execute the application on the FVP 
-$FVP -V "./source/VSI/data_sensor/python" -f fvp_config.txt -a Objects/hello_vsi.axf --stat --simlimit 24 $*
+$FVP -V "./source/VSI/data_sensor/python" -f fvp_config.txt -a Objects/hello_vsi*.axf --stat --simlimit 24 $*
 

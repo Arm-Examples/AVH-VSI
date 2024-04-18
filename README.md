@@ -38,21 +38,33 @@ To make this permanent, you can add the line to your `~/.bashrc` file.
     cd Hello_AVH/<example>
     ```
 
-3. Update the keil packs index
+3. Update the keil packs index and  Install necessary package
 
+    ```bash
+    csolution list packs -s target/<platform>/<application>.csolution.yml -m > packs.txt
+    ```
     ```bash
     cpackget update-index
     ```
+    ```
+    cpackget add -f packs.txt
+    ```
 
-4. Build the application
+4. Convert yml project file to cprj project file
+
+    ```bash
+    csolution convert -s target/<platform>/<application>.csolution.yml
+    ```
+
+5. Build the application
 
     * Build with CMSIS Toolbox v1.3 or early
       ```bash
-      cbuild --packs target/<platform>/<application>.cprj
+      cbuild --packs --rebuild target/<platform>/<application>.cprj
       ```
     * Build with CMSIS Toolbox v1.4 or later
       ```bash
-      cbuild --packs --update-rte target/<platform>/<application>.cprj
+      cbuild --packs --rebuild --update-rte target/<platform>/<application>.cprj
       ``` 
     > You can run `cbuild --version` to check CMSIS Toolbox version
 
