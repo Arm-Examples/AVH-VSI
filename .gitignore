@@ -54,7 +54,6 @@ dkms.conf
 # Build Artifacts
 _deps/
 Objects/
-RTE/
 __pycache__/
 
 # Python Cache Files

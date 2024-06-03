@@ -6,16 +6,17 @@
 
 #include "sensor_drv.h"
 #include "arm_vsi.h"
+#include "platform_irq.h"
 #ifdef _RTE_
 #include "RTE_Components.h"
 #endif
 #include CMSIS_device_header
 
 /* Sensor Peripheral definitions */
-#define SensorO          ARM_VSI1                /* Sensor Output access struct */
+#define SensorO          ARM_VSI1_NS                /* Sensor Output access struct */
 #define SensorO_IRQn     ARM_VSI1_IRQn           /* Sensor Output Interrupt number */
 #define SensorO_Handler  ARM_VSI1_Handler        /* Sensor Output Interrupt handler */
-#define SensorI          ARM_VSI0                /* Sensor Input access struct */
+#define SensorI          ARM_VSI0_NS                /* Sensor Input access struct */
 #define SensorI_IRQn     ARM_VSI0_IRQn           /* Sensor Input Interrupt number */
 #define SensorI_Handler  ARM_VSI0_Handler        /* Sensor Input Interrupt handler */
 
@@ -77,10 +78,12 @@ int32_t SensorDrv_Initialize (SensorDrv_Event_t cb_event) {
   SensorI->CONTROL       = 0U;
 
   /* Enable peripheral interrupts */
-//NVIC_EnableIRQ(SensorO_IRQn);
-  NVIC->ISER[(((uint32_t)SensorO_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)SensorO_IRQn) & 0x1FUL));
-//NVIC_EnableIRQ(SensorI_IRQn);
-  NVIC->ISER[(((uint32_t)SensorI_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)SensorI_IRQn) & 0x1FUL));
+  NVIC_EnableIRQ(SensorO_IRQn);
+  //NVIC->ISER[(((uint32_t)SensorO_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)SensorO_IRQn) & 0x1FUL));
+	
+  NVIC_EnableIRQ(SensorI_IRQn);
+//  NVIC->ISER[(((uint32_t)SensorI_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)SensorI_IRQn) & 0x1FUL));
+
   __DSB();
   __ISB();
 
@@ -93,10 +96,11 @@ int32_t SensorDrv_Initialize (SensorDrv_Event_t cb_event) {
 int32_t SensorDrv_Uninitialize (void) {
 
   /* Disable peripheral interrupts */
-//NVIC_DisableIRQ(SensorO_IRQn);
-  NVIC->ICER[(((uint32_t)SensorO_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)SensorO_IRQn) & 0x1FUL));
-//NVIC_DisableIRQ(SensorI_IRQn);
-  NVIC->ICER[(((uint32_t)SensorI_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)SensorI_IRQn) & 0x1FUL));
+NVIC_DisableIRQ(SensorO_IRQn);
+//  NVIC->ICER[(((uint32_t)SensorO_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)SensorO_IRQn) & 0x1FUL));
+
+NVIC_DisableIRQ(SensorI_IRQn);
+//  NVIC->ICER[(((uint32_t)SensorI_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)SensorI_IRQn) & 0x1FUL));
   __DSB();
   __ISB();
 

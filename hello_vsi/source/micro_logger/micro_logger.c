@@ -28,7 +28,7 @@ static enum LOG_LEVEL log_level = INFO;
 
 void print_log_string_to_each_line(char* log_message, const char* log_type)
 {
-    char buffer[255];
+    char buffer[1024];
     
     strcpy(buffer, log_message);
     char *token;
@@ -36,7 +36,7 @@ void print_log_string_to_each_line(char* log_message, const char* log_type)
     token = strtok(buffer, delim);
     while(token != NULL)
     {
-        printf("%s%s\n", log_type, token);
+        printf("%s%s\r\n", log_type, token);
         token = strtok(NULL, delim);
     }
 }
@@ -91,7 +91,7 @@ extern void log_debug(const char* format, ...)
 {
     if (log_level < DEBUG)
         return;
-    char log_buffer[1024];
+    char log_buffer[2048];
     va_list args;
     va_start(args, format);
 

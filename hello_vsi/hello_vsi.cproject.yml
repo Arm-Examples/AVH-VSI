@@ -1,0 +1,123 @@
+project:
+  packs:
+    - pack: ARM::Arm-2D@1.1.0
+      for-context: .gui
+    - pack: ARM::CMSIS@6.1.0
+    - pack: ARM::CMSIS-RTX@5.9.0
+    - pack: ARM::CMSIS-Compiler@2.1.0
+    - pack: ARM::V2M_MPS3_SSE_300_BSP@1.5.0
+      for-context: +Corstone_300
+    - pack: ARM::V2M_MPS3_SSE_310_BSP@1.4.0
+      for-context: +Corstone_310
+    - pack: ARM::SSE_315_BSP@1.0.0
+      for-context: +Corstone_315
+    - pack: ARM::DMA350@1.0.0
+      for-context: .gui
+
+  processor:
+    trustzone: off
+
+  debug: on
+
+  add-path:
+    - ./source/application
+    - ./source/micro_logger
+    - .
+    - ./source/VSI/data_sensor/include
+    - ./source/VSI/include
+    - ./source/micro_sensor_lib
+  setups:
+    - setup: Corstone_300 AC6
+      for-context: +Corstone_300
+      for-compiler: AC6
+      linker:
+        - script: ./RTE/Device/SSE-300-MPS3/fvp_sse300_mps3_s.sct
+    - setup: Corstone_310 AC6
+      for-context: +Corstone_310
+      for-compiler: AC6
+      linker:
+        - script: ./RTE/Device/SSE-310-MPS3_FVP/linker_SSE310MPS3_secure.sct
+    - setup: Corstone_310 AC6
+      for-context: +Corstone_315
+      for-compiler: AC6
+      linker:
+        - script: ./RTE/Device/SSE-315-FVP/ac6_linker_script.sct
+    - setup: gui
+      for-context: .gui
+      add-path:
+       - ./source/arm2d/examples/common/platform
+       - ./source/arm2d/examples/common/platform/lib
+       - ./source/arm2d/examples/common/platform/mps3
+       - ./source/arm2d/examples/common/platform/mps3/v2m_mps3
+
+  groups:
+    - group: App
+      files:
+        - file: ./source/application/app_initialize.c
+        - file: ./source/application/main.c
+        - file: ./source/application/app.h
+        - file: ./source/application/app.c
+    - group: Utils
+      files:
+        - file: ./source/application/util.c
+        - file: ./source/application/app_cfg.h
+    - group: Driver
+      files:
+        - file: ./source/VSI/data_sensor/driver/sensor_drv.c
+        - file: ./source/micro_sensor_lib/data_sensor_provider.c
+    - group: micro_logger
+      files:
+        - file: ./source/micro_logger/micro_logger.c
+        - file: ./source/micro_logger/micro_logger.h
+    - group: Gui
+      for-context: .gui
+      files:
+        - file: ./source/application/gui/example_gui.c
+        - file: ./source/application/gui/example_gui.h
+        - file: ./source/application/gui/gui.c
+        - file: ./source/application/gui/gui.h
+        - file: ./source/application/gui/draw_line.c
+        - file: ./source/application/gui/draw_line.h
+        - file: ./source/arm2d/examples/common/asset/background.c
+    - group: platform
+      for-context: .gui
+      files:
+        - file: ./source/arm2d/examples/common/platform/app_platform.c
+        - file: ./source/arm2d/examples/common/platform/platform.h
+        - file: ./source/arm2d/examples/common/platform/lib/perf_counter.lib
+        - file: ./source/arm2d/examples/common/platform/lib/perf_os_patch_rtx5.c
+    - group: bsp_mps3
+      for-context: .gui
+      files:
+        - file: ./source/arm2d/examples/common/platform/mps3/GLCD_V2M-MPS3_AN540.c
+        - file: ./source/arm2d/examples/common/platform/mps3/platform_mps3.c
+        - file: ./source/arm2d/examples/common/platform/mps3/stdout_USART.c
+
+  components:
+    - component: ARM::CMSIS:CORE
+    - component: ARM::CMSIS Driver:USART
+    - component: ARM::CMSIS:OS Tick:SysTick
+    - component: ARM::CMSIS:RTOS2:Keil RTX5&Source
+    - component: ARM::CMSIS-Compiler:CORE
+    - component: ARM::CMSIS-Compiler:STDOUT:Custom
+    - component: ARM::Device:Definition
+    - component: ARM::Device:Native Driver:IO
+    - component: ARM::Device:Native Driver:PPC
+    - component: ARM::Device:Native Driver:SysCounter
+    - component: ARM::Device:Native Driver:SysTimer
+    - component: ARM::Device:Native Driver:Timeout
+    - component: ARM::Device:Native Driver:UART
+    - component: ARM::Device:Startup&C Startup
+    - component: ARM::Device:USART Retarget
+    - component: ARM::Acceleration:Arm-2D Extras:Controls
+      for-context: .gui
+    - component: ARM::Acceleration:Arm-2D Extras:LCD ASCII Printf
+      for-context: .gui
+    - component: ARM::Acceleration:Arm-2D Helper:PFB
+      for-context: .gui
+    - component: ARM::Acceleration:Arm-2D:Alpha-Blending
+      for-context: .gui
+    - component: ARM::Acceleration:Arm-2D:Core
+      for-context: .gui
+    - component: ARM::Acceleration:Arm-2D:Transform
+      for-context: .gui

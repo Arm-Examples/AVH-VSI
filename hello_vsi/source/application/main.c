@@ -24,8 +24,9 @@
 #endif
 
 #include "app.h"
+#include <stdio.h>
 
-extern void stdio_init(void);
+extern int stdout_init(void);
 
 #ifdef __USE_GUI
 
@@ -50,8 +51,8 @@ int main(void)
     SystemCoreClockUpdate();
     
     // Initialize STDIO
-    stdio_init();
-
+    stdout_init();
+    printf("\r\n= App is running =\r\n");
 #if defined(RTE_Compiler_EventRecorder) && \
     (defined(__MICROLIB) ||                \
      !(defined(RTE_CMSIS_RTOS2_RTX5) || defined(RTE_CMSIS_RTOS2_FreeRTOS)))

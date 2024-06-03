@@ -1,0 +1,48 @@
+solution:
+  created-by: uv2csolution@1.2.0
+  created-for: CMSIS-Toolbox@2.0.0
+  compiler: AC6
+  cdefault: # use default setup of toolchain specific controls.
+
+  build-types:
+    - type: event
+      define:
+      - __ARM_FP: 0xe
+      - __FVP_PY
+      - __EVENT_DRIVEN
+
+    - type: noevent
+      define:
+      - __ARM_FP: 0xe
+      - __FVP_PY
+
+    - type: gated
+      define:
+      - __ARM_FP: 0xe
+      - __FVP_PY
+      - __GATED_FETCH
+
+#    - type: gui
+#      define:
+#      - __ARM_FP: 0xe
+#      - __FVP_PY
+#      - __EVENT_DRIVEN
+#      - __USE_GUI
+#      - GLCD_MIRROR_Y: 0
+#      - LCD_MIRROR_X: 1
+#      - __USE_AN547__
+
+  target-types:
+    - type: Corstone_300
+      device: SSE-300-MPS3
+      define:
+      - CORSTONE300_FVP
+
+    - type: Corstone_310
+      device: SSE-310-MPS3_FVP
+
+    - type: Corstone_315
+      device: SSE-315-FVP
+
+  projects:
+      - project: ./hello_vsi.cproject.yml
