@@ -15,7 +15,7 @@ To display the content of the input file on the model's lcd, use `.lcd_out` as t
 Compile: 
 
 ```bash
-cbuild hello_video_vsi.csolution.yml -c .lcd_out+Corstone_310 --packs --update-rte
+cbuild hello_video_vsi.csolution.yml -c .lcd_out+Corstone_300 --packs --update-rte
 ```
 
 To run the program:
