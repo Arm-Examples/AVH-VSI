@@ -7,7 +7,7 @@ This repository contains a simple Hello World example for Arm Virtual Hardware.
 | Example name                              | Description   |
 |---                                            |---            |
 | [Hello VSI](./hello_vsi)                     | A sample of using the Virtual Streaming Interface on AVH FVPs. Sensor data is streamed to the embedded application via the python interface from a text file. |
-
+| [Hello Video VSI](./hello_video_vsi)                     | A sample of using the Virtual Streaming Interface on AVH FVPs for video streaming input. Content of a data file/web ca, is streamed to the embedded application via the python interface and is displayed on the model's LCD. |
 
 ## Build a project
 

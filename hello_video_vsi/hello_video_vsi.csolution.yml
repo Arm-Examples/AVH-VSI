@@ -1,0 +1,23 @@
+solution:
+  created-by: uv2csolution@1.2.0
+  created-for: CMSIS-Toolbox@2.0.0
+  compiler: AC6
+  cdefault: # use default setup of toolchain specific controls.
+
+  build-types:
+    - type: lcd_out
+
+  target-types:
+    - type: Corstone_300
+      device: SSE-300-MPS3
+      define:
+      - CORSTONE300_FVP
+
+    - type: Corstone_310
+      device: SSE-310-MPS3_FVP
+
+    - type: Corstone_315
+      device: SSE-315-FVP
+
+  projects:
+      - project: ./hello_video_vsi.cproject.yml
