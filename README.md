@@ -1,4 +1,5 @@
 # Basic Virtual Interface Applications
+[![CMSIS Compliance](https://img.shields.io/github/actions/workflow/status/Arm-Examples/Hello_AVH/verify.yml?logo=arm&logoColor=0091bd&label=CMSIS%20Compliance)](https://www.keil.arm.com/cmsis) 
 
 This repository contains a simple Hello World example for Arm Virtual Hardware.
 
