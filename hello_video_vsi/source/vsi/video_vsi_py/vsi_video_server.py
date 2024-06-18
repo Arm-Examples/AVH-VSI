@@ -1,33 +1,41 @@
-#!/usr/bin/env python3
-#  SPDX-FileCopyrightText:  Copyright 2024 Arm Limited and/or its affiliates <open-source-office@arm.com>
-#  SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2023-2024 Arm Limited. All rights reserved.
 #
-#  Licensed under the Apache License, Version 2.0 (the "License");
-#  you may not use this file except in compliance with the License.
-#  You may obtain a copy of the License at
+# SPDX-License-Identifier: Apache-2.0
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+# Licensed under the Apache License, Version 2.0 (the License); you may
+# not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS,
-#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#  See the License for the specific language governing permissions and
-#  limitations under the License.
+# www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an AS IS BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 # Python VSI Video Server module
 
-import argparse
-import ipaddress
-import logging
-import os
-from multiprocessing.connection import Listener
+try:
+    import argparse
+    import ipaddress
+    import logging
+    import os
+    from multiprocessing.connection import Listener
 
-import cv2
-import numpy as np
+    import cv2
+    import numpy as np
+except ImportError as err:
+    print(f"VSI:Video:Server:ImportError: {err}")
+except Exception as e:
+    print(f"VSI:Video:Server:Exception: {type(e).__name__}")
+
 
 ## Set verbosity level
-#verbosity = logging.INFO
-verbosity = logging.ERROR
+#verbosity = logging.DEBUG
+verbosity = logging.INFO
+#verbosity = logging.WARNING
+#verbosity = logging.ERROR
 
 # [debugging] Verbosity settings
 level = { 10: "DEBUG",  20: "INFO",  30: "WARNING",  40: "ERROR" }

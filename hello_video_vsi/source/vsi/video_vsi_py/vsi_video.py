@@ -1,26 +1,35 @@
-#!/usr/bin/env python3
-#  SPDX-FileCopyrightText:  Copyright 2024 Arm Limited and/or its affiliates <open-source-office@arm.com>
-#  SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2023-2024 Arm Limited. All rights reserved.
 #
-#  Licensed under the Apache License, Version 2.0 (the "License");
-#  you may not use this file except in compliance with the License.
-#  You may obtain a copy of the License at
+# SPDX-License-Identifier: Apache-2.0
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+# Licensed under the Apache License, Version 2.0 (the License); you may
+# not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS,
-#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#  See the License for the specific language governing permissions and
-#  limitations under the License.
+# www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an AS IS BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-import time
-import atexit
-import logging
-import subprocess
-from multiprocessing.connection import Client, Connection
-from os import path, getcwd
-from os import name as os_name
+# Python VSI Video Client module
+
+try:
+    import time
+    import atexit
+    import logging
+    import subprocess
+    from multiprocessing.connection import Client, Connection
+    from os import path, getcwd
+    from os import name as os_name
+except ImportError as err:
+    print(f"VSI:Video:ImportError: {err}")
+    raise
+except Exception as e:
+    print(f"VSI:Video:Exception: {type(e).__name__}")
+    raise
 
 
 class VideoClient:
@@ -164,9 +173,9 @@ def init(address, authkey):
             py_cmd = 'python'
         else:
             py_cmd = 'python3'
-        cmd = f"{py_cmd} {server_path} " \
-              f"--ip {address[0]} " \
-              f"--port {address[1]} " \
+        cmd = f"{py_cmd} {server_path} "\
+              f"--ip {address[0]} "\
+              f"--port {address[1]} "\
               f"--authkey {authkey}"
         subprocess.Popen(cmd, shell=True)
         # Connect to Video Server
@@ -175,7 +184,7 @@ def init(address, authkey):
             logging.error("Server not connected")
 
     else:
-        logging.error("Server script not found: {server_path}")
+        logging.error(f"Server script not found: {server_path}")
 
     # Register clean-up function
     atexit.register(cleanup)

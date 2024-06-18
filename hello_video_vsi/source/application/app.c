@@ -39,8 +39,8 @@ limitations under the License.
 #define IMAGE_DATA_SIZE (150528U)
 #define CHANNELS_IMAGE_DISPLAYED (3U)
 
-/* Input file (relative to arm_vsi4.py script) */
-#define INPUT_IMAGE "./samples/couple.bmp"
+/* Input file */
+#define INPUT_IMAGE "./samples/couple.mp4"
 
 /* Buffer for holding an input frame */
 static uint8_t ImageBuf[IMAGE_DATA_SIZE];
@@ -48,7 +48,7 @@ static uint8_t ImageBuf[IMAGE_DATA_SIZE];
 void init()
 {
   if (VideoDrv_Initialize(NULL) != VIDEO_DRV_OK) {
-      log_error("Failed to initialise video driver\n");
+    log_error("Failed to initialise video driver\n");
   }
 }
 
@@ -66,21 +66,27 @@ void run()
   hal_lcd_clear(COLOR_BLACK);
 
   /* Configure Video Driver for Input */
-  if (VideoDrv_Configure(VIDEO_DRV_IN0,  IMAGE_WIDTH, IMAGE_HEIGHT, VIDEO_DRV_COLOR_RGB888, 24U) != VIDEO_DRV_OK) {
-      log_error("Failed to configure video input\n");
-      return;
+  if (VideoDrv_Configure(VIDEO_DRV_IN0,  IMAGE_WIDTH, IMAGE_HEIGHT, VIDEO_DRV_COLOR_RGB888, 30U) != VIDEO_DRV_OK) {
+    log_error("Failed to configure video input\n");
+    return;
   }
 
   /* Set Input Video buffer */
   if (VideoDrv_SetBuf(VIDEO_DRV_IN0,  ImageBuf, IMAGE_DATA_SIZE) != VIDEO_DRV_OK) {
-      log_error("Failed to set buffer for video input\n");
-      return;
+    log_error("Failed to set buffer for video input\n");
+    return;
   }
 
   /* Set input file */
   if (VideoDrv_SetFile(VIDEO_DRV_IN0, INPUT_IMAGE) != VIDEO_DRV_OK) {
-      log_error("Failed to set filename for video input\n");
-      return;
+    log_error("Failed to set filename for video input\n");
+    return;
+  }
+
+  /* Start video capture (single frame) */
+  if (VideoDrv_StreamStart(VIDEO_DRV_IN0, VIDEO_DRV_MODE_CONTINUOS) != VIDEO_DRV_OK) {
+    log_error("Failed to start frame capture");
+    return;
   }
 
   /* loop for obtaining video frames */
@@ -88,16 +94,19 @@ void run()
 
     VideoDrv_Status_t status;
 
-    /* Start video capture (single frame) */
-    if (VideoDrv_StreamStart(VIDEO_DRV_IN0, VIDEO_DRV_MODE_SINGLE) != VIDEO_DRV_OK) {
-    log_error("Failed to start frame capture");
-         return;
-    }
-
     /* Wait for video input frame */
     do {
       status = VideoDrv_GetStatus(VIDEO_DRV_IN0);
+      if (status.overflow != 0U) {
+        log_info("Overflow\n");
+      }
     } while (status.buf_empty != 0U);
+
+    if (status.eos != 0U) {
+      /* Stop Video Stream */
+      VideoDrv_StreamStop(VIDEO_DRV_IN0);
+      // log_info("Video Stream stopped");
+    }
 
     /* Get input video frame buffer */
     imgFrame = VideoDrv_GetFrameBuf(VIDEO_DRV_IN0);
@@ -117,17 +126,17 @@ void run()
       dataPsnImgStartY,
       dataPsnImgDownscaleFactor);
 
-      /* Release input frame */
-      VideoDrv_ReleaseFrame(VIDEO_DRV_IN0);
+    /* Release input frame */
+    VideoDrv_ReleaseFrame(VIDEO_DRV_IN0);
 
       /* Exit the loop when reaching end of stream */
-      if (status.eos){break;}
+    if (status.eos) {
+      break;
+    }
   }
 
   log_info("Video Stream stopped");
 
-  /* Stop Video Stream */
-  VideoDrv_StreamStop(VIDEO_DRV_IN0);
 
   /* De-initialize Video Interface */
   VideoDrv_Uninitialize();

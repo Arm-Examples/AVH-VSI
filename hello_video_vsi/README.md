@@ -4,7 +4,7 @@ This example uses the VSI ([Virtual Streaming Interface](https://arm-software.gi
 
 ## Build and run
 
-Use the cbuild tool or an IDE to build the application project in csolution format (See the project [README](../README.md).
+Use the cbuild tool or an IDE to build the application project in csolution format (See the project [README](../README.md)).
 
 All applications have been ported for Corstone-300, Corstone-310 and can be compiled with Arm Compiler 6.
 
