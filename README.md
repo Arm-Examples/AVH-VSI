@@ -18,7 +18,7 @@ The project are provided in [csolution format](https://github.com/Open-CMSIS-Pac
 You can also use *cbuild* utility from [CMSIS-Toolbox](https://github.com/Open-CMSIS-Pack/cmsis-toolbox/blob/main/docs/build-operation.md) to build the project in command line. For example for hello_vsi project, Corstone-315 target with build type event:
 
 ```bash
-      cbuild hello_vsi.csolution.yml --context .event+Corstone_315 --update-rte --packs --toolchain GCC
+cbuild hello_vsi.csolution.yml --context .event+Corstone_315 --update-rte --packs --toolchain GCC
 ```
 
 ## Arm Virtual Hardware (AVH) Setup
