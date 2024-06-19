@@ -38,7 +38,7 @@ cbuild hello_vsi.csolution.yml -c .gated+Corstone_310 --packs --update-rte --too
 
 
 ```bash
-FVP_Corstone_SSE-310 -a ./out/hello_vsi/Corstone_310/event/hello_vsi.axf -C mps3_board.v_path=./source/VSI/data_sensor/python/
+FVP_Corstone_SSE-310 -a ./out/hello_vsi/Corstone_310/gated/hello_vsi.axf -C mps3_board.v_path=./source/VSI/data_sensor/python/
 ```
 
 ### No Event Flow
@@ -56,7 +56,7 @@ cbuild hello_vsi.csolution.yml -c .noevent+Corstone_310 --packs --update-rte
 Run:
 
 ```bash
-FVP_Corstone_SSE-310 -a ./out/hello_vsi/Corstone_310/event/hello_vsi.axf -C mps3_board.v_path=./source/VSI/data_sensor/python/
+FVP_Corstone_SSE-310 -a ./out/hello_vsi/Corstone_310/noevent/hello_vsi.axf -C mps3_board.v_path=./source/VSI/data_sensor/python/
 ```
 
 
