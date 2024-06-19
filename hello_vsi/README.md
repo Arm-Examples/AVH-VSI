@@ -1,31 +1,54 @@
 # Hello VSI example
 
-This example uses the VSI ([Virtual Streaming Interface](https://arm-software.github.io/AVH/main/simulation/html/group__arm__vsi.html)) to simulate a peripheral sensor. The example sensor will send data in form of bytes to the application running on [AVH FVP Models](https://arm-software.github.io/AVH/main/overview/html/index.html). The virtual peripheral is controlled by a python script that reads the data from a text file called `intdata.txt`. This is a minimal example of how to use Arm VSI, and you can modify the python script and the sensor driver in order to match your use case.
+This example uses the **VSI** ([Virtual Streaming Interface](https://arm-software.github.io/AVH/main/simulation/html/group__arm__vsi.html)) to simulate a peripheral sensor. The example sensor will send data in form of bytes to the application running on [AVH FVP Models](https://arm-software.github.io/AVH/main/overview/html/index.html). The virtual peripheral is controlled by a python script that reads the data from a text file called `intdata.txt`. This is a minimal example of how to use Arm VSI, and you can modify the python script and the sensor driver in order to match your use case.
 
 ## Build and run
 
 Use the cbuild tool or an IDE to build the application project in csolution format (See the project [README](../README.md).
 
-All applications have been ported for Corstone-300, Corstone-310 and Corstone-315, and can be compiled with Arm Compiler 6 or GCC. By default the Arm Compiler 6 is used, to compile with GCC, use `--toolchain GCC` option for cbuild command.
+All applications have been ported for **Corstone-300**, **Corstone-310** and **Corstone-315**, and can be compiled with **Arm Compiler** 6 or **GCC**. By default the Arm Compiler 6 is used, to compile with GCC, use `--toolchain GCC` option for the cbuild command.
 
 
 ### Application Without GUI
 
 Streams data from the `intdata.txt` file and prints to the console. For each loop, the application will wait until it get an interrupt from the driver that a new item has been streamed, at that point the application will proceed to copy the data from a data buffer and print out to the console.
 
-Use `.event` as the build type, followed by the target platform. For example, to build and run on Corstone-310, use:
+Use `.event` as the build type, followed by the target platform. For example:
 
-Compile: 
+To build the **Corstone-310** target with **GCC** use: 
 
 ```bash
 cbuild hello_vsi.csolution.yml -c .event+Corstone_310 --packs --update-rte --toolchain GCC
 ```
 
-Run:
+To build the **Corstone-300** target with **AC6** (default toolchain): 
+
+```bash
+cbuild hello_vsi.csolution.yml -c .event+Corstone_300 --packs --update-rte
+```
+
+or more specific
+
+```bash
+cbuild hello_vsi.csolution.yml -c .event+Corstone_300 --packs --update-rte --toolchain AC6
+```
+
+To run the:
+
+**Corstone_310** target which has been build with **GCC** use:
 
 ```bash
 FVP_Corstone_SSE-310 -a ./out/hello_vsi/Corstone_310/event/hello_vsi.elf -C mps3_board.v_path=./source/VSI/data_sensor/python/
 ```
+
+
+**Corstone_300** target which has been build with **AC6** use:
+
+```bash
+FVP_Corstone_SSE-300 -a ./out/hello_vsi/Corstone_300/event/hello_vsi.axf -C mps3_board.v_path=./source/VSI/data_sensor/python/
+```
+
+
 
 ### Gated Fetch Flow
 
