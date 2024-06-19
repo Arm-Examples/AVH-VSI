@@ -40,7 +40,7 @@ limitations under the License.
 #define CHANNELS_IMAGE_DISPLAYED (3U)
 
 /* Input file */
-#define INPUT_IMAGE "./samples/couple.mp4"
+#define INPUT_IMAGE "./samples/couple.bmp"
 
 /* Buffer for holding an input frame */
 static uint8_t ImageBuf[IMAGE_DATA_SIZE];

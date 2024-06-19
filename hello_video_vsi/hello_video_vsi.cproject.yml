@@ -7,8 +7,6 @@ project:
       for-context: +Corstone_300
     - pack: ARM::V2M_MPS3_SSE_310_BSP@1.4.0
       for-context: +Corstone_310
-    - pack: ARM::SSE_315_BSP@1.0.0
-      for-context: +Corstone_315
 
   processor:
     trustzone: off
@@ -24,30 +22,31 @@ project:
     - ./source/hal/source/components/lcd/include/
     - ./source/hal/source/components/lcd/source/
     - ./source/hal/source/components/stdout/include/
-    - ./source/hal/source/platform/mps3/include/
-    - ./source/hal/source/platform/mps3/source/
     - ./source/hal/source/platform_pmu/include/
 
   setups:
-    - setup: Corstone_300 AC6
+    - setup: Corstone_300
       for-context: +Corstone_300
-      for-compiler: AC6
       add-path:
         - ./source/hal/source/platform/mps3/include/sse-300/
+        - ./source/hal/source/platform/mps3/include/
+        - ./source/hal/source/platform/mps3/source/
       linker:
         - script: ./RTE/Device/SSE-300-MPS3/fvp_sse300_mps3_s.sct
-    - setup: Corstone_310 AC6
+          for-compiler: AC6
+        - script: ./RTE/Device/SSE-300-MPS3/gcc_linker_script.ld.src
+          for-compiler: GCC
+    - setup: Corstone_310
       for-context: +Corstone_310
-      for-compiler: AC6
       add-path:
         - ./source/hal/source/platform/mps3/include/sse-310/
+        - ./source/hal/source/platform/mps3/include/
+        - ./source/hal/source/platform/mps3/source/
       linker:
         - script: ./RTE/Device/SSE-310-MPS3_FVP/linker_SSE310MPS3_secure.sct
-    - setup: Corstone_310 AC6
-      for-context: +Corstone_315
-      for-compiler: AC6
-      linker:
-        - script: ./RTE/Device/SSE-315-FVP/ac6_linker_script.sct
+          for-compiler: AC6
+        - script: ./RTE/Device/SSE-310-MPS3_FVP/gcc_linker_script.ld.src
+          for-compiler: GCC
 
   groups:
     - group: App
@@ -69,8 +68,13 @@ project:
         - file: ./source/hal/source/hal.c
         - file: ./source/hal/source/hal_pmu.c
         - file: ./source/hal/source/platform/mps3/source/platform_drivers.c
+          for-context:
+           - +Corstone_300
+           - +Corstone_310
         - file: ./source/hal/source/platform/mps3/source/timer_mps3.c
-
+          for-context:
+           - +Corstone_300
+           - +Corstone_310
 
   components:
     - component: ARM::CMSIS:CORE
