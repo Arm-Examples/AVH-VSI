@@ -37,7 +37,7 @@ project:
       for-compiler: AC6
       linker:
         - script: ./RTE/Device/SSE-310-MPS3_FVP/linker_SSE310MPS3_secure.sct
-    - setup: Corstone_310 AC6
+    - setup: Corstone_315 AC6
       for-context: +Corstone_315
       for-compiler: AC6
       linker:
