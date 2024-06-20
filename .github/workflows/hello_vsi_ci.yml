@@ -9,11 +9,6 @@ on:
     - cron: '30 22 * * 0'
 
 
-permissions:
-  actions: read
-  security-events: write
-
-
 jobs:
   CI_test_run:
     runs-on: ubuntu-latest
