@@ -27,4 +27,24 @@ jobs:
           with:
             python-version: '3.10'
   
+        # Build all project contexts
+        - name: Build context Corstone_300
+          run: |
+            echo "Building Arm Virtual Hardware hello_vsi example by using the context Corstone_300..."
+            cbuild hello_vsi.csolution.yml --context-set --update-rte --packs --context hello_vsi.event+Corstone_300 --toolchain AC6
 
+        - name: Build context Corstone_310
+          run: |
+             echo "Building Arm Virtual Hardware hello_vsi example by using the context Corstone_310..."
+             cbuild hello_vsi.csolution.yml --context-set --update-rte --packs --context hello_vsi.event+Corstone_310 --toolchain AC6
+
+        - name: Build context Corstone_315
+          run: |
+             echo "Building Arm Virtual Hardware hello_vsi example by using the context Corstone_315..."
+             cbuild hello_vsi.csolution.yml --context-set --update-rte --packs --context hello_vsi.event+Corstone_315 --toolchain AC6
+
+        # Execute all project contexts (experimental, under development)
+        - name: Execute
+          run: |
+            echo "Running the Corstone_300 context..."
+            FVP_Corstone_SSE-300.exe -a ./out/hello_vsi/Corstone_300/event/hello_vsi.axf -C mps3_board.v_path=./source/VSI/data_sensor/python/ -f ARMCM55_config.txt --simlimit 24 --stat
