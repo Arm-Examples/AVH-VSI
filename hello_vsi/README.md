@@ -18,22 +18,23 @@ Use `.event` as the build type, followed by the target platform. For example:
 To build the **Corstone-310** target with **GCC** use: 
 
 ```bash
-cbuild hello_vsi.csolution.yml -c .event+Corstone_310 --packs --update-rte --toolchain GCC
+cbuild hello_vsi.csolution.yml --context-set --update-rte --packs --context hello_vsi.event+Corstone_310 --toolchain GCC
 ```
 
 To build the **Corstone-300** target with **AC6** (default toolchain): 
 
+short form
 ```bash
-cbuild hello_vsi.csolution.yml -c .event+Corstone_300 --packs --update-rte
+cbuild hello_vsi.csolution.yml --context-set --update-rte --packs --context hello_vsi.event+Corstone_300
 ```
 
 or more specific
 
 ```bash
-cbuild hello_vsi.csolution.yml -c .event+Corstone_300 --packs --update-rte --toolchain AC6
+cbuild hello_vsi.csolution.yml --context-set --update-rte --packs --context hello_vsi.event+Corstone_300 --toolchain AC6
 ```
 
-To run the:
+To run a specific context:
 
 **Corstone_310** target which has been build with **GCC** use:
 
