@@ -36,11 +36,12 @@ limitations under the License.
 #define COLOR_BLACK  0
 #define IMAGE_WIDTH (192U)
 #define IMAGE_HEIGHT (192U)
-#define IMAGE_DATA_SIZE (150528U)
 #define CHANNELS_IMAGE_DISPLAYED (3U)
+#define IMAGE_DATA_SIZE (IMAGE_WIDTH*IMAGE_HEIGHT*CHANNELS_IMAGE_DISPLAYED)
+#define FRAME_RATE (30U)
 
 /* Input file */
-#define INPUT_IMAGE "./samples/couple.bmp"
+#define INPUT_IMAGE "./samples/typing.mp4"
 
 /* Buffer for holding an input frame */
 static uint8_t ImageBuf[IMAGE_DATA_SIZE];
@@ -60,13 +61,11 @@ void run()
   uint32_t dataPsnImgDownscaleFactor = 1;
   uint32_t dataPsnImgStartX          = 10;
   uint32_t dataPsnImgStartY          = 35;
-  uint32_t dataPsnTxtInfStartX       = 20;
-  uint32_t dataPsnTxtInfStartY       = 28;
 
   hal_lcd_clear(COLOR_BLACK);
 
   /* Configure Video Driver for Input */
-  if (VideoDrv_Configure(VIDEO_DRV_IN0,  IMAGE_WIDTH, IMAGE_HEIGHT, VIDEO_DRV_COLOR_RGB888, 30U) != VIDEO_DRV_OK) {
+  if (VideoDrv_Configure(VIDEO_DRV_IN0,  IMAGE_WIDTH, IMAGE_HEIGHT, VIDEO_DRV_COLOR_RGB888, FRAME_RATE) != VIDEO_DRV_OK) {
     log_error("Failed to configure video input\n");
     return;
   }
