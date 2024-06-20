@@ -25,13 +25,13 @@ To build the **Corstone-300** target with **AC6** (default toolchain):
 
 short form
 ```bash
-cbuild hello_vsi.csolution.yml --context-set --update-rte --packs --context hello_vsi.event+Corstone_300
+cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_300
 ```
 
 or more specific
 
 ```bash
-cbuild hello_vsi.csolution.yml --context-set --update-rte --packs --context hello_vsi.event+Corstone_300 --toolchain AC6
+cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_300 --toolchain AC6
 ```
 
 To run a specific context:
@@ -39,14 +39,14 @@ To run a specific context:
 **Corstone_310** target which has been build with **GCC** use:
 
 ```bash
-FVP_Corstone_SSE-310 -a ./out/hello_vsi/Corstone_310/event/hello_vsi.elf -C mps3_board.v_path=./source/VSI/data_sensor/python/
+FVP_Corstone_SSE-310 -a ./out/hello_vsi/Corstone_310/event/hello_vsi.elf -C mps3_board.v_path=./source/VSI/data_sensor/python/ --simlimit 60
 ```
 
 
 **Corstone_300** target which has been build with **AC6** use:
 
 ```bash
-FVP_Corstone_SSE-300 -a ./out/hello_vsi/Corstone_300/event/hello_vsi.axf -C mps3_board.v_path=./source/VSI/data_sensor/python/
+FVP_Corstone_SSE-300 -a ./out/hello_vsi/Corstone_300/event/hello_vsi.axf -C mps3_board.v_path=./source/VSI/data_sensor/python/ --simlimit 60
 ```
 
 
