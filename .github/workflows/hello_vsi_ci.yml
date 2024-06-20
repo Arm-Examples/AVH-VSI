@@ -35,8 +35,9 @@ jobs:
 
       - name: Build context Corstone_300_AC6
         run: |
-            echo "Building Arm Virtual Hardware hello_vsi example by using the context Corstone_300..."
+            echo "Building Arm Virtual Hardware hello_vsi example by using the context Corstone_300..."            
             cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_300 --toolchain AC6
+        working-directory: ./hello_vsi
 
       - name: Execute context Corstone_300_AC6
         run: |
