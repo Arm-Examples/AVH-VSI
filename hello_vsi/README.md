@@ -4,7 +4,7 @@ This example uses the **VSI** ([Virtual Streaming Interface](https://arm-softwar
 
 ## Build and run
 
-Use the cbuild tool or an IDE to build the application project in csolution format (See the project [README](../README.md).
+Use the cbuild tool or an IDE to build the application project in csolution format (see the project [README](../README.md)).
 
 All applications have been ported for **Corstone-300**, **Corstone-310** and **Corstone-315**, and can be compiled with **Arm Compiler** 6 or **GCC**. By default the Arm Compiler 6 is used, to compile with GCC, use `--toolchain GCC` option for the cbuild command.
 
@@ -34,21 +34,33 @@ or more specific
 cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_300 --toolchain AC6
 ```
 
+To build the **Corstone-315** target with **AC6**:
+```bash
+cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_315
+```
+
+
 To run a specific context:
 
-**Corstone_310** target which has been build with **GCC** use:
+target **Corstone_310** which has been build with **GCC**  for **60 sec** use:
 
 ```bash
 FVP_Corstone_SSE-310 -a ./out/hello_vsi/Corstone_310/event/hello_vsi.elf -C mps3_board.v_path=./source/VSI/data_sensor/python/ --simlimit 60
 ```
 
 
-**Corstone_300** target which has been build with **AC6** use:
+target **Corstone_300** which has been build with **AC6**  for **60 sec** use:
 
 ```bash
 FVP_Corstone_SSE-300 -a ./out/hello_vsi/Corstone_300/event/hello_vsi.axf -C mps3_board.v_path=./source/VSI/data_sensor/python/ --simlimit 60
 ```
 
+
+target **Corstone_315** which has been build with **AC6**  for **60 sec** use:
+
+```bash
+FVP_Corstone_SSE-315 -a ./out/hello_vsi/Corstone_315/event/hello_vsi.axf -C mps4_board.v_path=./source/VSI/data_sensor/python/ --simlimit 60
+```
 
 
 ### Gated Fetch Flow
