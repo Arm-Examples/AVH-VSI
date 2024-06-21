@@ -64,7 +64,7 @@ jobs:
       - name: Execute context Corstone_315_AC6
         run: |
             echo "Running the Corstone_315 context build with AC6"
-            FVP_Corstone_SSE-315 -a ./out/hello_vsi/Corstone_315/event/hello_vsi.axf -C mps4_board.v_path=./source/VSI/data_sensor/python/ -C mps4_board.visualisation.disable-visualisation=1 --simlimit 60 --stat | tee Corstone_315_AC6.avh.log
+            FVP_Corstone_SSE-315 -a ./out/hello_vsi/Corstone_315/event/hello_vsi.axf -C mps4_board.v_path=./source/VSI/data_sensor/python/ -C mps4_board.visualisation.disable-visualisation=1  -C vis_hdlcd.disable_visualisation=1 --simlimit 60 --stat | tee Corstone_315_AC6.avh.log
             echo "Checking output..."
             test "$(grep "FAIL: " Corstone_315_AC6.avh.log | wc -l)" -eq 0
         working-directory: ./hello_vsi
