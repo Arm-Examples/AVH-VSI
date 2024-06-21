@@ -45,8 +45,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Corstone_300_AC6.avh.log
-          path: ./
-          working-directory: ./hello_vsi
+          path: ./hello_vsi/Corstone_300_AC6.avh.log
+
 
       - name: Build context Corstone_310_AC6
         run: |
