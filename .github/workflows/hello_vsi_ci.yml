@@ -40,3 +40,31 @@ jobs:
             echo "Checking output..."
             test "$(grep "FAIL: " Corstone_300_AC6.avh.log | wc -l)" -eq 0
         working-directory: ./hello_vsi
+
+      - name: Build context Corstone_310_AC6
+        run: |
+            echo "Building Arm Virtual Hardware hello_vsi example by using the context Corstone_310..."
+            cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_310 --toolchain AC6
+        working-directory: ./hello_vsi
+
+      - name: Execute context Corstone_310_AC6
+        run: |
+            echo "Running the Corstone_310 context build with AC6"
+            FVP_Corstone_SSE-300 -a ./out/hello_vsi/Corstone_310/event/hello_vsi.axf -C mps3_board.v_path=./source/VSI/data_sensor/python/ --simlimit 60 --stat | tee Corstone_310_AC6.avh.log
+            echo "Checking output..."
+            test "$(grep "FAIL: " Corstone_310_AC6.avh.log | wc -l)" -eq 0
+        working-directory: ./hello_vsi
+
+      - name: Build context Corstone_315_AC6
+        run: |
+            echo "Building Arm Virtual Hardware hello_vsi example by using the context Corstone_315..."
+            cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_315 --toolchain AC6
+        working-directory: ./hello_vsi
+
+      - name: Execute context Corstone_315_AC6
+        run: |
+            echo "Running the Corstone_315 context build with AC6"
+            FVP_Corstone_SSE-300 -a ./out/hello_vsi/Corstone_315/event/hello_vsi.axf -C mps3_board.v_path=./source/VSI/data_sensor/python/ --simlimit 60 --stat | tee Corstone_315_AC6.avh.log
+            echo "Checking output..."
+            test "$(grep "FAIL: " Corstone_315_AC6.avh.log | wc -l)" -eq 0
+        working-directory: ./hello_vsi
