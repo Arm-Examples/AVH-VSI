@@ -8,7 +8,6 @@ on:
   schedule:
     - cron: '30 22 * * 0'
 
-
 jobs:
   CI_test_run:
     runs-on: ubuntu-latest
@@ -21,9 +20,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
-
-      - name: Diagnosis
-        run: pwd      
 
       - name: Activate vcpkg
         uses: ARM-software/cmsis-actions/vcpkg@v1
@@ -43,4 +39,4 @@ jobs:
             FVP_Corstone_SSE-300 -a ./out/hello_vsi/Corstone_300/event/hello_vsi.axf -C mps3_board.v_path=./source/VSI/data_sensor/python/ --simlimit 60 --stat | tee Corstone_300_AC6.avh.log
             echo "Checking output..."
             test "$(grep "FAIL: " Corstone_300_AC6.avh.log | wc -l)" -eq 0
-        working-directory: ./hello_vsi            
+        working-directory: ./hello_vsi
