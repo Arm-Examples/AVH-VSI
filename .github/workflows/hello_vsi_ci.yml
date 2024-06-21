@@ -41,6 +41,13 @@ jobs:
             test "$(grep "FAIL: " Corstone_300_AC6.avh.log | wc -l)" -eq 0
         working-directory: ./hello_vsi
 
+      - name: Upload report for context Corstone_300_AC6
+        uses: actions/upload-artifact@v4
+        with:
+          name: Corstone_300_AC6.avh.log
+          path: ./
+          working-directory: ./hello_vsi
+
       - name: Build context Corstone_310_AC6
         run: |
             echo "Building Arm Virtual Hardware hello_vsi example by using the context Corstone_310..."
