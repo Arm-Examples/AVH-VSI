@@ -21,11 +21,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
-  
-      # - name: Install system packages
-      #   run: |
-      #       sudo add-apt-repository ppa:deadsnakes/ppa
-      #       sudo apt-get install libpython3.9 libtinfo5
+
+      - name: Diagnosis
+        run: pwd      
 
       - name: Activate vcpkg
         uses: ARM-software/cmsis-actions/vcpkg@v1
