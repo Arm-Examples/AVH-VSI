@@ -21,6 +21,10 @@ jobs:
         with:
           python-version: '3.9'
 
+      - name: Install xterm on Ubuntu
+        run: |
+            sudo apt-get install -y xterm
+
       - name: Activate vcpkg
         uses: ARM-software/cmsis-actions/vcpkg@v1
 
@@ -46,7 +50,6 @@ jobs:
         with:
           name: Corstone_300_AC6.avh.log
           path: ./hello_vsi/Corstone_300_AC6.avh.log
-
 
       - name: Build context Corstone_310_AC6
         run: |
