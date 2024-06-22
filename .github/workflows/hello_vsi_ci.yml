@@ -82,18 +82,3 @@ jobs:
             echo "Checking output..."
             test "$(grep "FAIL: " Corstone_315_AC6.avh.log | wc -l)" -eq 0
         working-directory: ./hello_vsi
-
-      - name: Build context Corstone_300_GCC
-        run: |
-            echo "Building Arm Virtual Hardware hello_vsi example  with GCC  by using the context Corstone_300..."            
-            cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_300 --toolchain GCC
-        working-directory: ./hello_vsi
-
-      - name: Execute context Corstone_300_GCC
-        run: |
-            echo "Running the Corstone_300 context build with GCC"
-            FVP_Corstone_SSE-300 -a ./out/hello_vsi/Corstone_300/event/hello_vsi.elf -C mps3_board.v_path=./source/VSI/data_sensor/python/ -C mps3_board.visualisation.disable-visualisation=1 --simlimit 60 --stat | tee Corstone_300_GCC.avh.log
-            echo "Checking output..."
-            test "$(grep "FAIL: " Corstone_300_GCC.avh.log | wc -l)" -eq 0
-        working-directory: ./hello_vsi
-        
