@@ -25,6 +25,10 @@ jobs:
         run: |
             sudo apt-get install -y xterm
 
+      - name: Install xvfb Virtual Framebuffer on Ubuntu # Needed for xterm
+        run: |
+            sudo apt install -y xvfb
+
       - name: Activate vcpkg
         uses: ARM-software/cmsis-actions/vcpkg@v1
 
