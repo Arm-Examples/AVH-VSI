@@ -52,11 +52,11 @@ jobs:
             test "$(grep "FAIL: " Corstone_300_AC6.avh.log | wc -l)" -eq 0
         working-directory: ./hello_vsi
 
-      - name: Upload report for context Corstone_300_AC6
+      - name: Upload FVP simulation results for context Corstone_300_AC6
         uses: actions/upload-artifact@v4
         with:
-          name: Corstone_300_AC6.avh.log
-          path: ./hello_vsi/Corstone_300_AC6.avh.log
+          name: fvp_stdout_Corstone_300_AC6.simulation.log
+          path: ./hello_vsi/fvp_stdout_Corstone_300_AC6.simulation.log
 
       - name: Build context Corstone_310_AC6
         run: |
@@ -72,6 +72,12 @@ jobs:
             test "$(grep "FAIL: " Corstone_310_AC6.avh.log | wc -l)" -eq 0
         working-directory: ./hello_vsi
 
+      - name: Upload FVP simulation results for context Corstone_310_AC6
+        uses: actions/upload-artifact@v4
+        with:
+          name: fvp_stdout_Corstone_310_AC6.simulation.log
+          path: ./hello_vsi/fvp_stdout_Corstone_310_AC6.simulation.log
+
       - name: Build context Corstone_315_AC6
         run: |
             echo "Building Arm Virtual Hardware hello_vsi example with AC6 by using the context Corstone_315..."
@@ -85,6 +91,12 @@ jobs:
             echo "Checking output..."
             test "$(grep "FAIL: " Corstone_315_AC6.avh.log | wc -l)" -eq 0
         working-directory: ./hello_vsi
+
+      - name: Upload FVP simulation results for context Corstone_315_AC6
+        uses: actions/upload-artifact@v4
+        with:
+          name: fvp_stdout_Corstone_315_AC6.simulation.log
+          path: ./hello_vsi/fvp_stdout_Corstone_315_AC6.simulation.log
 
       # ----------------------------------------------------------------
       # Build with GCC and execute
@@ -103,6 +115,12 @@ jobs:
             test "$(grep "FAIL: " Corstone_300_AC6.avh.log | wc -l)" -eq 0
         working-directory: ./hello_vsi
 
+      - name: Upload FVP simulation results for context Corstone_300_GCC
+        uses: actions/upload-artifact@v4
+        with:
+          name: fvp_stdout_Corstone_300_GCC.simulation.log
+          path: ./hello_vsi/fvp_stdout_Corstone_300_GCC.simulation.log
+
       - name: Build context Corstone_310_GCC
         run: |
             echo "Building Arm Virtual Hardware hello_vsi example with GCC by using the context Corstone_310..."
@@ -117,6 +135,12 @@ jobs:
             test "$(grep "FAIL: " Corstone_310_AC6.avh.log | wc -l)" -eq 0
         working-directory: ./hello_vsi
 
+      - name: Upload FVP simulation results for context Corstone_310_GCC
+        uses: actions/upload-artifact@v4
+        with:
+          name: fvp_stdout_Corstone_310_GCC.simulation.log
+          path: ./hello_vsi/fvp_stdout_Corstone_310_GCC.simulation.log
+
       - name: Build context Corstone_315_GCC
         run: |
             echo "Building Arm Virtual Hardware hello_vsi example with GCC by using the context Corstone_315..."
@@ -130,3 +154,9 @@ jobs:
             echo "Checking output..."
             test "$(grep "FAIL: " Corstone_315_GCC.avh.log | wc -l)" -eq 0
         working-directory: ./hello_vsi
+
+      - name: Upload FVP simulation results for context Corstone_315_GCC
+        uses: actions/upload-artifact@v4
+        with:
+          name: fvp_stdout_Corstone_315_GCC.simulation.log
+          path: ./hello_vsi/fvp_stdout_Corstone_315_GCC.simulation.log
