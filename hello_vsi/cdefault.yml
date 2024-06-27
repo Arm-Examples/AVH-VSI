@@ -19,6 +19,7 @@
 default:
   # Note that we need AC6@6.18 or higher to compile for Corstone-310 target.
   compiler: AC6
+
   misc:
     - for-compiler: AC6
       C:
@@ -64,3 +65,17 @@ default:
         - --entry=Reset_Handler
         - --strict
         - --diag_suppress=6314,6848
+
+    - for-compiler: GCC
+      C-CPP:
+        - -masm-syntax-unified
+        - -fomit-frame-pointer
+        - -ffunction-sections
+        - -fdata-sections        
+      C:
+        - -std=gnu11
+      Link:
+        - --specs=nano.specs
+        - --specs=rdimon.specs
+        - -Wl,-Map=$elf()$.map
+        - -Wl,--gc-sections

@@ -1,8 +1,23 @@
+# Copyright (c) 2024 Arm Limited. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
 solution:
   created-by: uv2csolution@1.2.0
   created-for: CMSIS-Toolbox@2.0.0
-  compiler: AC6
-  cdefault: # use default setup of toolchain specific controls.
+  description: Hello example for the Video Streaming Interface
+
+  packs:
+    - pack: ARM::CMSIS@6.0.0
+    - pack: ARM::CMSIS-Compiler@2.0.0
+    - pack: ARM::V2M_MPS3_SSE_300_BSP
+    - pack: ARM::V2M_MPS3_SSE_310_BSP
+    - pack: ARM::SSE_315_BSP
+
+
+  compiler: GCC  # <-- Check if this is needed!
+
+  # Use default setup of toolchain specific controls.
+  cdefault: 
 
   build-types:
     - type: event
@@ -21,16 +36,6 @@ solution:
       - __ARM_FP: 0xe
       - __FVP_PY
       - __GATED_FETCH
-
-#    - type: gui
-#      define:
-#      - __ARM_FP: 0xe
-#      - __FVP_PY
-#      - __EVENT_DRIVEN
-#      - __USE_GUI
-#      - GLCD_MIRROR_Y: 0
-#      - LCD_MIRROR_X: 1
-#      - __USE_AN547__
 
   target-types:
     - type: Corstone_300
