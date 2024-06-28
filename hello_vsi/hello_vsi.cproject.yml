@@ -38,6 +38,11 @@ project:
       for-compiler: AC6
       linker:
         - script: ./RTE/Device/SSE-315-FVP/ac6_linker_script.sct
+    - setup: Corstone_315 GCC
+      for-context: +Corstone_315
+      for-compiler: GCC
+      linker:
+        - script: ./RTE/Device/SSE-315-FVP/gcc_linker_script.ld
 
   groups:
     - group: App
