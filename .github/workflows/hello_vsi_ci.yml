@@ -47,7 +47,7 @@ jobs:
       - name: Diagnosis after Corstone_300_AC6 build
         run: |
             echo "Diagnosis"
-            tree /A /F ./out
+            tree ./out /A /F
         working-directory: ./hello_vsi
         continue-on-error: true
 
@@ -74,7 +74,7 @@ jobs:
       - name: Diagnosis after Corstone_310_AC6 build
         run: |
             echo "Diagnosis"
-            tree /A /F ./out
+            tree ./out /A /F
         working-directory: ./hello_vsi
         continue-on-error: true
 
@@ -101,7 +101,7 @@ jobs:
       - name: Diagnosis after Corstone_315_AC6 build
         run: |
             echo "Diagnosis"
-            tree /A /F ./out
+            tree ./out /A /F
         working-directory: ./hello_vsi
         continue-on-error: true
 
@@ -131,7 +131,7 @@ jobs:
       - name: Diagnosis after Corstone_300_GCC build
         run: |
             echo "Diagnosis"
-            tree /A /F ./out
+            tree ./out /A /F
         working-directory: ./hello_vsi
         continue-on-error: true
 
@@ -158,7 +158,7 @@ jobs:
       - name: Diagnosis after Corstone_310_GCC build
         run: |
             echo "Diagnosis"
-            tree /A /F ./out
+            tree ./out /A /F
         working-directory: ./hello_vsi
         continue-on-error: true
         
@@ -185,7 +185,7 @@ jobs:
       - name: Diagnosis after Corstone_315_GCC build
         run: |
             echo "Diagnosis"
-            tree /A /F ./out
+            tree ./out /A /F
         working-directory: ./hello_vsi
         continue-on-error: true        
        
