@@ -15,9 +15,9 @@ jobs:
       matrix:
         compiler: [ {name: AC6, ext: axf}, {name: GCC, ext: elf} ]
         target-types: [ 
-         {type: Corstone_300,  device: SSE-300-MPS3,      fvp_model: FVP_Corstone_SSE-300}, 
-         {type: Corstone_310,  device: SSE-310-MPS3_FVP,  fvp_model: FVP_Corstone_SSE-310}, 
-         {type: Corstone_315,  device: SSE-315-FVP,       fvp_model: FVP_Corstone_SSE-315} 
+         {type: Corstone_300,  device: SSE-300-MPS3,      fvp_model: FVP_Corstone_SSE-300, mps_board: mps3_board}, 
+         {type: Corstone_310,  device: SSE-310-MPS3_FVP,  fvp_model: FVP_Corstone_SSE-310, mps_board: mps3_board}, 
+         {type: Corstone_315,  device: SSE-315-FVP,       fvp_model: FVP_Corstone_SSE-315, mps_board: mps4_board} 
          ]
 
     runs-on: ubuntu-latest
@@ -53,29 +53,22 @@ jobs:
             echo "Building Arm Virtual Hardware hello_vsi example with ${{ matrix.compiler.name }} by using the context ${{ matrix.target-types.type }}..."
             cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+${{ matrix.target-types.type }} --toolchain ${{ matrix.compiler.name }} -r
         working-directory: ./hello_vsi
-        continue-on-error: true
 
       # ----------------------------------------------------------------
       # Execute the previous generated context on a model
       # ----------------------------------------------------------------
       - name: Execute the context ${{ matrix.target-types.type }}_${{ matrix.compiler.name }} on ${{ matrix.target-types.fvp_model }}
         run: |
-            mps_board=""
-            case "${{ matrix.target-types.fvp_model }}" in
-              FVP_Corstone_SSE-300 | FVP_Corstone_SSE-310) mps_board="mps3_board" ;;
-              FVP_Corstone_SSE-315) mps_board="mps4_board" ;;
-            esac
 
             echo " ${{ matrix.target-types.fvp_model }} context build with ${{ matrix.compiler }}"
             ${{ matrix.target-types.fvp_model }} -a  ./out/hello_vsi/${{ matrix.target-types.type }}/event/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} /
-            -C ${mps_board}.v_path=./source/VSI/data_sensor/python/ -C ${mps_board}.visualisation.disable-visualisation=1 /
-            -C ${mps_board}.uart0.out_file=fvp_stdout_${{ matrix.target-types.type }}_${{ matrix.compiler.name }}.simulation.log /
+            -C ${{ matrix.target-types.mps_board }}.v_path=./source/VSI/data_sensor/python/ -C ${mps_board}.visualisation.disable-visualisation=1 /
+            -C ${{ matrix.target-types.mps_board }}.uart0.out_file=fvp_stdout_${{ matrix.target-types.type }}_${{ matrix.compiler.name }}.simulation.log /
             --simlimit 60 --stat | tee ${{ matrix.target-types.type }}_${{ matrix.compiler.name }}.avh.log
 
             echo "Checking output..."
             test "$(grep "FAIL: " ${{ matrix.target-types.type }}_${{ matrix.compiler.name }}.avh.log | wc -l)" -eq 0
         working-directory: ./hello_vsi
-        continue-on-error: true
 
       # ----------------------------------------------------------------
       # Upload FVP simulation results
@@ -85,7 +78,6 @@ jobs:
         with:
           name: fvp_stdout_${{ matrix.target-types.type }}_${{ matrix.compiler.name }}.simulation.log
           path: ./hello_vsi/fvp_stdout_${{ matrix.target-types.type }}_${{ matrix.compiler.name }}.simulation.log
-        continue-on-error: true
 
       # ----------------------------------------------------------------
       # Show the directory structure of the ./out folder
