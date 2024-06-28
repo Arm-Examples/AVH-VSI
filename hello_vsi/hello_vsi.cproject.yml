@@ -1,7 +1,5 @@
 project:
   packs:
-    - pack: ARM::Arm-2D@1.1.0
-      for-context: .gui
     - pack: ARM::CMSIS@6.1.0
     - pack: ARM::CMSIS-RTX@5.9.0
     - pack: ARM::CMSIS-Compiler@2.1.0
@@ -40,7 +38,6 @@ project:
       for-compiler: AC6
       linker:
         - script: ./RTE/Device/SSE-315-FVP/ac6_linker_script.sct
-
 
   groups:
     - group: App

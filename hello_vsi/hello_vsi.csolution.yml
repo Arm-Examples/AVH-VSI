@@ -13,16 +13,13 @@ solution:
     - pack: ARM::V2M_MPS3_SSE_310_BSP
     - pack: ARM::SSE_315_BSP
 
-
-  compiler: GCC  # <-- Check if this is needed!
-
   # Use default setup of toolchain specific controls.
   cdefault: 
 
   build-types:
     - type: event
       define:
-      - __ARM_FP: 0xe
+      # - __ARM_FP: 0xe
       - __FVP_PY
       - __EVENT_DRIVEN
 
@@ -48,6 +45,9 @@ solution:
 
     - type: Corstone_315
       device: SSE-315-FVP
+
+  output-dirs:
+    outdir:  $SolutionDir()$/out/$Project$/$TargetType$/$BuildType$/$Compiler$
 
   projects:
       - project: ./hello_vsi.cproject.yml
