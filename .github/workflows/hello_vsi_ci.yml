@@ -98,7 +98,7 @@ jobs:
             cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_315 --toolchain AC6 -r
         working-directory: ./hello_vsi
 
-      - name: Diagnosis after Corstone_310_AC6 build
+      - name: Diagnosis after Corstone_315_AC6 build
         run: |
             echo "Diagnosis"
             tree /A /F ./out
@@ -128,10 +128,15 @@ jobs:
             cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_300 --toolchain GCC -r
         working-directory: ./hello_vsi
 
-      - name: Execute context Corstone_300_GCC
+      - name: Diagnosis after Corstone_300_GCC build
         run: |
             echo "Diagnosis"
             tree /A /F ./out
+        working-directory: ./hello_vsi
+        continue-on-error: true
+
+      - name: Execute context Corstone_300_GCC
+        run: |
             echo "Running the Corstone_300 context build with GCC"
             FVP_Corstone_SSE-300 -a ./out/hello_vsi/Corstone_300/event/GCC/hello_vsi.elf -C mps3_board.v_path=./source/VSI/data_sensor/python/ -C mps3_board.visualisation.disable-visualisation=1 -C mps3_board.uart0.out_file=fvp_stdout_Corstone_300_GCC.simulation.log --simlimit 60 --stat | tee Corstone_300_GCC.avh.log
             echo "Checking output..."
@@ -150,10 +155,15 @@ jobs:
             cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_310 --toolchain GCC -r
         working-directory: ./hello_vsi
 
-      - name: Execute context Corstone_310_GCC
+      - name: Diagnosis after Corstone_310_GCC build
         run: |
             echo "Diagnosis"
             tree /A /F ./out
+        working-directory: ./hello_vsi
+        continue-on-error: true
+        
+      - name: Execute context Corstone_310_GCC
+        run: |
             echo "Running the Corstone_310 context build with GCC"
             FVP_Corstone_SSE-310 -a ./out/hello_vsi/Corstone_310/event/GCC/hello_vsi.elf -C mps3_board.v_path=./source/VSI/data_sensor/python/ -C mps3_board.visualisation.disable-visualisation=1 -C mps3_board.uart0.out_file=fvp_stdout_Corstone_310_GCC.simulation.log --simlimit 60 --stat | tee Corstone_310_GCC.avh.log
             echo "Checking output..."
@@ -172,10 +182,15 @@ jobs:
             cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_315 --toolchain GCC -r
         working-directory: ./hello_vsi
 
-      - name: Execute context Corstone_315_GCC
+      - name: Diagnosis after Corstone_315_GCC build
         run: |
             echo "Diagnosis"
             tree /A /F ./out
+        working-directory: ./hello_vsi
+        continue-on-error: true        
+       
+      - name: Execute context Corstone_315_GCC
+        run: |
             echo "Running the Corstone_315 context build with AC6"
             FVP_Corstone_SSE-315 -a ./out/hello_vsi/Corstone_315/event/GCC/hello_vsi.elf -C mps4_board.v_path=./source/VSI/data_sensor/python/ -C mps4_board.visualisation.disable-visualisation=1 -C vis_hdlcd.disable_visualisation=1 -C mps4_board.uart0.out_file=fvp_stdout_Corstone_315_GCC.simulation.log --simlimit 60 --stat | tee Corstone_315_GCC.avh.log
             echo "Checking output..."
