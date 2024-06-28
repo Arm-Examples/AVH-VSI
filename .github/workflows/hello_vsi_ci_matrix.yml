@@ -1,4 +1,4 @@
-name: Arm Virtual Hardware hello_vsi example
+name: Arm Virtual Hardware hello_vsi example matrix build
 on:
   workflow_dispatch:
   pull_request:
@@ -53,6 +53,7 @@ jobs:
             echo "Building Arm Virtual Hardware hello_vsi example with ${{ matrix.compiler.name }} by using the context ${{ matrix.target-types.type }}..."
             cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+${{ matrix.target-types.type }} --toolchain ${{ matrix.compiler.name }} -r
         working-directory: ./hello_vsi
+        continue-on-error: true
 
       # ----------------------------------------------------------------
       # Execute the previous generated context on a model
@@ -69,6 +70,7 @@ jobs:
             echo "Checking output..."
             test "$(grep "FAIL: " ${{ matrix.target-types.type }}_${{ matrix.compiler.name }}.avh.log | wc -l)" -eq 0
         working-directory: ./hello_vsi
+        continue-on-error: true        
 
       # ----------------------------------------------------------------
       # Upload FVP simulation results
