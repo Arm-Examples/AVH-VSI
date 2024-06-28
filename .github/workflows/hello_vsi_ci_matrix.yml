@@ -63,10 +63,7 @@ jobs:
         run: |
 
             echo " ${{ matrix.target-types.fvp_model }} context build with ${{ matrix.compiler }}"
-            " ${{ matrix.target-types.fvp_model }} -a  ./out/hello_vsi/${{ matrix.target-types.type }}/event/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} 
-            -C ${{ matrix.target-types.mps_board }}.v_path=./source/VSI/data_sensor/python/ -C ${mps_board}.visualisation.disable-visualisation=1 
-            -C ${{ matrix.target-types.mps_board }}.uart0.out_file=fvp_stdout_${{ matrix.target-types.type }}_${{ matrix.compiler.name }}.simulation.log 
-            --simlimit 60 --stat | tee ${{ matrix.target-types.type }}_${{ matrix.compiler.name }}.avh.log "
+            ${{ matrix.target-types.fvp_model }} -a  ./out/hello_vsi/${{ matrix.target-types.type }}/event/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} -C ${{ matrix.target-types.mps_board }}.v_path=./source/VSI/data_sensor/python/ -C ${mps_board}.visualisation.disable-visualisation=1 -C ${{ matrix.target-types.mps_board }}.uart0.out_file=fvp_stdout_${{ matrix.target-types.type }}_${{ matrix.compiler.name }}.simulation.log  --simlimit 60 --stat | tee ${{ matrix.target-types.type }}_${{ matrix.compiler.name }}.avh.log
 
             echo "Checking output..."
             test "$(grep "FAIL: " ${{ matrix.target-types.type }}_${{ matrix.compiler.name }}.avh.log | wc -l)" -eq 0
