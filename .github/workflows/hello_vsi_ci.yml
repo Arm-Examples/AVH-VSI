@@ -47,7 +47,7 @@ jobs:
       - name: Diagnosis after Corstone_300_AC6 build
         run: |
             echo "Diagnosis"
-            tree ./out /A /F
+            tree ./out /F
         working-directory: ./hello_vsi
         continue-on-error: true
 
@@ -71,13 +71,6 @@ jobs:
             cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_310 --toolchain AC6 -r
         working-directory: ./hello_vsi
 
-      - name: Diagnosis after Corstone_310_AC6 build
-        run: |
-            echo "Diagnosis"
-            tree ./out /A /F
-        working-directory: ./hello_vsi
-        continue-on-error: true
-
       - name: Execute context Corstone_310_AC6
         run: |
             echo "Running the Corstone_310 context build with AC6"
@@ -97,13 +90,6 @@ jobs:
             echo "Building Arm Virtual Hardware hello_vsi example with AC6 by using the context Corstone_315..."
             cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_315 --toolchain AC6 -r
         working-directory: ./hello_vsi
-
-      - name: Diagnosis after Corstone_315_AC6 build
-        run: |
-            echo "Diagnosis"
-            tree ./out /A /F
-        working-directory: ./hello_vsi
-        continue-on-error: true
 
       - name: Execute context Corstone_315_AC6
         run: |
@@ -131,7 +117,7 @@ jobs:
       - name: Diagnosis after Corstone_300_GCC build
         run: |
             echo "Diagnosis"
-            tree ./out /A /F
+            tree ./out /F
         working-directory: ./hello_vsi
         continue-on-error: true
 
@@ -148,20 +134,7 @@ jobs:
         with:
           name: fvp_stdout_Corstone_300_GCC.simulation.log
           path: ./hello_vsi/fvp_stdout_Corstone_300_GCC.simulation.log
-
-      - name: Build context Corstone_310_GCC
-        run: |
-            echo "Building Arm Virtual Hardware hello_vsi example with GCC by using the context Corstone_310..."
-            cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_310 --toolchain GCC -r
-        working-directory: ./hello_vsi
-
-      - name: Diagnosis after Corstone_310_GCC build
-        run: |
-            echo "Diagnosis"
-            tree ./out /A /F
-        working-directory: ./hello_vsi
-        continue-on-error: true
-        
+       
       - name: Execute context Corstone_310_GCC
         run: |
             echo "Running the Corstone_310 context build with GCC"
@@ -175,20 +148,7 @@ jobs:
         with:
           name: fvp_stdout_Corstone_310_GCC.simulation.log
           path: ./hello_vsi/fvp_stdout_Corstone_310_GCC.simulation.log
-
-      - name: Build context Corstone_315_GCC
-        run: |
-            echo "Building Arm Virtual Hardware hello_vsi example with GCC by using the context Corstone_315..."
-            cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_315 --toolchain GCC -r
-        working-directory: ./hello_vsi
-
-      - name: Diagnosis after Corstone_315_GCC build
-        run: |
-            echo "Diagnosis"
-            tree ./out /A /F
-        working-directory: ./hello_vsi
-        continue-on-error: true        
-       
+      
       - name: Execute context Corstone_315_GCC
         run: |
             echo "Running the Corstone_315 context build with AC6"
