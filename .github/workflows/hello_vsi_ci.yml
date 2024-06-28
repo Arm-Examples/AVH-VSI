@@ -44,13 +44,6 @@ jobs:
             cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_300 --toolchain AC6 -r
         working-directory: ./hello_vsi
 
-      - name: Diagnosis after Corstone_300_AC6 build
-        run: |
-            echo "Diagnosis"
-            tree ./out /F
-        working-directory: ./hello_vsi
-        continue-on-error: true
-
       - name: Execute context Corstone_300_AC6
         run: |
             echo "Running the Corstone_300 context build with AC6"
@@ -114,13 +107,6 @@ jobs:
             cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+Corstone_300 --toolchain GCC -r
         working-directory: ./hello_vsi
 
-      - name: Diagnosis after Corstone_300_GCC build
-        run: |
-            echo "Diagnosis"
-            tree ./out /F
-        working-directory: ./hello_vsi
-        continue-on-error: true
-
       - name: Execute context Corstone_300_GCC
         run: |
             echo "Running the Corstone_300 context build with GCC"
@@ -162,3 +148,11 @@ jobs:
         with:
           name: fvp_stdout_Corstone_315_GCC.simulation.log
           path: ./hello_vsi/fvp_stdout_Corstone_315_GCC.simulation.log
+
+      - name: Show directory structure of ./out folder
+        run: |
+              echo "Diagnosis"
+              tree ./out
+        working-directory: ./hello_vsi
+        continue-on-error: true
+  
