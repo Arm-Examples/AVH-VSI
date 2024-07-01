@@ -52,7 +52,7 @@ jobs:
       - name: Build context ${{ matrix.target.type }}_${{ matrix.compiler.name }}
         run: |
             echo "Building Arm Virtual Hardware hello_vsi example with ${{ matrix.compiler.name }} by using the context ${{ matrix.target.type }}..."
-            cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+${{ matrix.target.type }} --toolchain ${{ matrix.compiler.name }} -r
+            cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+${{ matrix.target.type }} --toolchain ${{ matrix.compiler.name }} -r | tee ${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
         working-directory: ./hello_vsi
         continue-on-error: true
 
@@ -82,11 +82,11 @@ jobs:
       # ----------------------------------------------------------------
       # Upload build log
       # ----------------------------------------------------------------
-      - name: Upload build log for context ${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log
+      - name: Upload build log for context ${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
         uses: actions/upload-artifact@v4
         with:
-            name: ${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log
-            path: ./hello_vsi/${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log
+            name: ${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+            path: ./hello_vsi/${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
 
       # ----------------------------------------------------------------
       # Upload FVP simulation results
