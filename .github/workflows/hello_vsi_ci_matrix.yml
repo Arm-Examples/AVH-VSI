@@ -63,12 +63,21 @@ jobs:
         run: |
 
             echo " ${{ matrix.target.model }} context build with ${{ matrix.compiler }}"
-            ${{ matrix.target.model }} -a  ./out/hello_vsi/${{ matrix.target.type }}/event/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} -C ${{ matrix.target.board }}.v_path=./source/VSI/data_sensor/python/ -f ${{ matrix.target.model }}.cfg -C ${{ matrix.target.mps }}.uart0.out_file=fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log --simlimit 60 --stat | tee ${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log
+            ${{ matrix.target.model }} -a ./out/hello_vsi/${{ matrix.target.type }}/event/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} -C ${{ matrix.target.board }}.v_path=./source/VSI/data_sensor/python/ -f ${{ matrix.target.model }}.cfg -C ${{ matrix.target.mps }}.uart0.out_file=fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log --simlimit 60 --stat | tee ${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log
 
             echo "Checking output..."
             test "$(grep "FAIL: " ${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log | wc -l)" -eq 0
         working-directory: ./hello_vsi
         continue-on-error: true        
+
+      # ----------------------------------------------------------------
+      # Directory structure of ./hello_vsi folder
+      # ----------------------------------------------------------------
+      - name: Directory structure of ./hello_vsi folder
+        run: |
+              echo "Diagnosis"
+              tree ./hello_vs
+        continue-on-error: true
 
       # ----------------------------------------------------------------
       # Upload build log
