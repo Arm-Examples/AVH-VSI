@@ -11,13 +11,13 @@ on:
 jobs:
   CI_test_run:
     strategy:
-      # The data for the target-types have been taken from the hello_vsi.csolution.yml file
+      # The data for the types have been taken from the section target-types in the hello_vsi.csolution.yml file
       matrix:
         compiler: [ {name: AC6, ext: axf}, {name: GCC, ext: elf} ]
-        target-types: [ 
-         {type: Corstone_300,  device: SSE-300-MPS3,      fvp_model: FVP_Corstone_SSE-300, mps_board: mps3_board}, 
-         {type: Corstone_310,  device: SSE-310-MPS3_FVP,  fvp_model: FVP_Corstone_SSE-310, mps_board: mps3_board}, 
-         {type: Corstone_315,  device: SSE-315-FVP,       fvp_model: FVP_Corstone_SSE-315, mps_board: mps4_board} 
+        target: [ 
+         {type: Corstone_300,  device: SSE-300-MPS3,      model: FVP_Corstone_SSE-300, board: mps3_board}, 
+         {type: Corstone_310,  device: SSE-310-MPS3_FVP,  model: FVP_Corstone_SSE-310, board: mps3_board}, 
+         {type: Corstone_315,  device: SSE-315-FVP,       model: FVP_Corstone_SSE-315, board: mps4_board} 
          ]
       max-parallel: 1
 
@@ -49,40 +49,49 @@ jobs:
       # ----------------------------------------------------------------
       # Build executable for a specific target compiler pair
       # ----------------------------------------------------------------
-      - name: Build context  ${{ matrix.target-types.type }}_${{ matrix.compiler.name }}
+      - name: Build context ${{ matrix.target.type }}_${{ matrix.compiler.name }}
         run: |
-            echo "Building Arm Virtual Hardware hello_vsi example with ${{ matrix.compiler.name }} by using the context ${{ matrix.target-types.type }}..."
-            cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+${{ matrix.target-types.type }} --toolchain ${{ matrix.compiler.name }} -r
+            echo "Building Arm Virtual Hardware hello_vsi example with ${{ matrix.compiler.name }} by using the context ${{ matrix.target.type }}..."
+            cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+${{ matrix.target.type }} --toolchain ${{ matrix.compiler.name }} -r
         working-directory: ./hello_vsi
         continue-on-error: true
 
       # ----------------------------------------------------------------
       # Execute the previous generated context on a model
       # ----------------------------------------------------------------
-      - name: Execute the context ${{ matrix.target-types.type }}_${{ matrix.compiler.name }} on ${{ matrix.target-types.fvp_model }}
+      - name: Execute context ${{ matrix.target.type }}_${{ matrix.compiler.name }} on ${{ matrix.target.model }}
         run: |
 
-            echo " ${{ matrix.target-types.fvp_model }} context build with ${{ matrix.compiler }}"
-            ${{ matrix.target-types.fvp_model }} -a  ./out/hello_vsi/${{ matrix.target-types.type }}/event/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} -C ${{ matrix.target-types.mps_board }}.v_path=./source/VSI/data_sensor/python/ -f ${{ matrix.target-types.fvp_model }}.cfg -C ${{ matrix.target-types.mps_board }}.uart0.out_file=fvp_stdout_${{ matrix.target-types.fvp_model }}_${{ matrix.compiler.name }}.simulation.log --simlimit 60 --stat | tee ${{ matrix.target-types.type }}_${{ matrix.compiler.name }}.avh.log
+            echo " ${{ matrix.target.model }} context build with ${{ matrix.compiler }}"
+            ${{ matrix.target.model }} -a  ./out/hello_vsi/${{ matrix.target.type }}/event/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} -C ${{ matrix.target.board }}.v_path=./source/VSI/data_sensor/python/ -f ${{ matrix.target.model }}.cfg -C ${{ matrix.target.mps }}.uart0.out_file=fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log --simlimit 60 --stat | tee ${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log
 
             echo "Checking output..."
-            test "$(grep "FAIL: " ${{ matrix.target-types.type }}_${{ matrix.compiler.name }}.avh.log | wc -l)" -eq 0
+            test "$(grep "FAIL: " ${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log | wc -l)" -eq 0
         working-directory: ./hello_vsi
         continue-on-error: true        
 
       # ----------------------------------------------------------------
-      # Upload FVP simulation results
+      # Upload build log
       # ----------------------------------------------------------------
-      - name: Upload FVP simulation results for context ${{ matrix.target-types.type }}_${{ matrix.compiler.name }}
+      - name: Upload build log for context ${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log
         uses: actions/upload-artifact@v4
         with:
-          name: fvp_stdout_${{ matrix.target-types.fvp_model }}_${{ matrix.compiler.name }}.simulation.log
-          path: ./hello_vsi/fvp_stdout_${{ matrix.target-types.fvp_model }}_${{ matrix.compiler.name }}.simulation.log
+            name: ${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log
+            path: ./hello_vsi/${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log
 
       # ----------------------------------------------------------------
-      # Show the directory structure of the ./out folder
+      # Upload FVP simulation results
       # ----------------------------------------------------------------
-      - name: Show the directory structure of the ./out folder
+      - name: Upload FVP simulation results for context ${{ matrix.target.type }}_${{ matrix.compiler.name }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log
+          path: ./hello_vsi/fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log
+
+      # ----------------------------------------------------------------
+      # Directory structure of ./out folder
+      # ----------------------------------------------------------------
+      - name: Directory structure of ./out folder
         run: |
               echo "Diagnosis"
               tree ./out
