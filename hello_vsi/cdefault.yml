@@ -79,3 +79,4 @@ default:
         - -Wl,-Map=$elf()$.map
         - -Wl,--gc-sections
         - -Wl,--no-warn-rwx-segment
+        - --entry=Reset_Handler
