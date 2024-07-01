@@ -76,8 +76,8 @@ jobs:
       - name: Upload FVP simulation results for context ${{ matrix.target-types.type }}_${{ matrix.compiler.name }}
         uses: actions/upload-artifact@v4
         with:
-          name: fvp_stdout_${{ matrix.target-types.type }}_${{ matrix.compiler.name }}.simulation.log
-          path: ./hello_vsi/fvp_stdout_${{ matrix.target-types.type }}_${{ matrix.compiler.name }}.simulation.log
+          name: fvp_stdout_${{ matrix.target-types.fvp_model }}_${{ matrix.compiler.name }}.simulation.log
+          path: ./hello_vsi/fvp_stdout_${{ matrix.target-types.fvp_model }}_${{ matrix.compiler.name }}.simulation.log
 
       # ----------------------------------------------------------------
       # Show the directory structure of the ./out folder
