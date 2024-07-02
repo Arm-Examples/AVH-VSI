@@ -3,7 +3,7 @@
 
 solution:
   created-by: uv2csolution@1.2.0
-  created-for: CMSIS-Toolbox@2.0.0
+  created-for: CMSIS-Toolbox@2.4.0
   description: Hello example for the Video Streaming Interface
 
   packs:
@@ -22,7 +22,7 @@ solution:
   build-types:
     - type: event
       define:
-      # - __ARM_FP: 0xe
+      - __ARM_FP: 0xe
       - __FVP_PY
       - __EVENT_DRIVEN
 
