@@ -60,7 +60,8 @@ jobs:
           list_of_contexts="$(csolution list contexts hello_vsi.csolution.yml)"
 
           echo "Variable content: $list_of_contexts"
-          echo "list_of_contexts=$list_of_contexts" >> "$GITHUB_OUTPUT"
+          echo "Redirect list to GHB output"
+          echo "$list_of_contexts" >> "$GITHUB_OUTPUT"
 
         working-directory: ./hello_vsi
         
