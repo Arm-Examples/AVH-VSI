@@ -51,16 +51,19 @@ jobs:
       # Experimental:Get list of contexts
       # ----------------------------------------------------------------        
       - name: Get list of contexts
-        run: |
-          csolution list contexts hello_vsi.csolution.yml        
-          csolution list contexts hello_vsi.csolution.yml >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
         id: get_list_of_contexts
+        run: |
+          echo "Commandline to get the contexts"
+          csolution list contexts hello_vsi.csolution.yml
+          echo "Save the list to a variable"
+          list_of_contexts = "$(csolution list contexts hello_vsi.csolution.yml)"
+          echo "$list_of_contexts" >> $GITHUB_OUTPUT
         working-directory: ./hello_vsi
         
       - name: Show list of contexts
         run: |
-            echo ${{ steps.get_list_of_contexts.outputs  }}
+            echo "Action: Show list of contexts"
+            echo ${{ steps.get_list_of_contexts.list_of_contexts }}
         working-directory: ./hello_vsi
 
       # ----------------------------------------------------------------
