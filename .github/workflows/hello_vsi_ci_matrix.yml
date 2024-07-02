@@ -54,8 +54,11 @@ jobs:
         run: |
           echo "Commandline to get the contexts"
           csolution list contexts hello_vsi.csolution.yml
+
           echo "Save the list to a variable"
-          echo "list_of_contexts=$( csolution list contexts hello_vsi.csolution.yml )" >> $GITHUB_OUTPUT
+          list_of_contexts="csolution list contexts hello_vsi.csolution.yml"
+
+          echo "Variable content: [$list_of_contexts ]"
         id: get_list_of_contexts
         working-directory: ./hello_vsi
         
