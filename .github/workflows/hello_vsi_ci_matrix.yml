@@ -52,12 +52,14 @@ jobs:
       # ----------------------------------------------------------------        
       - name: Get list of contexts
         run: |
-          csolution list contexts >> $GITHUB_OUTPUT
+          csolution list contexts hello_vsi.csolution.yml >> $GITHUB_OUTPUT
         id: get_list_of_contexts
-    
+        working-directory: ./hello_vsi
+        
       - name: Show list of contexts
         run: |
             echo ${{ steps.get_list_of_contexts.outputs.*  }}
+        working-directory: ./hello_vsi
 
       # ----------------------------------------------------------------
       # Build executable for a specific target compiler pair
