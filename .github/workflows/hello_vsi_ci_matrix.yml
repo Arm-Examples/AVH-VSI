@@ -57,10 +57,10 @@ jobs:
           csolution list contexts hello_vsi.csolution.yml
 
           echo "Save the list to a variable"
-          echo "list_of_contexts=csolution list contexts hello_vsi.csolution.yml" >> $GITHUB_OUTPUT
+          "list_of_contexts=$(csolution list contexts hello_vsi.csolution.yml)"" >> $GITHUB_OUTPUT
 
           echo "Variable content"
-          echo "${{ steps.get_list_of_contexts.list_of_contexts }}"
+          echo " $list_of_contexts"
 
         working-directory: ./hello_vsi
         
