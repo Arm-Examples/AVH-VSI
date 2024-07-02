@@ -52,7 +52,7 @@ jobs:
       # ----------------------------------------------------------------        
       - name: Get list of contexts
         run: |
-          echo 'var<<EOF' >> $GITHUB_OUTPUT
+          csolution list contexts hello_vsi.csolution.yml        
           csolution list contexts hello_vsi.csolution.yml >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
         id: get_list_of_contexts
@@ -60,7 +60,7 @@ jobs:
         
       - name: Show list of contexts
         run: |
-            echo ${{ steps.get_list_of_contexts.outputs.*  }}
+            echo ${{ steps.get_list_of_contexts.outputs  }}
         working-directory: ./hello_vsi
 
       # ----------------------------------------------------------------
