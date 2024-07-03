@@ -88,11 +88,11 @@ jobs:
         run: |
 
             echo " ${{ matrix.target.model }} context build with ${{ matrix.compiler }}"
-            ${{ matrix.target.model }} /
-                -a ./out/hello_vsi/${{ matrix.target.type }}/event/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} /
-                -C ${{ matrix.target.board }}.v_path=./source/VSI/data_sensor/python/ /
-                -f ${{ matrix.target.model }}.cfg /
-                -C ${{ matrix.target.board }}.uart0.out_file=fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log /
+            ${{ matrix.target.model }} \
+                -a ./out/hello_vsi/${{ matrix.target.type }}/event/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} \
+                -C ${{ matrix.target.board }}.v_path=./source/VSI/data_sensor/python/ \
+                -f ${{ matrix.target.model }}.cfg \
+                -C ${{ matrix.target.board }}.uart0.out_file=fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log \
                 --simlimit 60 --stat | tee ${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log
 
             echo "Checking output..."
