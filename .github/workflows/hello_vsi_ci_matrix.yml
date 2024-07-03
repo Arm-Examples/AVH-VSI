@@ -21,9 +21,9 @@ jobs:
          {type: Corstone_315,  device: SSE-315-FVP,       model: FVP_Corstone_SSE-315, board: mps4_board} 
          ]
 
-      max-parallel: 1
+      max-parallel: 2
 
-    runs-on: [ "${{ matrix.os }}" ]
+    runs-on: [ "${{ matrix.os }}" , "${{ matrix.compiler.name }}" ]
 
     steps:
       - name: Checkout
