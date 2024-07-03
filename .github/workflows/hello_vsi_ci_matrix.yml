@@ -62,14 +62,13 @@ jobs:
           echo "Variable content: $list_of_contexts"
 
           echo "LIST_OF_CONTEXTS_VAR<<EOF" >> $GITHUB_ENV
-          echo "$list_of_contexts" >> $GITHUB_ENV
+          echo $list_of_contexts >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
         working-directory: ./hello_vsi
 
       - name: Show list of contexts
         run: |
           echo ${{ env.LIST_OF_CONTEXTS_VAR }}
-
         working-directory: ./hello_vsi
 
       # ----------------------------------------------------------------
