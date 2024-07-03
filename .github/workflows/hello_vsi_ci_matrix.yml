@@ -13,15 +13,17 @@ jobs:
     strategy:
       # The data for the types have been taken from the section target-types in the hello_vsi.csolution.yml file
       matrix:
+        os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
         compiler: [ {name: AC6, ext: axf}, {name: GCC, ext: elf} ]
         target: [ 
          {type: Corstone_300,  device: SSE-300-MPS3,      model: FVP_Corstone_SSE-300, board: mps3_board}, 
          {type: Corstone_310,  device: SSE-310-MPS3_FVP,  model: FVP_Corstone_SSE-310, board: mps3_board}, 
          {type: Corstone_315,  device: SSE-315-FVP,       model: FVP_Corstone_SSE-315, board: mps4_board} 
          ]
+
       max-parallel: 1
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout
@@ -80,7 +82,7 @@ jobs:
             cbuild hello_vsi.csolution.yml --update-rte --packs --context \
                 hello_vsi.event+${{ matrix.target.type }} \
                 --toolchain ${{ matrix.compiler.name }} -r \
-                | tee ${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+                | tee ${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.build.log
 
         working-directory: ./hello_vsi
         continue-on-error: true
@@ -96,8 +98,8 @@ jobs:
                 -a ./out/hello_vsi/${{ matrix.target.type }}/event/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} \
                 -C ${{ matrix.target.board }}.v_path=./source/VSI/data_sensor/python/ \
                 -f ${{ matrix.target.model }}.cfg \
-                -C ${{ matrix.target.board }}.uart0.out_file=fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log \
-                --simlimit 60 --stat | tee ${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log
+                -C ${{ matrix.target.board }}.uart0.out_file=fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.${{ matrix.os }}.simulation.log \
+                --simlimit 60 --stat | tee ${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.avh.log
 
             echo "Checking output..."
             test "$(grep "FAIL: " ${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log | wc -l)" -eq 0
@@ -117,20 +119,20 @@ jobs:
       # ----------------------------------------------------------------
       # Upload build log
       # ----------------------------------------------------------------
-      - name: Upload build log for context ${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+      - name: Upload build log for context ${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.build.log
         uses: actions/upload-artifact@v4
         with:
-            name: ${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
-            path: ./hello_vsi/${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+            name: ${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.build.log
+            path: ./hello_vsi/${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.build.log
 
       # ----------------------------------------------------------------
       # Upload FVP simulation results
       # ----------------------------------------------------------------
-      - name: Upload FVP simulation results for context ${{ matrix.target.type }}_${{ matrix.compiler.name }}
+      - name: Upload FVP simulation results for context ${{ matrix.target.type }}_${{ matrix.compiler.name }}_on_${{ matrix.os }} 
         uses: actions/upload-artifact@v4
         with:
-          name: fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log
-          path: ./hello_vsi/fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log
+          name: fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.${{ matrix.os }}.simulation.log
+          path: ./hello_vsi/fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.${{ matrix.os }}.simulation.log
 
       # ----------------------------------------------------------------
       # Directory structure of ./out folder
