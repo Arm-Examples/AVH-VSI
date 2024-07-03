@@ -46,10 +46,9 @@ jobs:
       - name: Activate Arm tool license
         uses: ARM-software/cmsis-actions/armlm@v1
 
-
       # ----------------------------------------------------------------
       # Experimental:Get list of contexts
-      # ----------------------------------------------------------------        
+      # ----------------------------------------------------------------
       - name: Get list of contexts
         id: get_list_of_contexts
         run: |
@@ -77,7 +76,12 @@ jobs:
       - name: Build context ${{ matrix.target.type }}_${{ matrix.compiler.name }}
         run: |
             echo "Building Arm Virtual Hardware hello_vsi example with ${{ matrix.compiler.name }} by using the context ${{ matrix.target.type }}..."
-            cbuild hello_vsi.csolution.yml --update-rte --packs --context hello_vsi.event+${{ matrix.target.type }} --toolchain ${{ matrix.compiler.name }} -r | tee ${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+
+            cbuild hello_vsi.csolution.yml --update-rte --packs --context \
+                hello_vsi.event+${{ matrix.target.type }} \
+                --toolchain ${{ matrix.compiler.name }} -r \
+                | tee ${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+
         working-directory: ./hello_vsi
         continue-on-error: true
 
@@ -86,8 +90,8 @@ jobs:
       # ----------------------------------------------------------------
       - name: Execute context ${{ matrix.target.type }}_${{ matrix.compiler.name }} on ${{ matrix.target.model }}
         run: |
-
             echo " ${{ matrix.target.model }} context build with ${{ matrix.compiler }}"
+
             ${{ matrix.target.model }} \
                 -a ./out/hello_vsi/${{ matrix.target.type }}/event/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} \
                 -C ${{ matrix.target.board }}.v_path=./source/VSI/data_sensor/python/ \
@@ -97,8 +101,9 @@ jobs:
 
             echo "Checking output..."
             test "$(grep "FAIL: " ${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log | wc -l)" -eq 0
+
         working-directory: ./hello_vsi
-        continue-on-error: true        
+        continue-on-error: true
 
       # ----------------------------------------------------------------
       # Directory structure of ./hello_vsi folder
