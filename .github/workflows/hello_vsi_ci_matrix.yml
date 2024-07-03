@@ -71,12 +71,6 @@ jobs:
           echo ${{ env.LIST_OF_CONTEXTS_VAR }}
 
         working-directory: ./hello_vsi
-        
-      - name: Show list of contexts
-        run: |
-            echo "Action 2: Show list of contexts"
-            echo ${{ steps.get_list_of_contexts.list_of_contexts }}
-        working-directory: ./hello_vsi
 
       # ----------------------------------------------------------------
       # Build executable for a specific target compiler pair
