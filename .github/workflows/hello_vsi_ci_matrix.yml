@@ -23,7 +23,7 @@ jobs:
 
       max-parallel: 1
 
-    runs-on: ${{ matrix.os }}
+    runs-on: [ "${{ matrix.os }}" ]
 
     steps:
       - name: Checkout
