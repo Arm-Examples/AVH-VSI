@@ -36,11 +36,15 @@ jobs:
 
       - name: Install xterm on Ubuntu
         run: |
-            sudo apt-get install -y xterm
+            if [ "$RUNNER_OS" == "Linux" ]; then
+                 sudo apt-get install -y xterm
+            fi
 
       - name: Install xvfb Virtual Framebuffer on Ubuntu # Needed for xterm
         run: |
-            sudo apt install -y xvfb
+            if [ "$RUNNER_OS" == "Linux" ]; then
+                 sudo apt install -y xvfb
+            fi
 
       - name: Activate vcpkg
         uses: ARM-software/cmsis-actions/vcpkg@v1
@@ -102,7 +106,7 @@ jobs:
                 --simlimit 60 --stat | tee ${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.avh.log
 
             echo "Checking output..."
-            test "$(grep "FAIL: " ${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log | wc -l)" -eq 0
+            test "$(grep "FAIL: " ${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.avh.log | wc -l)" -eq 0
 
         working-directory: ./hello_vsi
         continue-on-error: true
