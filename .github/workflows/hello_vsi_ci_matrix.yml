@@ -40,7 +40,7 @@ jobs:
           sudo apt-get install -y xterm
   
       - name: Install xvfb Virtual Framebuffer on Ubuntu # Needed for xterm
-        if: startsWith(matrix.os,'ubuntu')      
+        if: startsWith(matrix.os,'ubuntu')
         run: |
           sudo apt install -y xvfb
   
@@ -54,13 +54,13 @@ jobs:
       # Experimental:Get list of contexts
       # ----------------------------------------------------------------
       - name: Get list of contexts
-        id: get_list_of_contexts
+        if: startsWith(matrix.os,'ubuntu')
         run: |
-          # echo "Commandline to get the contexts"
-          # csolution list contexts hello_vsi.csolution.yml
-          # echo "Save the list to a variable"
-          # list_of_contexts="$(csolution list contexts hello_vsi.csolution.yml)"
-          # echo "Variable content: $list_of_contexts"
+          echo "Commandline to get the contexts"
+          csolution list contexts hello_vsi.csolution.yml
+          echo "Save the list to a variable"
+          list_of_contexts="$(csolution list contexts hello_vsi.csolution.yml)"
+          echo "Variable content: $list_of_contexts"
 
           echo "LIST_OF_CONTEXTS_VAR<<EOF" >> $GITHUB_ENV
           echo $(csolution list contexts hello_vsi.csolution.yml) >> $GITHUB_ENV
@@ -68,6 +68,7 @@ jobs:
         working-directory: ./hello_vsi
 
       - name: Show list of contexts
+        if: startsWith(matrix.os,'ubuntu')      
         run: |
           echo ${{ env.LIST_OF_CONTEXTS_VAR }}
         working-directory: ./hello_vsi
