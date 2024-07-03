@@ -13,7 +13,7 @@ jobs:
     strategy:
       # The data for the types have been taken from the section target-types in the hello_vsi.csolution.yml file
       matrix:
-        os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
+        os: ['windows-latest', 'ubuntu-latest', 'macos-latest']
         compiler: [ {name: AC6, ext: axf}, {name: GCC, ext: elf} ]
         target: [ 
          {type: Corstone_300,  device: SSE-300-MPS3,      model: FVP_Corstone_SSE-300, board: mps3_board}, 
@@ -56,16 +56,14 @@ jobs:
       - name: Get list of contexts
         id: get_list_of_contexts
         run: |
-          echo "Commandline to get the contexts"
-          
-          csolution list contexts hello_vsi.csolution.yml
-
-          echo "Save the list to a variable"
-          list_of_contexts="$(csolution list contexts hello_vsi.csolution.yml)"
-          echo "Variable content: $list_of_contexts"
+          # echo "Commandline to get the contexts"
+          # csolution list contexts hello_vsi.csolution.yml
+          # echo "Save the list to a variable"
+          # list_of_contexts="$(csolution list contexts hello_vsi.csolution.yml)"
+          # echo "Variable content: $list_of_contexts"
 
           echo "LIST_OF_CONTEXTS_VAR<<EOF" >> $GITHUB_ENV
-          echo $list_of_contexts >> $GITHUB_ENV
+          echo $(csolution list contexts hello_vsi.csolution.yml) >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
         working-directory: ./hello_vsi
 
