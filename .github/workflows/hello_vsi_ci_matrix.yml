@@ -54,14 +54,20 @@ jobs:
         id: get_list_of_contexts
         run: |
           echo "Commandline to get the contexts"
+          
           csolution list contexts hello_vsi.csolution.yml
 
           echo "Save the list to a variable"
           list_of_contexts="$(csolution list contexts hello_vsi.csolution.yml)"
-
           echo "Variable content: $list_of_contexts"
-          echo "Redirect list to GHB output"
-          echo "$list_of_contexts" >> "$GITHUB_OUTPUT"
+
+          echo "LIST_OF_CONTEXTS_VAR<<EOF" >> $GITHUB_ENV
+          echo "$list_of_contexts" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Show list of contexts
+        run: |
+          echo ${{ env.LIST_OF_CONTEXTS_VAR }}
 
         working-directory: ./hello_vsi
         
