@@ -6,13 +6,11 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - hello_vsi/*
-      - ./hello_vsi_ci_matrix.yml
+      - hello_vsi/**
   push:
     branches: [main]
     paths:
-     - hello_vsi/*
-     - ./hello_vsi_ci_matrix.yml
+     - hello_vsi/**
 
   schedule:
     - cron: '00 22 * * 0'
@@ -42,8 +40,6 @@ jobs:
       max-parallel: 1
 
     runs-on: ubuntu-latest
-    env: 
-      PROJECT: "hello_vsi"
 
     steps:
       - name: Checkout
