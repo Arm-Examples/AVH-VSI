@@ -138,7 +138,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
             name: ${{ matrix.btype }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.build.log
-            path: ./hello_vsi/${{ matrix.btype }}_${{ matrix.btype }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.build.log
+            path: ./hello_vsi/${{ matrix.btype }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.build.log
 
       # ----------------------------------------------------------------
       # Upload FVP simulation results
@@ -146,7 +146,7 @@ jobs:
       - name: Upload FVP simulation results for context ${{ matrix.target.type }}_${{ matrix.compiler.name }}_on_${{ matrix.os }} 
         uses: actions/upload-artifact@v4
         with:
-          name: fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.${{ matrix.os }}.simulation.log
+          name: fvp_stdout_${{ matrix.btype }}_${{ matrix.target.model }}_${{ matrix.compiler.name }}.${{ matrix.os }}.simulation.log
           path: ./hello_vsi/fvp_stdout_${{ matrix.btype }}_${{ matrix.target.model }}_${{ matrix.compiler.name }}.${{ matrix.os }}.simulation.log
 
       # ----------------------------------------------------------------
