@@ -53,29 +53,6 @@ jobs:
         uses: ARM-software/cmsis-actions/armlm@v1
 
       # ----------------------------------------------------------------
-      # Experimental:Get list of contexts
-      # ----------------------------------------------------------------
-      - name: Get list of contexts
-        if: startsWith(matrix.os,'ubuntu')
-        run: |
-          echo "Commandline to get the contexts"
-          csolution list contexts hello_vsi.csolution.yml
-          echo "Save the list to a variable"
-          list_of_contexts="$(csolution list contexts hello_vsi.csolution.yml)"
-          echo "Variable content: $list_of_contexts"
-
-          echo "LIST_OF_CONTEXTS_VAR<<EOF" >> $GITHUB_ENV
-          echo $(csolution list contexts hello_vsi.csolution.yml) >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-        working-directory: ./hello_vsi
-
-      - name: Show list of contexts
-        if: startsWith(matrix.os,'ubuntu')      
-        run: |
-          echo ${{ env.LIST_OF_CONTEXTS_VAR }}
-        working-directory: ./hello_vsi
-
-      # ----------------------------------------------------------------
       # Build executable for a specific target compiler pair
       # ----------------------------------------------------------------
       - name: Build context ubuntu ${{ matrix.btype }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}
@@ -113,7 +90,7 @@ jobs:
         run: |
             echo " ${{ matrix.btype }}_${{ matrix.target.model }} context build with ${{ matrix.compiler }}"
 
-            ${{ matrix.btype }}_${{ matrix.target.model }} \
+            ${{ matrix.target.model }} \
                 -a ./out/hello_vsi/${{ matrix.target.type }}/${{ matrix.btype }}/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} \
                 -C ${{ matrix.target.board }}.v_path=./source/VSI/data_sensor/python/ \
                 -f ${{ matrix.target.model }}.cfg \
@@ -131,7 +108,7 @@ jobs:
         run: |
             echo " ${{ matrix.btype }}_${{ matrix.target.model }} context build with ${{ matrix.compiler }}"
 
-            ${{ matrix.btype }}_${{ matrix.target.model }} `
+            ${{ matrix.target.model }} `
                 -a ./out/hello_vsi/${{ matrix.target.type }}/${{ matrix.btype }}/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} `
                 -C ${{ matrix.target.board }}.v_path=./source/VSI/data_sensor/python/ `
                 -f ${{ matrix.target.model }}.cfg `
