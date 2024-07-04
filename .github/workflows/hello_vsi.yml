@@ -118,7 +118,8 @@ jobs:
       # Directory structure of ./out folder
       # ----------------------------------------------------------------
       - name: Directory structure of ./out folder
+        working-directory: ./hello_vsi
         run: |
               echo "Diagnosis"
               tree ./out
-        working-directory: ./hello_vsi
+
