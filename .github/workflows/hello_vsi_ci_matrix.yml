@@ -13,8 +13,9 @@ jobs:
     strategy:
       # The data for the types have been taken from the section target-types in the hello_vsi.csolution.yml file
       matrix:
+
         os: [
-          {ubuntu-latest}
+          'ubuntu-latest'
         ]
 
         compiler: [ 
@@ -29,9 +30,9 @@ jobs:
         ]
 
         build: [ 
-          {event}, 
-          {noevent}, 
-          {gated}
+          'event', 
+          'noevent', 
+          'gated'
         ]
 
       max-parallel: 1
