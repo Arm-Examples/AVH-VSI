@@ -21,9 +21,11 @@ jobs:
          {type: Corstone_315,  device: SSE-315-FVP,       model: FVP_Corstone_SSE-315, board: mps4_board} 
          ]
 
-      max-parallel: 2
+        btype: ['event', 'noevent', 'gated']
 
-    runs-on: [ "${{ matrix.os }}" , "${{ matrix.compiler.name }}" ]
+      max-parallel: 1
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout
@@ -76,28 +78,28 @@ jobs:
       # ----------------------------------------------------------------
       # Build executable for a specific target compiler pair
       # ----------------------------------------------------------------
-      - name: Build context ubuntu ${{ matrix.target.type }}_${{ matrix.compiler.name }}
+      - name: Build context ubuntu ${{ matrix.btype }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}
         if: startsWith(matrix.os,'ubuntu')      
         run: |
-            echo "Building Arm Virtual Hardware hello_vsi example with ${{ matrix.compiler.name }} by using the context ${{ matrix.target.type }}..."
+            echo "Building Arm Virtual Hardware hello_vsi example with ${{ matrix.compiler.name }} by using the build-type ${{ matrix.btype }} and the context ${{ matrix.target.type }}..."
 
             cbuild hello_vsi.csolution.yml --update-rte --packs --context \
-                hello_vsi.event+${{ matrix.target.type }} \
+                hello_vsi.${{ matrix.btype }}+${{ matrix.target.type }} \
                 --toolchain ${{ matrix.compiler.name }} -r \
-                | tee ${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.build.log
+                | tee ${{ matrix.btype }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.build.log
 
         working-directory: ./hello_vsi
         continue-on-error: true
 
-      - name: Build context windows ${{ matrix.target.type }}_${{ matrix.compiler.name }}
+      - name: Build context windows ${{ matrix.btype }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}
         if: startsWith(matrix.os,'windows')
         run: |
-            echo "Building Arm Virtual Hardware hello_vsi example with ${{ matrix.compiler.name }} by using the context ${{ matrix.target.type }}..."
+            echo "Building Arm Virtual Hardware hello_vsi example with ${{ matrix.compiler.name }} by using the build-type ${{ matrix.btype }} and the context ${{ matrix.target.type }}..."
 
             cbuild hello_vsi.csolution.yml --update-rte --packs --context `
-                hello_vsi.event+${{ matrix.target.type }} `
+                hello_vsi.${{ matrix.btype }}+${{ matrix.target.type }} `
                 --toolchain ${{ matrix.compiler.name }} -r `
-                | tee ${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.build.log
+                | tee ${{ matrix.btype }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.build.log
 
         working-directory: ./hello_vsi
         continue-on-error: true
@@ -106,38 +108,38 @@ jobs:
       # ----------------------------------------------------------------
       # Execute the previous generated context on a model
       # ----------------------------------------------------------------
-      - name: Execute context ubuntu ${{ matrix.target.type }}_${{ matrix.compiler.name }} on ${{ matrix.target.model }}
+      - name: Execute context ubuntu ${{ matrix.btype }}_${{ matrix.target.type }}_${{ matrix.compiler.name }} on ${{ matrix.target.model }}
         if: startsWith(matrix.os,'ubuntu')      
         run: |
-            echo " ${{ matrix.target.model }} context build with ${{ matrix.compiler }}"
+            echo " ${{ matrix.btype }}_${{ matrix.target.model }} context build with ${{ matrix.compiler }}"
 
-            ${{ matrix.target.model }} \
-                -a ./out/hello_vsi/${{ matrix.target.type }}/event/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} \
+            ${{ matrix.btype }}_${{ matrix.target.model }} \
+                -a ./out/hello_vsi/${{ matrix.target.type }}/${{ matrix.btype }}/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} \
                 -C ${{ matrix.target.board }}.v_path=./source/VSI/data_sensor/python/ \
                 -f ${{ matrix.target.model }}.cfg \
-                -C ${{ matrix.target.board }}.uart0.out_file=fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.${{ matrix.os }}.simulation.log \
-                --simlimit 60 --stat | tee ${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.avh.log
+                -C ${{ matrix.target.board }}.uart0.out_file=fvp_stdout_${{ matrix.btype }}_${{ matrix.target.model }}_${{ matrix.compiler.name }}.${{ matrix.os }}.simulation.log \
+                --simlimit 60 --stat | tee ${{ matrix.btype }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.avh.log
 
             echo "Checking output..."
-            test "$(grep "FAIL: " ${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.avh.log | wc -l)" -eq 0
+            test "$(grep "FAIL: " ${{ matrix.btype }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.avh.log | wc -l)" -eq 0
 
         working-directory: ./hello_vsi
         continue-on-error: true
 
-      - name: Execute context windows ${{ matrix.target.type }}_${{ matrix.compiler.name }} on ${{ matrix.target.model }}
+      - name: Execute context windows ${{ matrix.btype }}_${{ matrix.target.type }}_${{ matrix.compiler.name }} on ${{ matrix.target.model }}
         if: startsWith(matrix.os,'windows')      
         run: |
-            echo " ${{ matrix.target.model }} context build with ${{ matrix.compiler }}"
+            echo " ${{ matrix.btype }}_${{ matrix.target.model }} context build with ${{ matrix.compiler }}"
 
-            ${{ matrix.target.model }} `
-                -a ./out/hello_vsi/${{ matrix.target.type }}/event/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} `
+            ${{ matrix.btype }}_${{ matrix.target.model }} `
+                -a ./out/hello_vsi/${{ matrix.target.type }}/${{ matrix.btype }}/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} `
                 -C ${{ matrix.target.board }}.v_path=./source/VSI/data_sensor/python/ `
                 -f ${{ matrix.target.model }}.cfg `
-                -C ${{ matrix.target.board }}.uart0.out_file=fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.${{ matrix.os }}.simulation.log `
-                --simlimit 60 --stat | tee ${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.avh.log
+                -C ${{ matrix.target.board }}.uart0.out_file=fvp_stdout_${{ matrix.btype }}_${{ matrix.target.model }}_${{ matrix.compiler.name }}.${{ matrix.os }}.simulation.log `
+                --simlimit 60 --stat | tee ${{ matrix.btype }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.avh.log
 
             echo "Checking output..."
-            test "$(grep "FAIL: " ${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.avh.log | wc -l)" -eq 0
+            test "$(grep "FAIL: " ${{ matrix.btype }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.avh.log | wc -l)" -eq 0
 
         working-directory: ./hello_vsi
         continue-on-error: true
@@ -155,11 +157,11 @@ jobs:
       # ----------------------------------------------------------------
       # Upload build log
       # ----------------------------------------------------------------
-      - name: Upload build log for context ${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.build.log
+      - name: Upload build log for context ${{ matrix.btype }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.build.log
         uses: actions/upload-artifact@v4
         with:
-            name: ${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.build.log
-            path: ./hello_vsi/${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.build.log
+            name: ${{ matrix.btype }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.build.log
+            path: ./hello_vsi/${{ matrix.btype }}_${{ matrix.btype }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.${{ matrix.os }}.build.log
 
       # ----------------------------------------------------------------
       # Upload FVP simulation results
@@ -168,7 +170,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.${{ matrix.os }}.simulation.log
-          path: ./hello_vsi/fvp_stdout_${{ matrix.target.model }}_${{ matrix.compiler.name }}.${{ matrix.os }}.simulation.log
+          path: ./hello_vsi/fvp_stdout_${{ matrix.btype }}_${{ matrix.target.model }}_${{ matrix.compiler.name }}.${{ matrix.os }}.simulation.log
 
       # ----------------------------------------------------------------
       # Directory structure of ./out folder
