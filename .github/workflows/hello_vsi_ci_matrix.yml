@@ -7,10 +7,12 @@ on:
     branches: [main]
     paths:
       - hello_vsi/*
+      - ./hello_vsi_ci_matrix.yml
   push:
     branches: [main]
     paths:
      - hello_vsi/*
+     - ./hello_vsi_ci_matrix.yml
 
   schedule:
     - cron: '00 22 * * 0'
