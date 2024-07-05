@@ -4,12 +4,7 @@
 solution:
   created-by: uv2csolution@1.2.0
   created-for: CMSIS-Toolbox@2.4.0
-  description: Hello example for the Video Streaming Interface
-
-  packs:
-    - pack: ARM::CMSIS@6.0.0
-    - pack: ARM::CMSIS-Compiler@2.0.0
-    - pack: ARM::CMSIS-RTX@5.8.0
+  description: Hello example for the Virtual Streaming Interface
 
   # Use default setup of toolchain specific controls.
   cdefault: 
