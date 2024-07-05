@@ -6,7 +6,7 @@ This example uses the **VSI** ([Virtual Streaming Interface](https://arm-softwar
 
 Use the cbuild tool or an IDE to build the application project in csolution format (see the project [README](../README.md)).
 
-All applications have been ported for **Corstone-300**, **Corstone-310** and **Corstone-315**, and can be compiled with **Arm Compiler** 6 or **GCC**. By default the Arm Compiler 6 is used, to compile with GCC, use `--toolchain GCC` option for the cbuild command.
+All applications have been ported for **Corstone-300**, **Corstone-310** and **Corstone-315**, and can be compiled with **Arm Compiler 6** or **GCC**. To compile with **AC6** use `--toolchain AC6` and for **GCC** the `--toolchain GCC` option with the cbuild command.
 
 
 ### Application Without GUI
