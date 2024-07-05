@@ -1,8 +1,5 @@
 project:
   packs:
-    - pack: ARM::CMSIS@6.1.0
-    - pack: ARM::CMSIS-RTX@5.9.0
-    - pack: ARM::CMSIS-Compiler@2.1.0
     - pack: ARM::V2M_MPS3_SSE_300_BSP@1.5.0
       for-context: +Corstone_300
     - pack: ARM::V2M_MPS3_SSE_310_BSP@1.4.0
