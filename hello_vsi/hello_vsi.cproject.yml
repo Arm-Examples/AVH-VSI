@@ -1,10 +1,10 @@
 project:
+
   packs:
-    - pack: ARM::Arm-2D@1.1.0
-      for-context: .gui
     - pack: ARM::CMSIS@6.1.0
     - pack: ARM::CMSIS-RTX@5.9.0
     - pack: ARM::CMSIS-Compiler@2.1.0
+
     - pack: ARM::V2M_MPS3_SSE_300_BSP@1.5.0
       for-context: +Corstone_300
     - pack: ARM::V2M_MPS3_SSE_310_BSP@1.4.0
@@ -12,7 +12,7 @@ project:
     - pack: ARM::SSE_315_BSP@1.0.0
       for-context: +Corstone_315
     - pack: ARM::DMA350@1.0.0
-      for-context: .gui
+      for-context: +Corstone_315
 
   processor:
     trustzone: off
@@ -37,18 +37,16 @@ project:
       for-compiler: AC6
       linker:
         - script: ./RTE/Device/SSE-310-MPS3_FVP/linker_SSE310MPS3_secure.sct
-    - setup: Corstone_310 AC6
+    - setup: Corstone_315 AC6
       for-context: +Corstone_315
       for-compiler: AC6
       linker:
         - script: ./RTE/Device/SSE-315-FVP/ac6_linker_script.sct
-    - setup: gui
-      for-context: .gui
-      add-path:
-       - ./source/arm2d/examples/common/platform
-       - ./source/arm2d/examples/common/platform/lib
-       - ./source/arm2d/examples/common/platform/mps3
-       - ./source/arm2d/examples/common/platform/mps3/v2m_mps3
+    - setup: Corstone_315 GCC
+      for-context: +Corstone_315
+      for-compiler: GCC
+      linker:
+        - script: ./RTE/Device/SSE-315-FVP/gcc_linker_script.ld
 
   groups:
     - group: App
@@ -69,29 +67,6 @@ project:
       files:
         - file: ./source/micro_logger/micro_logger.c
         - file: ./source/micro_logger/micro_logger.h
-    - group: Gui
-      for-context: .gui
-      files:
-        - file: ./source/application/gui/example_gui.c
-        - file: ./source/application/gui/example_gui.h
-        - file: ./source/application/gui/gui.c
-        - file: ./source/application/gui/gui.h
-        - file: ./source/application/gui/draw_line.c
-        - file: ./source/application/gui/draw_line.h
-        - file: ./source/arm2d/examples/common/asset/background.c
-    - group: platform
-      for-context: .gui
-      files:
-        - file: ./source/arm2d/examples/common/platform/app_platform.c
-        - file: ./source/arm2d/examples/common/platform/platform.h
-        - file: ./source/arm2d/examples/common/platform/lib/perf_counter.lib
-        - file: ./source/arm2d/examples/common/platform/lib/perf_os_patch_rtx5.c
-    - group: bsp_mps3
-      for-context: .gui
-      files:
-        - file: ./source/arm2d/examples/common/platform/mps3/GLCD_V2M-MPS3_AN540.c
-        - file: ./source/arm2d/examples/common/platform/mps3/platform_mps3.c
-        - file: ./source/arm2d/examples/common/platform/mps3/stdout_USART.c
 
   components:
     - component: ARM::CMSIS:CORE
@@ -109,15 +84,3 @@ project:
     - component: ARM::Device:Native Driver:UART
     - component: ARM::Device:Startup&C Startup
     - component: ARM::Device:USART Retarget
-    - component: ARM::Acceleration:Arm-2D Extras:Controls
-      for-context: .gui
-    - component: ARM::Acceleration:Arm-2D Extras:LCD ASCII Printf
-      for-context: .gui
-    - component: ARM::Acceleration:Arm-2D Helper:PFB
-      for-context: .gui
-    - component: ARM::Acceleration:Arm-2D:Alpha-Blending
-      for-context: .gui
-    - component: ARM::Acceleration:Arm-2D:Core
-      for-context: .gui
-    - component: ARM::Acceleration:Arm-2D:Transform
-      for-context: .gui

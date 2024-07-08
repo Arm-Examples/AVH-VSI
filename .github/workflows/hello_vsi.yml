@@ -1,86 +1,125 @@
-# This is a basic workflow to help you get started with Actions on CMSIS projects
-# See also https://community.arm.com/developer/tools-software/tools/b/tools-software-ides-blog/posts/infrastructure-for-continuous-integration-tests
-#
-# The repository needs to provide the following secrets
-# - AWS_ACCESS_KEY_ID           The id of the access key.
-# - AWS_SECRET_ACCESS_KEY       The access key secret.
-# - AWS_DEFAULT_REGION          The data center region to be used.
-# - AWS_S3_BUCKET_NAME          The name of the S3 storage bucket to be used for data exchange.
-# - AWS_IAM_PROFILE             The IAM profile to be used.
-# - AWS_SECURITY_GROUP_ID       The id of the security group to add the EC2 instance to.
-# - AWS_SUBNET_ID               The id of the network subnet to connect the EC2 instance to.
-# - ARM_UBL                     A bzip2 compressed and base64-encoded user based license file:
-#                               armlm activate --server <URL> --product <PRODUCT> --as-user ubuntu --to-file ubuntu-ubl.binlic
-#                               bzip2 -c ubuntu-ubl.binlic | base64 > ubuntu-ubl.binlic.bz2.b64
+name: Arm Virtual Hardware hello_vsi example matrix build for CI
 
-name: Arm Virtual Hardware hello_vsi example - github hosted - remote AWS via avhclient
 on:
-# Uncomment the following lines to enable CI task trigger condition
-#  push:
-#    branches: [ main ]
-#  pull_request:
-#    paths:
-#      - .github/workflows/hello_vsi.yml
-#      - hello_vsi/source/**/*
-#      - hello_vsi/target/**/*
-
-# To allow you to run this workflow manually from the GitHub Actions tab add
   workflow_dispatch:
 
-env:
-  # Enable the next three lines if you are using IAM User and you added them in the repo's secret.
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-  AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
-  AWS_IAM_PROFILE: ${{ secrets.AWS_IAM_PROFILE }}
-  AWS_SECURITY_GROUP_ID: ${{ secrets.AWS_SECURITY_GROUP_ID }}
-  AWS_SUBNET_ID: ${{ secrets.AWS_SUBNET_ID }}
+  pull_request:
+    branches: [main]
+    paths:
+      - hello_vsi/**
+  push:
+    branches: [main]
+    paths:
+     - hello_vsi/**
 
+  schedule:
+    - cron: '00 22 * * 0'
 
 jobs:
-  ci_test:
+  CI_test_run:
+    strategy:
+      matrix:
+
+        compiler: [ 
+          {name: AC6,  ext: axf}, 
+          {name: GCC,  ext: elf} 
+        ]
+        
+        target: [ 
+          {type: Corstone_300,  model: FVP_Corstone_SSE-300,  board: mps3_board}, 
+          {type: Corstone_310,  model: FVP_Corstone_SSE-310,  board: mps3_board}, 
+          {type: Corstone_315,  model: FVP_Corstone_SSE-315,  board: mps4_board} 
+        ]
+
+        build: [ 
+          {type: event},
+          {type: noevent}, 
+          {type: gated}
+        ]
+
+      max-parallel: 1
+
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
+
     steps:
-    - name: Check out repository code
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+  
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+  
+      - name: Activate vcpkg
+        uses: ARM-software/cmsis-actions/vcpkg@v1
 
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.10'
+      - name: Activate Arm tool license
+        uses: ARM-software/cmsis-actions/armlm@v1
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-region: ${{ env.AWS_DEFAULT_REGION }}
+      # ----------------------------------------------------------------
+      # Build executable for a specific target compiler pair
+      # ----------------------------------------------------------------
+      - name: Build context ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}
+        working-directory: ./hello_vsi
+        run: |
+            echo "Building Arm Virtual Hardware hello_vsi example with ${{ matrix.compiler.name }} by using the build-type ${{ matrix.build.type }} and the target type ${{ matrix.target.type }}..."
 
-    - name: Install AVH Client for Python
-      run: |
-        pip install git+https://github.com/ARM-software/avhclient.git@v0.1
-    - uses: ammaraskar/gcc-problem-matcher@master
+            cbuild hello_vsi.csolution.yml --update-rte --packs --context \
+                hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }} \
+                --toolchain ${{ matrix.compiler.name }} -r \
+                | tee ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
 
-    - name: Run [check 199 count] test for SSE300 platform
-      run: |
-        avhclient -b aws execute --specfile hello_vsi/avh_SSE300.yml
-        count=$(grep -c "199" hello_vsi/hello_vsi.log)
-        echo "Found '199' ${count} times in hello_vsi.log ..."
-        if [[ $count < 1 ]]; then
-          echo "... seems 199 is not included in the intdata.txt"
-          exit 1
-        fi
-    - name: Archive results
-      uses: actions/upload-artifact@v2
-      with:
-        name: results
-        path: |
-          hello_vsi/hello_vsi.log
-          hello_vsi/Objects/hello_vsi*.axf
-          hello_vsi/Objects/hello_vsi*.axf.map
-          hello_vsi/intdata.txt
-        retention-days: 1
-        if-no-files-found: error
-      if: always()
+      # ----------------------------------------------------------------
+      # Execute the previous generated context on a model
+      # ----------------------------------------------------------------
+      - name: Execute context ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }} on ${{ matrix.target.model }}
+        working-directory: ./hello_vsi      
+        run: |
+            echo " ${{ matrix.build.type }}_${{ matrix.target.model }} context build with ${{ matrix.compiler }}"
+
+            ${{ matrix.target.model }} \
+                -a ./out/hello_vsi/${{ matrix.target.type }}/${{ matrix.build.type }}/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} \
+                -C ${{ matrix.target.board }}.v_path=./source/VSI/data_sensor/python/ \
+                -f ${{ matrix.target.model }}.cfg \
+                -C ${{ matrix.target.board }}.uart0.out_file=fvp_stdout_${{ matrix.build.type }}_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log \
+                --simlimit 60 --stat | tee ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log
+
+            echo "Checking output..."
+            test "$(grep "FAIL: " ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log | wc -l)" -eq 0
+ 
+
+      # ----------------------------------------------------------------
+      # Directory structure of the project folder
+      # ----------------------------------------------------------------
+      - name: Directory structure of ./hello_vsi folder
+        run: |
+              echo "Diagnosis"
+              tree ./hello_vsi
+
+      # ----------------------------------------------------------------
+      # Upload build log
+      # ----------------------------------------------------------------
+      - name: Upload build log for context ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+        uses: actions/upload-artifact@v4
+        with:
+            name: ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+            path: ./hello_vsi/${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+
+      # ----------------------------------------------------------------
+      # Upload FVP simulation results
+      # ----------------------------------------------------------------
+      - name: Upload FVP simulation results for context ${{ matrix.target.type }}_${{ matrix.compiler.name }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: fvp_stdout_${{ matrix.build.type }}_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log
+          path: ./hello_vsi/fvp_stdout_${{ matrix.build.type }}_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log
+
+      # ----------------------------------------------------------------
+      # Directory structure of ./out folder
+      # ----------------------------------------------------------------
+      - name: Directory structure of ./out folder
+        working-directory: ./hello_vsi
+        run: |
+              echo "Diagnosis"
+              tree ./out
+

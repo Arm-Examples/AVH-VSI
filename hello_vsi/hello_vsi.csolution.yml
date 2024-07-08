@@ -1,8 +1,13 @@
+# Copyright (c) 2024 Arm Limited. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
 solution:
   created-by: uv2csolution@1.2.0
-  created-for: CMSIS-Toolbox@2.0.0
-  compiler: AC6
-  cdefault: # use default setup of toolchain specific controls.
+  created-for: CMSIS-Toolbox@2.4.0
+  description: Hello example for the Virtual Streaming Interface
+
+  # Use default setup of toolchain specific controls.
+  cdefault: 
 
   build-types:
     - type: event
@@ -22,16 +27,6 @@ solution:
       - __FVP_PY
       - __GATED_FETCH
 
-#    - type: gui
-#      define:
-#      - __ARM_FP: 0xe
-#      - __FVP_PY
-#      - __EVENT_DRIVEN
-#      - __USE_GUI
-#      - GLCD_MIRROR_Y: 0
-#      - LCD_MIRROR_X: 1
-#      - __USE_AN547__
-
   target-types:
     - type: Corstone_300
       device: SSE-300-MPS3
@@ -43,6 +38,9 @@ solution:
 
     - type: Corstone_315
       device: SSE-315-FVP
+
+  output-dirs:
+    outdir:  $SolutionDir()$/out/$Project$/$TargetType$/$BuildType$/$Compiler$
 
   projects:
       - project: ./hello_vsi.cproject.yml
