@@ -55,6 +55,12 @@ SAMPLE_RATE = 0  # Regs[3]
 # User CONTROL register definitions
 CONTROL_ENABLE_Msk = 1<<0
 
+# Current index in sensor data
+index = 0
+
+# Flag for end of file
+eof = 0
+
 # Data buffer
 Data = bytearray()
 
@@ -62,6 +68,10 @@ Data = bytearray()
 #  @param name name of FILE file to open
 def openFILE(name):
     global FILE
+    global file_content
+    global index
+    global eof
+
     logging.info("Open data file (read mode): {}".format(name))
     
     FILE = open(name, 'r')
@@ -70,36 +80,11 @@ def openFILE(name):
     FILE.seek(0, os.SEEK_END)
     file_size = FILE.tell()
     FILE.seek(0)
+    file_content = FILE.read()
+    file_content = file_content.split()
+    index = 0
+    eof   = 0
     logging.info("  Number of Bytes: {}".format(file_size))
-
-
-def readNextLine(n):
-    global FILE
-    
-    while True:
-        row = FILE.readline()
-        if len(row) > 0:
-            return bytearray([int(x) for x in row.split()])
-        FILE.seek(0)
-
-
-first = True
-## Read FILE bytes (global FILE object) into global SensorFrames object
-#  @param n number of bytes to read
-#  @return frames frames read
-def readFILE(n):
-    global FILE
-    global first
-    logging.info("Read FILE frames")
-    if first:
-        first = False
-        return b''
-    
-    data = readNextLine(n)
-    
-    logging.debug("data: {}".format(data))
-    return data
-
 
 ## Close FILE file (global FILE object)
 def closeFILE():
@@ -107,6 +92,20 @@ def closeFILE():
     logging.info("Close FILE file")
     FILE.close()
 
+## Read next block of sensor data
+# @param - block size
+def readNextBlock(size):
+    global file_content, index, eof, Regs
+    logging.info("Trying to read {} frames".format(size))
+    frames = file_content[index:(index+size)]
+    if(len(frames)!=0):
+        index += size
+    else:
+        eof = 1
+        Regs[0] = 0
+        logging.debug("End of File reached")
+
+    return bytearray([int(x) for x in frames])
 
 ## Load sensor frames into global Data buffer
 #  @param block_size size of block to load (in bytes)
@@ -115,7 +114,7 @@ def loadSensorFrames(block_size):
     logging.info("Load sensor frames into data buffer")
     frame_size = CHANNELS * ((SAMPLE_BITS + 7) // 8)
     frames_max = block_size // frame_size
-    Data = readFILE(frames_max)
+    Data = readNextBlock(frames_max)
 
 
 ## Initialize
@@ -139,9 +138,12 @@ def rdIRQ():
 #  @param value value to write (32-bit)
 #  @return value value written (32-bit)
 def wrIRQ(value):
-    global IRQ_Status
+    global IRQ_Status, eof
     logging.info("Python function wrIRQ() called")
 
+    # No IRQ if end of file reached
+    if (eof):
+        value = 0
     IRQ_Status = value
     logging.debug("Write interrupt request: {}".format(value))
 
@@ -156,7 +158,7 @@ def wrTimer(index, value):
     global Timer_Control, Timer_Interval
     logging.info("Python function wrTimer() called")
 
-    if   index == 0:
+    if index == 0:
         Timer_Control = value
         logging.debug("Write Timer_Control: {}".format(value))
     elif index == 1:
@@ -164,7 +166,6 @@ def wrTimer(index, value):
         logging.debug("Write Timer_Interval: {}".format(value))
 
     return value
-
 
 ## Timer event (called at Timer Overflow)
 def timerEvent():
@@ -179,7 +180,7 @@ def wrDMA(index, value):
     global DMA_Control
     logging.info("Python function wrDMA() called")
 
-    if   index == 0:
+    if index == 0:
         DMA_Control = value
         logging.debug("Write DMA_Control: {}".format(value))
 
@@ -194,13 +195,12 @@ def rdDataDMA(size):
     logging.info("Python function rdDataDMA() called")
 
     loadSensorFrames(size)
-
-    n = min(len(Data), size)
-    data = bytearray(size)
-    data[0:n] = Data[0:n]
-    logging.debug("Read data ({} bytes)".format(size))
-
-    return data
+    logging.debug("Obtained {} bytes)".format(len(Data)))
+    if (len(Data)!= 0):
+      n = min(len(Data), size)
+      data = bytearray(size)
+      data[0:n] = Data[0:n]
+      return data
 
 
 ## Write data to peripheral for DMA M2P transfer (VSI DMA)

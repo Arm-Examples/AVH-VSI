@@ -63,7 +63,7 @@ typedef struct
 #define ARM_VSI_Timer_Periodic_Msk      (1UL << ARM_VSI_Timer_Periodic_Pos)     /*!< Timer Control: Periodic Mask */
 #define ARM_VSI_Timer_Trig_IRQ_Pos      2U                                      /*!< Timer Control: Trig_IRQ Position */
 #define ARM_VSI_Timer_Trig_IRQ_Msk      (1UL << ARM_VSI_Timer_Trig_IRQ_Pos)     /*!< Timer Control: Trig_IRQ Mask */
-#define ARM_VSI_Timer_Trig_DMA_Pos      3U                                      /*!< Timer Control: Trig_DAM Position */
+#define ARM_VSI_Timer_Trig_DMA_Pos      3U                                      /*!< Timer Control: Trig_DMA Position */
 #define ARM_VSI_Timer_Trig_DMA_Msk      (1UL << ARM_VSI_Timer_Trig_DMA_Pos)     /*!< Timer Control: Trig_DMA Mask */
 
 /* VSI DMA Control Definitions for DMA.Control register */

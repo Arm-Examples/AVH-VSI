@@ -13,6 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
+
 #ifdef _RTE_
 #include "RTE_Components.h"
 #ifdef RTE_Compiler_EventRecorder
@@ -23,14 +24,11 @@ limitations under the License.
 #endif
 #endif
 
-#include <stdlib.h>
-
-#include "app.h"
-#include "app_cfg.h"
-#include "micro_logger.h" /* Logging engine to UART */
-#include "video_drv.h"    /* Video Driver API */
-
-#include "hal.h"
+#include CMSIS_device_header  // Device-specific defines and CMSIS-Core
+#include "cmsis_os2.h"        // CMSIS-RTOS2 API
+#include "micro_logger.h"     // Application logging engine to UART
+#include "video_drv.h"        // Video Driver API
+#include "hal.h"              // Device HAL, here for LCD access
 
 /* Video input characteristics */
 #define COLOR_BLACK  0
@@ -40,20 +38,25 @@ limitations under the License.
 #define IMAGE_DATA_SIZE (IMAGE_WIDTH*IMAGE_HEIGHT*CHANNELS_IMAGE_DISPLAYED)
 #define FRAME_RATE (30U)
 
-/* Input file */
-#define INPUT_IMAGE "./samples/typing.mp4"
+#define INPUT_IMAGE "./samples/typing.mp4"  // Input file path
 
-/* Buffer for holding an input frame */
-static uint8_t ImageBuf[IMAGE_DATA_SIZE];
+static uint8_t ImageBuf[IMAGE_DATA_SIZE];   // Buffer for holding an input frame
 
-void init()
+/*---------------------------------------------------------------------------
+ * User application initialization
+ *---------------------------------------------------------------------------*/
+void app_init()
 {
+  /* Initializing video driver */
   if (VideoDrv_Initialize(NULL) != VIDEO_DRV_OK) {
     log_error("Failed to initialise video driver\n");
   }
 }
 
-void run()
+/*---------------------------------------------------------------------------
+ * User application run
+ *---------------------------------------------------------------------------*/
+void app_run()
 {
   void* imgFrame = NULL;
 
@@ -64,13 +67,13 @@ void run()
 
   hal_lcd_clear(COLOR_BLACK);
 
-  /* Configure Video Driver for Input */
+  /* Configure video driver for input */
   if (VideoDrv_Configure(VIDEO_DRV_IN0,  IMAGE_WIDTH, IMAGE_HEIGHT, VIDEO_DRV_COLOR_RGB888, FRAME_RATE) != VIDEO_DRV_OK) {
     log_error("Failed to configure video input\n");
     return;
   }
 
-  /* Set Input Video buffer */
+  /* Set input video buffer */
   if (VideoDrv_SetBuf(VIDEO_DRV_IN0,  ImageBuf, IMAGE_DATA_SIZE) != VIDEO_DRV_OK) {
     log_error("Failed to set buffer for video input\n");
     return;
@@ -82,13 +85,13 @@ void run()
     return;
   }
 
-  /* Start video capture (single frame) */
+  /* Start video capture */
   if (VideoDrv_StreamStart(VIDEO_DRV_IN0, VIDEO_DRV_MODE_CONTINUOS) != VIDEO_DRV_OK) {
     log_error("Failed to start frame capture");
     return;
   }
 
-  /* loop for obtaining video frames */
+  /* Loop for obtaining video frames */
   while (1) {
 
     VideoDrv_Status_t status;
@@ -101,10 +104,9 @@ void run()
       }
     } while (status.buf_empty != 0U);
 
+    /* Stop video stream upon end of stream status */
     if (status.eos != 0U) {
-      /* Stop Video Stream */
       VideoDrv_StreamStop(VIDEO_DRV_IN0);
-      // log_info("Video Stream stopped");
     }
 
     /* Get input video frame buffer */
@@ -128,7 +130,7 @@ void run()
     /* Release input frame */
     VideoDrv_ReleaseFrame(VIDEO_DRV_IN0);
 
-      /* Exit the loop when reaching end of stream */
+    /* Exit the loop when reaching end of stream */
     if (status.eos) {
       break;
     }
@@ -136,9 +138,23 @@ void run()
 
   log_info("Video Stream stopped");
 
-
-  /* De-initialize Video Interface */
+  /* De-initialize video interface */
   VideoDrv_Uninitialize();
 
   return;
+}
+
+/*---------------------------------------------------------------------------
+ * User application main thread
+ *---------------------------------------------------------------------------*/
+__NO_RETURN void app_main(void *argument)
+{
+  (void)argument;
+
+  app_init(); // Initialization step
+  app_run();  // Application run step
+
+  log_info("Application run ended");
+
+  for (;;){;}
 }

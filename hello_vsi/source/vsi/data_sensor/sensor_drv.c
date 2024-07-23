@@ -80,7 +80,7 @@ int32_t SensorDrv_Initialize (SensorDrv_Event_t cb_event) {
   /* Enable peripheral interrupts */
   NVIC_EnableIRQ(SensorO_IRQn);
   //NVIC->ISER[(((uint32_t)SensorO_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)SensorO_IRQn) & 0x1FUL));
-	
+
   NVIC_EnableIRQ(SensorI_IRQn);
 //  NVIC->ISER[(((uint32_t)SensorI_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)SensorI_IRQn) & 0x1FUL));
 
@@ -194,6 +194,9 @@ int32_t SensorDrv_SetBuf (uint32_t interface, void *buf, uint32_t block_num, uin
   return SENSOR_DRV_OK;
 }
 
+uint32_t irq, tm_ctrl, dma_ctrl;
+
+
 /* Control Sensor Interface */
 int32_t SensorDrv_Control (uint32_t control) {
   uint32_t sample_size;
@@ -221,9 +224,9 @@ int32_t SensorDrv_Control (uint32_t control) {
       SensorO->Timer.Interval = (1000000U * (block_size / sample_size)) / sample_rate;
     }
     SensorO->Timer.Control = ARM_VSI_Timer_Trig_DMA_Msk |
-                            ARM_VSI_Timer_Trig_IRQ_Msk |
-                            ARM_VSI_Timer_Periodic_Msk |
-                            ARM_VSI_Timer_Run_Msk;
+                             ARM_VSI_Timer_Trig_IRQ_Msk |
+                             ARM_VSI_Timer_Periodic_Msk |
+                             ARM_VSI_Timer_Run_Msk;
   }
 
   if ((control & SENSOR_DRV_CONTROL_RX_DISABLE) != 0U) {
@@ -243,15 +246,24 @@ int32_t SensorDrv_Control (uint32_t control) {
       SensorI->Timer.Interval = (1000000U * (block_size / sample_size)) / sample_rate;
     }
     SensorI->Timer.Control = ARM_VSI_Timer_Trig_DMA_Msk |
-                            ARM_VSI_Timer_Trig_IRQ_Msk |
-                            ARM_VSI_Timer_Periodic_Msk |
-                            ARM_VSI_Timer_Run_Msk;
+                             ARM_VSI_Timer_Trig_IRQ_Msk |
+                             ARM_VSI_Timer_Periodic_Msk |
+                             ARM_VSI_Timer_Run_Msk;
   }
-  else if((control & SENSOR_DRV_CONTROL_RX_PAUSE) != 0U) {
+
+  if((control & SENSOR_DRV_CONTROL_RX_PAUSE) != 0U) {
     SensorI->IRQ.Enable    = 0x00000000U;
+    SensorI->Timer.Control = 0U;
+    SensorI->DMA.Control   = 0U;
   }
   else if((control & SENSOR_DRV_CONTROL_RX_RESUME) != 0U) {
     SensorI->IRQ.Enable    = 0x00000001U;
+    SensorI->Timer.Control = ARM_VSI_Timer_Trig_DMA_Msk |
+                             ARM_VSI_Timer_Trig_IRQ_Msk |
+                             ARM_VSI_Timer_Periodic_Msk |
+                             ARM_VSI_Timer_Run_Msk;
+    SensorI->DMA.Control   = ARM_VSI_DMA_Direction_P2M |
+                             ARM_VSI_DMA_Enable_Msk;
   }
 
   return SENSOR_DRV_OK;

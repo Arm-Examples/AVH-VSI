@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------
- * Copyright (c) 2020-2021 Arm Limited (or its affiliates). All rights reserved.
+ * Copyright (c) 2020-2024 Arm Limited (or its affiliates). All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -19,49 +19,39 @@
 #include "RTE_Components.h"
 #include CMSIS_device_header
 #include "cmsis_os2.h"
+
 #ifdef RTE_Compiler_EventRecorder
 #include "EventRecorder.h"
 #endif
 
-#include "app.h"
 #include <stdio.h>
 
 extern int stdout_init(void);
+extern void app_main(void *argument);
 
-#ifdef __USE_GUI
+osThreadId_t app_main_tid;
 
-#include "platform.h"
-#include "arm_2d_helper.h"
-#include "example_gui.h"
-
-#endif
-
+/*---------------------------------------------------------------------------
+ * main function
+ *---------------------------------------------------------------------------*/
 int main(void)
 {
+  SystemCoreClockUpdate();     // System Initialization
 
-#ifdef __USE_GUI
-    arm_irq_safe
-    {
-        arm_2d_init();
-        example_gui_init();
-    }
-#endif
+  stdout_init();               // Initialize STDOUT for printing
+  printf("\r\n = App is started = \r\n\r\n");
 
-    // System Initialization
-    SystemCoreClockUpdate();
-    
-    // Initialize STDIO
-    stdout_init();
-    printf("\r\n= App is running =\r\n");
 #if defined(RTE_Compiler_EventRecorder) && \
-    (defined(__MICROLIB) ||                \
-     !(defined(RTE_CMSIS_RTOS2_RTX5) || defined(RTE_CMSIS_RTOS2_FreeRTOS)))
-    EventRecorderInitialize(EventRecordAll, 1U);
+  (defined(__MICROLIB) ||                \
+   !(defined(RTE_CMSIS_RTOS2_RTX5) || defined(RTE_CMSIS_RTOS2_FreeRTOS)))
+  EventRecorderInitialize(EventRecordAll, 1U);      // Initialize EventRecorder if present
 #endif
 
-    osKernelInitialize();   // Initialize CMSIS-RTOS2
-    initialize_threads();       // Initialize application
-    osKernelStart();        // Start thread execution
+  osKernelInitialize();   // Initialize CMSIS-RTOS2
 
-    for (;;) {}
+  app_main_tid = osThreadNew(app_main, NULL, NULL); // Create application thread
+
+  osKernelStart();        // Start RTOS scheduler
+
+  for (;;) {}
 }

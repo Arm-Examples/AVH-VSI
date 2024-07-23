@@ -16,13 +16,9 @@ The projects are provided in [csolution format](https://github.com/Open-CMSIS-Pa
  - [Keil Studio VS Code Get started with an example project](https://developer.arm.com/documentation/108029/latest/Get-started-with-an-example-project)
  - [uVision Open Project menu](https://developer.arm.com/documentation/101407/latest/User-Interface/Project-Menu-and-Commands)
 
-You can also use *cbuild* utility from [CMSIS-Toolbox](https://github.com/Open-CMSIS-Pack/cmsis-toolbox/blob/main/docs/build-operation.md) to build the project in command line. For example for hello_vsi project, Corstone-315 target with build type event:
+You can also use *cbuild* utility from [CMSIS-Toolbox](https://github.com/Open-CMSIS-Pack/cmsis-toolbox/blob/main/docs/build-operation.md) to build the project in command line.
 
-```bash
-cbuild hello_vsi.csolution.yml --context .event+Corstone_315 --update-rte --packs --toolchain GCC
-```
-
-README files in the project folder provide additional details.
+README files in the project folders provide additional details.
 
 ## Arm Virtual Hardware (AVH) Setup
 
