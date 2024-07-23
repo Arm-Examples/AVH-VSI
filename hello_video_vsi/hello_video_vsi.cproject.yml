@@ -16,8 +16,8 @@ project:
   add-path:
     - ./source/application
     - ./source/micro_logger
-    - ./source/vsi/video_driver
     - ./source/vsi
+    - ./source/vsi/video_driver
     - ./source/hal/include/
     - ./source/hal/source/components/lcd/include/
     - ./source/hal/source/components/lcd/source/
@@ -51,16 +51,17 @@ project:
   groups:
     - group: App
       files:
-        - file: ./source/application/main.c
-        - file: ./source/application/app_initialize.c
         - file: ./source/application/app.c
+        - file: ./source/application/main.c
     - group: Video Driver
       files:
+        - file: ./source/vsi/video_driver/video_drv.h
         - file: ./source/vsi/video_driver/video_drv.c
-    - group: micro_logger
+    - group: Micro Logger
       files:
+        - file: ./source/micro_logger/micro_logger.h
         - file: ./source/micro_logger/micro_logger.c
-    - group: hal
+    - group: HAL
       files:
         - file: ./source/hal/source/components/lcd/source/glcd_mps3/glcd_mps3.c
         - file: ./source/hal/source/components/lcd/source/lcd_img.c

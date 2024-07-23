@@ -16,5 +16,7 @@ solution:
     - type: Corstone_310
       device: SSE-310-MPS3_FVP
 
+  output-dirs:
+    outdir:  $SolutionDir()$/out/$Project$/$TargetType$/$BuildType$/$Compiler$
   projects:
       - project: ./hello_video_vsi.cproject.yml
