@@ -28,7 +28,7 @@ cbuild hello_vsi.csolution.yml --update-rte --packs --rebuild --toolchain GCC --
 To build with the gated fetch flow for the **Corstone-310** target and Arm Compiler 6: 
 
 ```bash
-cbuild hello_vsi.csolution.yml --update-rte --packs --rebuild --toolchain AC6 --context .event+Corstone_300 
+cbuild hello_vsi.csolution.yml --update-rte --packs --rebuild --toolchain AC6 --context .gated+Corstone_310 
 ```
 
 ## Run
@@ -43,10 +43,10 @@ To run on the Corstone -315 the event-based firmware built with GCC compiler, wi
 FVP_Corstone_SSE-315 -a ./out/hello_vsi/Corstone_315/event/GCC/hello_vsi.elf -C mps4_board.v_path=./source/vsi/data_sensor_py/ --simlimit 60
 ```
 
-For a target Corstone-300 with gated fetch flow built with Arm Compiler 6 and exit after 60 seconds of execution:
+For a target Corstone-310 with gated fetch flow built with Arm Compiler 6 and exit after 60 seconds of execution:
 
 ```bash
-FVP_Corstone_SSE-300 -a ./out/hello_vsi/Corstone_300/gated/AC6/hello_vsi.axf -C mps3_board.v_path=./source/vsi/data_sensor_py/ --simlimit 60
+FVP_Corstone_SSE-310 -a ./out/hello_vsi/Corstone_310/gated/AC6/hello_vsi.axf -C mps3_board.v_path=./source/vsi/data_sensor_py/ --simlimit 60
 ```
 
 
