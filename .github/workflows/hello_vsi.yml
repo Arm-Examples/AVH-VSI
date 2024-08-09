@@ -78,8 +78,9 @@ jobs:
 
             ${{ matrix.target.model }} \
                 -a ./out/hello_vsi/${{ matrix.target.type }}/${{ matrix.build.type }}/${{ matrix.compiler.name }}/hello_vsi.${{ matrix.compiler.ext }} \
-                -C ${{ matrix.target.board }}.v_path=./source/vsi/data_sensor_py/ \
                 -f ${{ matrix.target.model }}.txt \
+                -C ${{ matrix.target.board }}.v_path=./source/vsi/data_sensor_py/ \
+                -C ${{ matrix.target.board }}.telnetterminal0.start_telnet=0 \
                 -C ${{ matrix.target.board }}.uart0.out_file=fvp_stdout_${{ matrix.build.type }}_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log \
                 --timelimit 40 --stat | tee ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log
 
