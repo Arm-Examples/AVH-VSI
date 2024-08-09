@@ -81,7 +81,7 @@ jobs:
                 -C ${{ matrix.target.board }}.v_path=./source/vsi/data_sensor_py/ \
                 -f ${{ matrix.target.model }}.txt \
                 -C ${{ matrix.target.board }}.uart0.out_file=fvp_stdout_${{ matrix.build.type }}_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log \
-                --simlimit 60 --stat | tee ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log
+                --timelimit 40 --stat | tee ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log
 
             echo "Checking output..."
             test "$(grep "FAIL: " ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log | wc -l)" -eq 0

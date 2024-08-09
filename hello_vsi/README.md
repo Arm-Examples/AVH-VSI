@@ -37,16 +37,16 @@ To run the application from command line, use corresponding AVH FVP and provide 
 
 For example:
 
-To run on the Corstone -315 the event-based firmware built with GCC compiler, with exit after running 60 seconds, use:
+To run on the Corstone -315 the event-based firmware built with GCC compiler, with exit after running 40 seconds (wall-time), use:
 
 ```bash
-FVP_Corstone_SSE-315 -a ./out/hello_vsi/Corstone_315/event/GCC/hello_vsi.elf -C mps4_board.v_path=./source/vsi/data_sensor_py/ --simlimit 60
+FVP_Corstone_SSE-315 -a ./out/hello_vsi/Corstone_315/event/GCC/hello_vsi.elf -C mps4_board.v_path=./source/vsi/data_sensor_py/ --timelimit 40
 ```
 
 For a target Corstone-310 with gated fetch flow built with Arm Compiler 6 and exit after 60 seconds of execution:
 
 ```bash
-FVP_Corstone_SSE-310 -a ./out/hello_vsi/Corstone_310/gated/AC6/hello_vsi.axf -C mps3_board.v_path=./source/vsi/data_sensor_py/ --simlimit 60
+FVP_Corstone_SSE-310 -a ./out/hello_vsi/Corstone_310/gated/AC6/hello_vsi.axf -C mps3_board.v_path=./source/vsi/data_sensor_py/ --timelimit 40
 ```
 
 
