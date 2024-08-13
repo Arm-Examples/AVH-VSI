@@ -1,4 +1,4 @@
-name: Arm Virtual Hardware hello_vsi example matrix build for CI
+name: Arm Virtual Hardware hello_vsi example matrix build
 
 on:
   workflow_dispatch:
@@ -20,18 +20,18 @@ jobs:
     strategy:
       matrix:
 
-        compiler: [ 
-          {name: AC6,  ext: axf}, 
-          {name: GCC,  ext: elf} 
-        ]
-        
-        target: [ 
-          {type: Corstone_300,  model: FVP_Corstone_SSE-300,  board: mps3_board}, 
-          {type: Corstone_310,  model: FVP_Corstone_SSE-310,  board: mps3_board}, 
-          {type: Corstone_315,  model: FVP_Corstone_SSE-315,  board: mps4_board} 
+        compiler: [
+          {name: AC6,  ext: axf},
+          {name: GCC,  ext: elf}
         ]
 
-        build: [ 
+        target: [
+          {type: Corstone_300,  model: FVP_Corstone_SSE-300,  board: mps3_board},
+          {type: Corstone_310,  model: FVP_Corstone_SSE-310,  board: mps3_board},
+          {type: Corstone_315,  model: FVP_Corstone_SSE-315,  board: mps4_board}
+        ]
+
+        build: [
           {type: event},
           {type: gated}
         ]
@@ -43,12 +43,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-  
+
       - name: Setup Python 3.9
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
-  
+
       - name: Activate vcpkg
         uses: ARM-software/cmsis-actions/vcpkg@v1
 
@@ -86,7 +86,6 @@ jobs:
 
             echo "Checking output..."
             test "$(grep "FAIL: " ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log | wc -l)" -eq 0
- 
 
       # ----------------------------------------------------------------
       # Directory structure of the project folder
@@ -106,9 +105,9 @@ jobs:
             path: ./hello_vsi/${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
 
       # ----------------------------------------------------------------
-      # Upload FVP simulation results
+      # Upload FVP UART output log
       # ----------------------------------------------------------------
-      - name: Upload FVP simulation results for context ${{ matrix.target.type }}_${{ matrix.compiler.name }}
+      - name: Upload FVP UART output for the context ${{ matrix.target.type }}_${{ matrix.compiler.name }}
         uses: actions/upload-artifact@v4
         with:
           name: fvp_stdout_${{ matrix.build.type }}_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log
