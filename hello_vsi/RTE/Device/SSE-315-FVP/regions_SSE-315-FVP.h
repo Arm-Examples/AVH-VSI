@@ -1,5 +1,5 @@
-#ifndef REGIONS_SSE_315_H
-#define REGIONS_SSE_315_H
+#ifndef REGIONS_SSE_315_FVP_H
+#define REGIONS_SSE_315_FVP_H
 
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> --------------------
@@ -363,4 +363,4 @@
 // </h>
 
 
-#endif /* REGIONS_SSE_315_H */
+#endif /* REGIONS_SSE_315_FVP_H */

@@ -27,24 +27,23 @@
  ****************************************************************/
 
 /* Secure Code */
-
-#define S_ROM_ALIAS               (0x11000000) /* SRAM_BASE_S */
-#define TOTAL_S_ROM_SIZE          (0x00100000) /* 1 MB */
+#define S_ROM_ALIAS      (0x11000000) /* SRAM_BASE_S */
+#define TOTAL_S_ROM_SIZE (0x00020000) /* 128 kB */
 
 /* Secure Data */
-#define S_RAM_ALIAS               (0x31000000) /* ISRAM0_BASE_S */
-#define TOTAL_S_RAM_SIZE          (0x00400000) /* 4 MB */
+#define S_RAM_ALIAS      (0x31000000) /* ISRAM0_BASE_S */
+#define TOTAL_S_RAM_SIZE (0x00040000) /* 256 kB */
 
 /* Non-Secure Code */
-#define NS_ROM_ALIAS              (0x01000000 + TOTAL_S_ROM_SIZE) /* SRAM_BASE_NS */
-#define TOTAL_NS_ROM_SIZE         (0x00200000) /* 2 MB */
+#define NS_ROM_ALIAS      (0x01000000 + 0x00020000) /* SRAM_BASE_NS */
+#define TOTAL_NS_ROM_SIZE (0x00020000)              /* 128 kB */
 
 /* Non-Secure Data */
-#define NS_RAM_ALIAS              (0x21000000 + TOTAL_S_RAM_SIZE) /* ISRAM0_BASE_NS */
-#define TOTAL_NS_RAM_SIZE         (0x00040000) /* 256 kB */
+#define NS_RAM_ALIAS      (0x21000000 + 0x00040000) /* ISRAM0_BASE_NS */
+#define TOTAL_NS_RAM_SIZE (0x00040000)              /* 256 kB */
 
 /* Heap and Stack sizes for secure and nonsecure applications */
-#define HEAP_SIZE                 (0x0000C000) /* 48 KiB */
-#define STACK_SIZE                (0x00008000) /* 32 KiB */
+#define HEAP_SIZE  (0x00000400) /* 1 KiB */
+#define STACK_SIZE (0x00000400) /* 1 KiB */
 
 #endif /* __REGION_LIMITS_H__ */
