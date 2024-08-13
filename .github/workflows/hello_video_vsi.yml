@@ -1,4 +1,4 @@
-name: Arm Virtual Hardware hello_video_vsi example matrix build for CI
+name: hello_video_vsi build
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ on:
     - cron: '00 22 * * 0'
 
 jobs:
-  CI_test_run:
+  Build:
     strategy:
       matrix:
 
@@ -33,8 +33,6 @@ jobs:
         build: [
           {type: lcd_out},
         ]
-
-      max-parallel: 1
 
     runs-on: ubuntu-latest
 
@@ -56,7 +54,7 @@ jobs:
       # ----------------------------------------------------------------
       # Build executable for a specific target compiler pair
       # ----------------------------------------------------------------
-      - name: Build context ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}
+      - name: Build context .${{ matrix.build.type }}+${{ matrix.target.type }} with ${{ matrix.compiler.name }}
         working-directory: ./hello_video_vsi
         run: |
             echo "Building Arm Virtual Hardware hello_video_vsi example with ${{ matrix.compiler.name }} by using the build-type ${{ matrix.build.type }} and the target type ${{ matrix.target.type }}..."
