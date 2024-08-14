@@ -1,5 +1,5 @@
 # Basic Virtual Interface Applications
-[![CMSIS Compliance](https://img.shields.io/github/actions/workflow/status/Arm-Examples/Hello_AVH/verify.yml?logo=arm&logoColor=0091bd&label=CMSIS%20Compliance)](https://www.keil.arm.com/cmsis) 
+[![CMSIS Compliance](https://img.shields.io/github/actions/workflow/status/Arm-Examples/Hello_AVH/cmsis_verify.yml?logo=arm&logoColor=0091bd&label=CMSIS%20Compliance)](https://www.keil.arm.com/cmsis) 
 [![hello_vsi Build and Run](https://img.shields.io/github/actions/workflow/status/Arm-Examples/AVH-VSI/hello_vsi.yml?logo=arm&logoColor=0091bd&label=hello_vsi%20Build%20and%20Run)](https://github.com/Arm-Examples/AVH-VSI/tree/main/.github/workflows/hello_vsi.yml)
 [![hello_video_vsi Build](https://img.shields.io/github/actions/workflow/status/Arm-Examples/AVH-VSI/hello_video_vsi.yml?logo=arm&logoColor=0091bd&label=hello_video_vsi%20Build)](https://github.com/Arm-Examples/AVH-VSI/tree/main/.github/workflows/hello_video_vsi.yml)
 
