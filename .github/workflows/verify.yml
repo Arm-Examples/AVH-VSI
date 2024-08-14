@@ -15,8 +15,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: Arm-Examples/verify-cmsis-example-action@latest
-        name: Verify CMSIS Compliance
+        name: Verify CMSIS Compliance for hello_vsi
         with:
           branch: ${{ github.ref }}
           project-file: ./hello_vsi/hello_vsi.csolution.yml
           API_TOKEN: ${{ secrets.CMSIS_API_KEY }}
+      - uses: Arm-Examples/verify-cmsis-example-action@latest
+        name: Verify CMSIS Compliance for hello_video_vsi
+        with:
+          branch: ${{ github.ref }}
+          project-file: ./hello_video_vsi/hello_video_vsi.csolution.yml
+          API_TOKEN: ${{ secrets.CMSIS_API_KEY }}
+
