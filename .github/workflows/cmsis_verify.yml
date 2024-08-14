@@ -19,11 +19,13 @@ jobs:
         with:
           branch: ${{ github.ref }}
           project-file: ./hello_vsi/hello_vsi.csolution.yml
+          output-artifact: hello_vsi_cmsis_verify.zip
           API_TOKEN: ${{ secrets.CMSIS_API_KEY }}
       - uses: Arm-Examples/verify-cmsis-example-action@latest
         name: Verify CMSIS Compliance for hello_video_vsi
         with:
           branch: ${{ github.ref }}
           project-file: ./hello_video_vsi/hello_video_vsi.csolution.yml
+          output-artifact: hello_video_vsi_cmsis_verify.zip
           API_TOKEN: ${{ secrets.CMSIS_API_KEY }}
 
