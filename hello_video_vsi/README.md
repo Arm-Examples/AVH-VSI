@@ -1,10 +1,10 @@
 # Hello Video VSI Example
 
-This example uses the ([Virtual Streaming Interface (VSI)](https://arm-software.github.io/AVH/main/simulation/html/group__arm__vsi.html)) to simulate an input from a peripheral video sensor.
+This example uses the [Virtual Streaming Interface (VSI)](https://arm-software.github.io/AVH/main/simulation/html/group__arm__vsi.html) to simulate an input from a peripheral video sensor.
 
-Application firmware defines video input configuration in app.c file. The video vsi python scripts read the specified image/video file and send it to the application running on [AVH FVP Models](https://arm-software.github.io/AVH/main/overview/html/index.html) where it gets displayed on the mode LCD screen.
+Application firmware defines video input configuration in app.c file. The video vsi python scripts read the specified image/video file and send it to the application running on an [AVH FVP Model](https://arm-software.github.io/AVH/main/overview/html/index.html) where it gets displayed on the model LCD screen.
 
-See [Video over VSI](https://arm-software.github.io/AVH/main/simulation/html/group__arm__vsi__video.html) documentation for more information about the implementation of video driver for AVH FVPs.
+See [Video over VSI documentation](https://arm-software.github.io/AVH/main/simulation/html/group__arm__vsi__video.html) for more information about the implementation of video driver for AVH FVPs.
 
 This is a minimal example of how to use Video over VSI, and you can modify the python script and the video driver in order to match your use case.
 
