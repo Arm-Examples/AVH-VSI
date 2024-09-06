@@ -67,16 +67,27 @@ jobs:
         run: |
             echo "Building Arm Virtual Hardware hello_vsi example with ${{ matrix.compiler.name }} by using the build-type ${{ matrix.build.type }} and the target type ${{ matrix.target.type }}..."
 
-            cbuild hello_vsi.csolution.yml --packs --context \
-                hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }} \
-                --toolchain ${{ matrix.compiler.name }} -r \
-                | tee ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+            cbuild hello_vsi.csolution.yml --packs --rebuild \
+                --context hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }} \
+                --toolchain ${{ matrix.compiler.name }} \
+                | tee hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+
+     # ----------------------------------------------------------------
+      # Upload build log
+      # ----------------------------------------------------------------
+      - name: Upload build log for context .${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+          path: |
+            ./hello_vsi/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+            ./hello_vsi/tmp/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}/src/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}-stamp/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}-configure-*.log
 
       # ----------------------------------------------------------------
-      # Execute the previous generated context on a model
+      # Execute firmware on a model
       # ----------------------------------------------------------------
-      - name: Execute context ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }} on ${{ matrix.target.model }}
-        working-directory: ./hello_vsi      
+      - name: Execute context .${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }} on ${{ matrix.target.model }}
+        working-directory: ./hello_vsi
         run: |
             echo " ${{ matrix.build.type }}_${{ matrix.target.model }} context build with ${{ matrix.compiler }}"
 
@@ -92,37 +103,18 @@ jobs:
             test "$(grep "FAIL: " ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.avh.log | wc -l)" -eq 0
 
       # ----------------------------------------------------------------
-      # Directory structure of the project folder
-      # ----------------------------------------------------------------
-      - name: Directory structure of ./hello_vsi folder
-        run: |
-              echo "Diagnosis"
-              tree ./hello_vsi
-
-      # ----------------------------------------------------------------
-      # Upload build log
-      # ----------------------------------------------------------------
-      - name: Upload build log for context ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
-        uses: actions/upload-artifact@v4
-        with:
-            name: ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
-            path: ./hello_vsi/${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
-
-      # ----------------------------------------------------------------
       # Upload FVP UART output log
       # ----------------------------------------------------------------
-      - name: Upload FVP UART output for the context ${{ matrix.target.type }}_${{ matrix.compiler.name }}
+      - name: Upload FVP UART output for the context ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}
         uses: actions/upload-artifact@v4
         with:
           name: fvp_stdout_${{ matrix.build.type }}_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log
           path: ./hello_vsi/fvp_stdout_${{ matrix.build.type }}_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log
 
       # ----------------------------------------------------------------
-      # Directory structure of ./out folder
+      # Directory structure of the project folder
       # ----------------------------------------------------------------
-      - name: Directory structure of ./out folder
-        working-directory: ./hello_vsi
+      - name: Directory structure of ./hello_vsi folder
         run: |
               echo "Diagnosis"
-              tree ./out
-
+              tree ./hello_vsi
