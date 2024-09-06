@@ -73,7 +73,7 @@ jobs:
       # ----------------------------------------------------------------
       # Upload build log
       # ----------------------------------------------------------------
-      - name: Upload build log for context .${{ matrix.build.type }+${{ matrix.target.type }}_${{ matrix.compiler.name }}
+      - name: Upload build log for context .${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}
         uses: actions/upload-artifact@v4
       with:
           name: hello_video_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
