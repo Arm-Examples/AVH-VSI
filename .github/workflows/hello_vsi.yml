@@ -84,13 +84,13 @@ jobs:
       - name: configure-out.log for context ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.build.type }}+${{ matrix.target.type }}-configure-out.log
+          name: ${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}-configure-out.log
           path: ./hello_vsi/tmp/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}/src/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}-stamp/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}-configure-out.log
 
       - name: configure-err.log for context ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.build.type }}+${{ matrix.target.type }}-configure-err.log
+          name: ${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}-configure-err.log
           path: ./hello_vsi/tmp/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}/src/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}-stamp/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}-configure-err.log
 
       # ----------------------------------------------------------------
@@ -115,7 +115,7 @@ jobs:
       # ----------------------------------------------------------------
       # Upload FVP UART output log
       # ----------------------------------------------------------------
-      - name: Upload FVP UART output for the context ${{ matrix.target.type }}_${{ matrix.compiler.name }}
+      - name: Upload FVP UART output for the context ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}
         uses: actions/upload-artifact@v4
         with:
           name: fvp_stdout_${{ matrix.build.type }}_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log
@@ -124,7 +124,7 @@ jobs:
       # ----------------------------------------------------------------
       # Directory structure of the project folder
       # ----------------------------------------------------------------
-      - name: Directory structure of ./hello_vsi folder
+      - name: Directory structure of ./hello_vsi folder for ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}
         run: |
               echo "Diagnosis"
               tree ./hello_vsi
@@ -132,7 +132,7 @@ jobs:
       # ----------------------------------------------------------------
       # Directory structure of ./out folder
       # ----------------------------------------------------------------
-      - name: Directory structure of ./out folder
+      - name: Directory structure of ./out folder for ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}
         working-directory: ./hello_vsi
         run: |
               echo "Diagnosis"
