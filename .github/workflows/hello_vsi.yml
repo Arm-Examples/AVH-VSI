@@ -68,9 +68,9 @@ jobs:
         run: |
             echo "Building Arm Virtual Hardware hello_vsi example with ${{ matrix.compiler.name }} by using the build-type ${{ matrix.build.type }} and the target type ${{ matrix.target.type }}..."
 
-            cbuild hello_vsi.csolution.yml --packs \
+            cbuild hello_vsi.csolution.yml --packs --rebuild --update-rte \
                 --context hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }} \
-                --toolchain ${{ matrix.compiler.name }} -r \
+                --toolchain ${{ matrix.compiler.name }} \
                 | tee ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
 
       # ----------------------------------------------------------------
