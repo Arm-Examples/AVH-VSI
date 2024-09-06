@@ -80,7 +80,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
-          path: ./hello_vsi/tmp/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}/src/hello_vsi.${{ matrix.build.type }}_+${{ matrix.target.type }}-stamp/hello_vsi.${{ matrix.build.type }}_+${{ matrix.target.type }}-configure-out.log
+          path: ./hello_vsi/tmp/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}-stamp/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}-configure-out.log
 
       # ----------------------------------------------------------------
       # Execute the previous generated context on a model
