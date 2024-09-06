@@ -81,8 +81,9 @@ jobs:
         with:
           name: ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
           path: |
-            /hello_vsi/tmp/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}/src/hello_vsi.${{ matrix.build.type }}_+${{ matrix.target.type }}-stamp/hello_vsi.${{ matrix.build.type }}_+${{ matrix.target.type }}-configure-out.log
-           ./hello_vsi/tmp/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}/src/hello_vsi.${{ matrix.build.type }}_+${{ matrix.target.type }}-stamp/hello_vsi.${{ matrix.build.type }}_+${{ matrix.target.type }}-configure-err.log
+          ./hello_vsi/${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+          ./hello_vsi/tmp/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}/src/hello_vsi.${{ matrix.build.type }}_+${{ matrix.target.type }}-stamp/hello_vsi.${{ matrix.build.type }}_+${{ matrix.target.type }}-configure-out.log
+          ./hello_vsi/tmp/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}/src/hello_vsi.${{ matrix.build.type }}_+${{ matrix.target.type }}-stamp/hello_vsi.${{ matrix.build.type }}_+${{ matrix.target.type }}-configure-err.log
 
       # ----------------------------------------------------------------
       # Execute the previous generated context on a model
@@ -128,4 +129,3 @@ jobs:
         run: |
               echo "Diagnosis"
               tree ./out
-
