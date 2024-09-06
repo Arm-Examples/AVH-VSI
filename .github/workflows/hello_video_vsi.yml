@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
 
   pull_request:
-    branches: [main]
+    branches: [update-rte]
     paths:
       - hello_video_vsi/**
   push:
-    branches: [main]
+    branches: [update-rte]
     paths:
      - hello_video_vsi/**
 
@@ -65,18 +65,10 @@ jobs:
         run: |
             echo "Building Arm Virtual Hardware hello_video_vsi example with ${{ matrix.compiler.name }} by using the build-type ${{ matrix.build.type }} and the target type ${{ matrix.target.type }}..."
 
-            cbuild hello_video_vsi.csolution.yml --packs --context \
-                hello_video_vsi.${{ matrix.build.type }}+${{ matrix.target.type }} \
-                --toolchain ${{ matrix.compiler.name }} -r \
+            cbuild hello_video_vsi.csolution.yml --packs --rebuild \
+                --context hello_video_vsi.${{ matrix.build.type }}+${{ matrix.target.type }} \
+                --toolchain ${{ matrix.compiler.name }} \
                 | tee ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
-
-      # ----------------------------------------------------------------
-      # Directory structure of the project folder
-      # ----------------------------------------------------------------
-      - name: Directory structure of ./hello_video_vsi folder
-        run: |
-              echo "Diagnosis"
-              tree ./hello_video_vsi
 
       # ----------------------------------------------------------------
       # Upload build log
@@ -86,6 +78,13 @@ jobs:
         with:
             name: ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
             path: ./hello_video_vsi/${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+      # ----------------------------------------------------------------
+      # Directory structure of the project folder
+      # ----------------------------------------------------------------
+      - name: Directory structure of ./hello_video_vsi folder
+        run: |
+              echo "Diagnosis"
+              tree ./hello_video_vsi
 
       # ----------------------------------------------------------------
       # Directory structure of ./out folder
