@@ -22,13 +22,13 @@ The build context is contructed as flow type (such as `.event`) and target type 
 To build the project for **Corstone-315** target with GCC compiler use:
 
 ```bash
-cbuild hello_vsi.csolution.yml --update-rte --packs --rebuild --toolchain GCC --context .event+Corstone_315
+cbuild hello_vsi.csolution.yml --packs --rebuild --toolchain GCC --context .event+Corstone_315
 ```
 
 To build with the gated fetch flow for the **Corstone-310** target and Arm Compiler 6: 
 
 ```bash
-cbuild hello_vsi.csolution.yml --update-rte --packs --rebuild --toolchain AC6 --context .gated+Corstone_310 
+cbuild hello_vsi.csolution.yml --packs --rebuild --toolchain AC6 --context .gated+Corstone_310
 ```
 
 ## Run

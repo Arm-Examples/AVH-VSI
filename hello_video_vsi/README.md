@@ -21,7 +21,7 @@ To display the content of the input file on the model's lcd, use `.lcd_out` as t
 Compile:
 
 ```bash
-cbuild hello_video_vsi.csolution.yml --packs --update-rte --rebuild --toolchain GCC --context .lcd_out+Corstone_310
+cbuild hello_video_vsi.csolution.yml --packs --rebuild --toolchain GCC --context .lcd_out+Corstone_310
 ```
 
 Run the program in .elf format when compiled in GCC:
