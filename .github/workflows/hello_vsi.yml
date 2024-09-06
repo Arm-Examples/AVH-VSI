@@ -35,9 +35,9 @@ jobs:
           {type: event},
           {type: gated}
         ]
+      max-parallel: 1
 
     runs-on: ubuntu-latest
-    max-parallel: 1
 
     steps:
       - name: Checkout
