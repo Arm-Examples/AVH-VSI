@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
 
   pull_request:
-    branches: [main]
+    branches: [update-rte]
     paths:
       - hello_vsi/**
   push:
-    branches: [main]
+    branches: [update-rte]
     paths:
      - hello_vsi/**
 
