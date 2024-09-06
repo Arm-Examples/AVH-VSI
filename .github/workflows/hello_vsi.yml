@@ -70,23 +70,23 @@ jobs:
             cbuild hello_vsi.csolution.yml --packs --rebuild \
                 --context hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }} \
                 --toolchain ${{ matrix.compiler.name }} \
-                | tee ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+                | tee hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
 
       # ----------------------------------------------------------------
       # Upload build log
       # ----------------------------------------------------------------
-      - name: Upload build log for context ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}
+      - name: Upload build log for context .${{ matrix.build.type }+${{ matrix.target.type }}_${{ matrix.compiler.name }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+          name: hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
           path: |
-            ./hello_vsi/${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
-            ./hello_vsi/tmp/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}/src/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}-stamp/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}-configure-out.log
+            ./hello_vsi/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+            ./hello_vsi/tmp/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}/src/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}-stamp/hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}-configure-*.log
 
       # ----------------------------------------------------------------
-      # Execute the firmware on a model
+      # Execute firmware on a model
       # ----------------------------------------------------------------
-      - name: Execute context ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }} on ${{ matrix.target.model }}
+      - name: Execute context .${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }} on ${{ matrix.target.model }}
         working-directory: ./hello_vsi
         run: |
             echo " ${{ matrix.build.type }}_${{ matrix.target.model }} context build with ${{ matrix.compiler }}"
@@ -114,7 +114,7 @@ jobs:
       # ----------------------------------------------------------------
       # Directory structure of the project folder
       # ----------------------------------------------------------------
-      - name: Directory structure of ./hello_vsi folder for ${{ matrix.build.type }}_${{ matrix.target.type }}_${{ matrix.compiler.name }}
+      - name: Directory structure of ./hello_vsi folder
         run: |
               echo "Diagnosis"
               tree ./hello_vsi
