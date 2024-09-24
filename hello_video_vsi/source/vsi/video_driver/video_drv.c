@@ -18,13 +18,18 @@
 
 #include <stdint.h>
 #include <string.h>
+
 #include "video_drv.h"
+#include "arm_vsi.h"
+
 #include "platform_irq.h"
+
 #ifdef _RTE_
 #include "RTE_Components.h"
 #endif
+
 #include CMSIS_device_header
-#include "arm_vsi.h"
+
 // Video channel definitions
 #ifndef VIDEO_INPUT_CHANNELS
 #define VIDEO_INPUT_CHANNELS    1
@@ -40,16 +45,16 @@
 #endif
 
 // Video peripheral definitions
-#define VideoI0                 ARM_VSI4                // Video Input channel 0 access struct
+#define VideoI0                 ARM_VSI4_NS                // Video Input channel 0 access struct
 #define VideoI0_IRQn            ARM_VSI4_IRQn           // Video Input channel 0 Interrupt number
 #define VideoI0_Handler         ARM_VSI4_Handler        // Video Input channel 0 Interrupt handler
-#define VideoI1                 ARM_VSI5                // Video Input channel 1 access struct
+#define VideoI1                 ARM_VSI5_NS                // Video Input channel 1 access struct
 #define VideoI1_IRQn            ARM_VSI5_IRQn           // Video Input channel 1 Interrupt number
 #define VideoI1_Handler         ARM_VSI5_Handler        // Video Input channel 1 Interrupt handler
-#define VideoO0                 ARM_VSI6                // Video Output channel 0 access struct
+#define VideoO0                 ARM_VSI6_NS                // Video Output channel 0 access struct
 #define VideoO0_IRQn            ARM_VSI6_IRQn           // Video Output channel 0 Interrupt number
 #define VideoO0_Handler         ARM_VSI6_Handler        // Video Output channel 0 Interrupt handler
-#define VideoO1                 ARM_VSI7                // Video Output channel 1 access struct
+#define VideoO1                 ARM_VSI7_NS                // Video Output channel 1 access struct
 #define VideoO1_IRQn            ARM_VSI7_IRQn           // Video Output channel 1 Interrupt number
 #define VideoO1_Handler         ARM_VSI7_Handler        // Video Output channel 1 Interrupt handler
 
@@ -195,8 +200,8 @@ int32_t VideoDrv_Initialize (VideoDrv_Event_t cb_event) {
     VideoI0->IRQ.Enable    = Reg_IRQ_Status_Msk;
     VideoI0->Reg_MODE      = Reg_MODE_Input;
     VideoI0->Reg_CONTROL   = 0U;
-//  NVIC_EnableIRQ(VideoI0_IRQn);
-    NVIC->ISER[(((uint32_t)VideoI0_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)VideoI0_IRQn) & 0x1FUL));
+    NVIC_EnableIRQ(VideoI0_IRQn);
+//    NVIC->ISER[(((uint32_t)VideoI0_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)VideoI0_IRQn) & 0x1FUL));
   #endif
   Configured[0] = 0U;
 
@@ -208,8 +213,9 @@ int32_t VideoDrv_Initialize (VideoDrv_Event_t cb_event) {
     VideoO0->IRQ.Enable    = Reg_IRQ_Status_Msk;
     VideoO0->Reg_MODE      = Reg_MODE_Output;
     VideoO0->Reg_CONTROL   = 0U;
-//  NVIC_EnableIRQ(VideoO0_IRQn);
-    NVIC->ISER[(((uint32_t)VideoO0_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)VideoO0_IRQn) & 0x1FUL));
+    NVIC_EnableIRQ(VideoO0_IRQn);
+
+//    NVIC->ISER[(((uint32_t)VideoO0_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)VideoO0_IRQn) & 0x1FUL));
   #endif
   Configured[1] = 0U;
 
@@ -254,6 +260,7 @@ int32_t VideoDrv_Uninitialize (void) {
   #if (VIDEO_INPUT_CHANNELS >= 1)
     NVIC_DisableIRQ(VideoI0_IRQn);
 //    NVIC->ICER[(((uint32_t)VideoI0_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)VideoI0_IRQn) & 0x1FUL));
+
     VideoI0->Timer.Control = 0U;
     VideoI0->DMA.Control   = 0U;
     VideoI0->IRQ.Clear     = Reg_IRQ_Status_Msk;
@@ -263,8 +270,9 @@ int32_t VideoDrv_Uninitialize (void) {
 
   // De-initialize Video Output channel 0
   #if (VIDEO_OUTPUT_CHANNELS >= 1)
-//  NVIC_DisableIRQ(VideoO0_IRQn);
-    NVIC->ICER[(((uint32_t)VideoO0_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)VideoO0_IRQn) & 0x1FUL));
+    NVIC_DisableIRQ(VideoO0_IRQn);
+//    NVIC->ICER[(((uint32_t)VideoO0_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)VideoO0_IRQn) & 0x1FUL));
+
     VideoO0->Timer.Control = 0U;
     VideoO0->DMA.Control   = 0U;
     VideoO0->IRQ.Clear     = Reg_IRQ_Status_Msk;
@@ -274,8 +282,9 @@ int32_t VideoDrv_Uninitialize (void) {
 
   // De-initialize Video Input channel 1
   #if (VIDEO_INPUT_CHANNELS >= 2)
-//  NVIC_DisableIRQ(VideoI1_IRQn);
-    NVIC->ICER[(((uint32_t)VideoI1_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)VideoI1_IRQn) & 0x1FUL));
+    NVIC_DisableIRQ(VideoI1_IRQn);
+//    NVIC->ICER[(((uint32_t)VideoI1_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)VideoI1_IRQn) & 0x1FUL));
+  
     VideoI1->Timer.Control = 0U;
     VideoI1->DMA.Control   = 0U;
     VideoI1->IRQ.Clear     = Reg_IRQ_Status_Msk;
@@ -285,8 +294,9 @@ int32_t VideoDrv_Uninitialize (void) {
 
   // De-initialize Video Output channel 1
   #if (VIDEO_OUTPUT_CHANNELS >= 2)
-//  NVIC_DisableIRQ(VideoO1_IRQn);
-    NVIC->ICER[(((uint32_t)VideoO1_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)VideoO1_IRQn) & 0x1FUL));
+    NVIC_DisableIRQ(VideoO1_IRQn);
+//    NVIC->ICER[(((uint32_t)VideoO1_IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)VideoO1_IRQn) & 0x1FUL));
+
     VideoO1->Timer.Control = 0U;
     VideoO1->DMA.Control   = 0U;
     VideoO1->IRQ.Clear     = Reg_IRQ_Status_Msk;
@@ -395,31 +405,31 @@ int32_t VideoDrv_Configure (uint32_t channel, uint32_t frame_width, uint32_t fra
 int32_t VideoDrv_SetBuf (uint32_t channel, void *buf, uint32_t buf_size) {
   uint32_t block_num;
 
-  if ((((channel & 1U) == 0U) && ((channel >> 1) >= VIDEO_INPUT_CHANNELS))  ||
-      (((channel & 1U) != 0U) && ((channel >> 1) >= VIDEO_OUTPUT_CHANNELS)) ||
-      (buf      == NULL) ||
-      (buf_size == 0U)) {
-    return VIDEO_DRV_ERROR_PARAMETER;
-  }
+   if ((((channel & 1U) == 0U) && ((channel >> 1) >= VIDEO_INPUT_CHANNELS))  ||
+       (((channel & 1U) != 0U) && ((channel >> 1) >= VIDEO_OUTPUT_CHANNELS)) ||
+       (buf      == NULL) ||
+       (buf_size == 0U)) {
+     return VIDEO_DRV_ERROR_PARAMETER;
+   }
 
-  if ((Initialized         == 0U) ||
-      (Configured[channel] == 0U)) {
-    return VIDEO_DRV_ERROR;
-  }
+   if ((Initialized         == 0U) ||
+       (Configured[channel] == 0U)) {
+     return VIDEO_DRV_ERROR;
+   }
 
-  if ((pVideo[channel]->Reg_STATUS & Reg_STATUS_ACTIVE_Msk) != 0U) {
-    return VIDEO_DRV_ERROR;
-  }
+   if ((pVideo[channel]->Reg_STATUS & Reg_STATUS_ACTIVE_Msk) != 0U) {
+     return VIDEO_DRV_ERROR;
+   }
 
-  block_num = buf_size / pVideo[channel]->DMA.BlockSize;
-  if (block_num == 0U) {
-    return VIDEO_DRV_ERROR;
-  }
+   block_num = buf_size / pVideo[channel]->DMA.BlockSize;
+   if (block_num == 0U) {
+     return VIDEO_DRV_ERROR;
+   }
 
-  pVideo[channel]->Reg_FRAME_COUNT_MAX = block_num;
-  pVideo[channel]->DMA.BlockNum        = block_num;
+   pVideo[channel]->Reg_FRAME_COUNT_MAX = block_num;
+   pVideo[channel]->DMA.BlockNum        = block_num;
 
-  pVideo[channel]->DMA.Address = (uint32_t)buf;
+   pVideo[channel]->DMA.Address = (uint32_t)buf;
 
   Configured[channel] = 2U;
 

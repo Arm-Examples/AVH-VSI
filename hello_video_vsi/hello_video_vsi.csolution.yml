@@ -8,13 +8,14 @@ solution:
     - type: lcd_out
 
   target-types:
+    - type: Corstone_315
+      device: SSE-315-FVP
+    - type: Corstone_310
+      device: SSE-310-MPS3_FVP
     - type: Corstone_300
       device: SSE-300-MPS3
       define:
       - CORSTONE300_FVP
-
-    - type: Corstone_310
-      device: SSE-310-MPS3_FVP
 
   output-dirs:
     outdir:  $SolutionDir()$/out/$Project$/$TargetType$/$BuildType$/$Compiler$

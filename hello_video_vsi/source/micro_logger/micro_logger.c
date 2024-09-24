@@ -1,4 +1,4 @@
-/* Copyright 2022-2024 Arm Limited. All Rights Reserved.
+/* Copyright 2022 Arm Limited. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,89 +19,85 @@ limitations under the License.
 
 enum LOG_LEVEL
 {
-  ERROR = 0,
-  WARNING,
-  INFO,
-  DEBUG
+    ERROR = 0,
+    WARNING,
+    INFO,
+    DEBUG
 };
-
 static enum LOG_LEVEL log_level = INFO;
 
 void print_log_string_to_each_line(char* log_message, const char* log_type)
 {
-  char buffer[1024];
-
-  strcpy(buffer, log_message);
-  char *token;
-  const char* delim = "\n";
-  token = strtok(buffer, delim);
-  while(token != NULL)
-  {
-      printf("%s%s\r\n", log_type, token);
-      token = strtok(NULL, delim);
-  }
+    char buffer[1024];
+    
+    strcpy(buffer, log_message);
+    char *token;
+    const char* delim = "\n";
+    token = strtok(buffer, delim);
+    while(token != NULL)
+    {
+        printf("%s%s\r\n", log_type, token);
+        token = strtok(NULL, delim);
+    }
 }
 
 extern void log_error(const char* format, ...)
 {
-  if (log_level <  ERROR)
-      return;
+    if (log_level <  ERROR)
+        return;
+    char log_buffer[1024];
+    va_list args;
+    va_start(args, format);
 
-  char log_buffer[1024];
-  va_list args;
-  va_start(args, format);
+    int how_many = vsprintf(log_buffer, format, args);
 
-  int how_many = vsprintf(log_buffer, format, args);
+    print_log_string_to_each_line(log_buffer, "ERROR: ");
 
-  print_log_string_to_each_line(log_buffer, "ERROR: ");
-
-  va_end(args);
+    va_end(args);
 }
 
 extern void log_warning(const char* format, ...)
 {
-  if (log_level < WARNING)
-      return;
+    if (log_level < WARNING)
+        return;
+    char log_buffer[1024];
+    va_list args;
+    va_start(args, format);
 
-  char log_buffer[1024];
-  va_list args;
-  va_start(args, format);
+    int how_many = vsprintf(log_buffer, format, args);
 
-  int how_many = vsprintf(log_buffer, format, args);
+    print_log_string_to_each_line(log_buffer, "WARNING: ");
 
-  print_log_string_to_each_line(log_buffer, "WARNING: ");
-
-  va_end(args);
+    va_end(args);
 }
 
 extern void log_info(const char* format, ...)
 {
-  if (log_level < INFO)
-      return;
+    if (log_level < INFO)
+        return;
+    char log_buffer[1024];
+    va_list args;
+    va_start(args, format);
 
-  char log_buffer[1024];
-  va_list args;
-  va_start(args, format);
+    int how_many = vsprintf(log_buffer, format, args);
 
-  int how_many = vsprintf(log_buffer, format, args);
+    print_log_string_to_each_line(log_buffer, "INFO: ");
 
-  print_log_string_to_each_line(log_buffer, "INFO: ");
+    va_end(args);
 
-  va_end(args);
 }
 
 extern void log_debug(const char* format, ...)
 {
-  if (log_level < DEBUG)
-      return;
+    if (log_level < DEBUG)
+        return;
+    char log_buffer[2048];
+    va_list args;
+    va_start(args, format);
 
-  char log_buffer[2048];
-  va_list args;
-  va_start(args, format);
+    int how_many = vsprintf(log_buffer, format, args);
 
-  int how_many = vsprintf(log_buffer, format, args);
+    print_log_string_to_each_line(log_buffer, "DEBUG: ");
 
-  print_log_string_to_each_line(log_buffer, "DEBUG: ");
-
-  va_end(args);
+    va_end(args);
 }
