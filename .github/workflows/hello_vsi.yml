@@ -18,6 +18,7 @@ on:
 jobs:
   CI:
     strategy:
+      fail-fast: false
       matrix:
 
         compiler: [
