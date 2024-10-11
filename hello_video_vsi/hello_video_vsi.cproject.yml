@@ -3,10 +3,14 @@ project:
     - pack: ARM::CMSIS@6.1.0
     - pack: ARM::CMSIS-RTX@5.9.0
     - pack: ARM::CMSIS-Compiler@2.1.0
-    - pack: ARM::V2M_MPS3_SSE_300_BSP@1.5.0
-      for-context: +Corstone_300
+    - pack: ARM::SSE_315_BSP@1.0.0
+      for-context: +Corstone_315
+    - pack: ARM::DMA350@1.0.0
+      for-context: +Corstone_315
     - pack: ARM::V2M_MPS3_SSE_310_BSP@1.4.0
       for-context: +Corstone_310
+    - pack: ARM::V2M_MPS3_SSE_300_BSP@1.5.0
+      for-context: +Corstone_300
 
   processor:
     trustzone: off
@@ -18,27 +22,21 @@ project:
     - ./source/micro_logger
     - ./source/vsi
     - ./source/vsi/video_driver
-    - ./source/hal/include/
-    - ./source/hal/source/components/lcd/include/
-    - ./source/hal/source/components/lcd/source/
-    - ./source/hal/source/components/stdout/include/
-    - ./source/hal/source/platform_pmu/include/
+
 
   setups:
-    - setup: Corstone_300
-      for-context: +Corstone_300
+    - setup: Corstone_315
+      for-context: +Corstone_315
       add-path:
-        - ./source/hal/source/platform/mps3/include/sse-300/
-        - ./source/hal/source/platform/mps3/include/
-        - ./source/hal/source/platform/mps3/source/
-      linker:
-        - script: ./RTE/Device/SSE-300-MPS3/fvp_sse300_mps3_s.sct
-          for-compiler: AC6
-        - script: ./RTE/Device/SSE-300-MPS3/gcc_linker_script.ld.src
-          for-compiler: GCC
+        - ./source/hal/source/platform/mps4/
     - setup: Corstone_310
       for-context: +Corstone_310
       add-path:
+        - ./source/hal/include/
+        - ./source/hal/source/components/lcd/include/
+        - ./source/hal/source/components/lcd/source/
+        - ./source/hal/source/components/stdout/include/
+        - ./source/hal/source/platform_pmu/include/
         - ./source/hal/source/platform/mps3/include/sse-310/
         - ./source/hal/source/platform/mps3/include/
         - ./source/hal/source/platform/mps3/source/
@@ -47,6 +45,23 @@ project:
           for-compiler: AC6
         - script: ./RTE/Device/SSE-310-MPS3_FVP/gcc_linker_script.ld.src
           for-compiler: GCC
+    - setup: Corstone_300
+      for-context: +Corstone_300
+      add-path:
+        - ./source/hal/include/
+        - ./source/hal/source/components/lcd/include/
+        - ./source/hal/source/components/lcd/source/
+        - ./source/hal/source/components/stdout/include/
+        - ./source/hal/source/platform_pmu/include/
+        - ./source/hal/source/platform/mps3/include/sse-300/
+        - ./source/hal/source/platform/mps3/include/
+        - ./source/hal/source/platform/mps3/source/
+      linker:
+        - script: ./RTE/Device/SSE-300-MPS3/fvp_sse300_mps3_s.sct
+          for-compiler: AC6
+        - script: ./RTE/Device/SSE-300-MPS3/gcc_linker_script.ld.src
+          for-compiler: GCC
+
 
   groups:
     - group: App
@@ -63,19 +78,37 @@ project:
         - file: ./source/micro_logger/micro_logger.c
     - group: HAL
       files:
+        - file: ./source/hal/source/platform/mps4/hdlcd_helper.c
+          for-context:
+           - +Corstone_315
         - file: ./source/hal/source/components/lcd/source/glcd_mps3/glcd_mps3.c
+          for-context:
+           - +Corstone_310
+           - +Corstone_300
         - file: ./source/hal/source/components/lcd/source/lcd_img.c
+          for-context:
+           - +Corstone_310
+           - +Corstone_300
         - file: ./source/hal/source/components/stdout/source/user_input.c
+          for-context:
+           - +Corstone_310
+           - +Corstone_300
         - file: ./source/hal/source/hal.c
+          for-context:
+           - +Corstone_310
+           - +Corstone_300
         - file: ./source/hal/source/hal_pmu.c
+          for-context:
+           - +Corstone_310
+           - +Corstone_300
         - file: ./source/hal/source/platform/mps3/source/platform_drivers.c
           for-context:
-           - +Corstone_300
            - +Corstone_310
+           - +Corstone_300
         - file: ./source/hal/source/platform/mps3/source/timer_mps3.c
           for-context:
-           - +Corstone_300
            - +Corstone_310
+           - +Corstone_300
 
   components:
     - component: ARM::CMSIS:CORE
@@ -93,3 +126,6 @@ project:
     - component: ARM::Device:Native Driver:UART
     - component: ARM::Device:Startup&C Startup
     - component: ARM::Device:USART Retarget
+    - component: ARM::Device:Native Driver:HDLCD
+      for-context:
+        - +Corstone_315

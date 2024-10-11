@@ -32,10 +32,10 @@ except Exception as e:
 
 
 ## Set verbosity level
-#verbosity = logging.DEBUG
+verbosity = logging.DEBUG
 #verbosity = logging.INFO
 #verbosity = logging.WARNING
-verbosity = logging.ERROR
+#verbosity = logging.ERROR
 
 # [debugging] Verbosity settings
 level = { 10: "DEBUG",  20: "INFO",  30: "WARNING",  40: "ERROR" }

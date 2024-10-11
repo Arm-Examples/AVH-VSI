@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
 
   pull_request:
-    branches: [main]
+    branches: [update-rte]
     paths:
       - hello_video_vsi/**
   push:
-    branches: [main]
+    branches: [update-rte]
     paths:
      - hello_video_vsi/**
 
@@ -70,7 +70,7 @@ jobs:
                 --toolchain ${{ matrix.compiler.name }} \
                 | tee hello_video_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
 
-    # ----------------------------------------------------------------
+      # ----------------------------------------------------------------
       # Upload build log
       # ----------------------------------------------------------------
       - name: Upload build log for context .${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}

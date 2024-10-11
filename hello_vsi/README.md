@@ -9,7 +9,7 @@ The application receives sensor data from the `intdata.txt` file and prints the 
 
 You can modify the streaming and driver operation using data and DMA parameters in `app.c` file.
 
-The application supports **Corstone-315**, **Corstone-310** and **Corstone-300** targets, and can be compiled with **Arm Compiler 6** or **GCC**.
+The application supports **Corstone-320**, **Corstone-315**, **Corstone-310** and **Corstone-300** targets, and can be compiled with **Arm Compiler 6** or **GCC**.
 
 See **Application flows** below for additional details.
 

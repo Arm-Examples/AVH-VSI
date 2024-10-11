@@ -20,6 +20,9 @@ solution:
 
   target-types:
 
+    - type: Corstone_320
+      device: SSE-320-FVP
+
     - type: Corstone_315
       device: SSE-315-FVP
 
