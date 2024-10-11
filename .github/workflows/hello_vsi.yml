@@ -68,17 +68,19 @@ jobs:
         working-directory: ./hello_vsi
         run: |
             echo "Building Arm Virtual Hardware hello_vsi example with ${{ matrix.compiler.name }} by using the build-type ${{ matrix.build.type }} and the target type ${{ matrix.target.type }}..."
-
+            cpackget update-index
             cbuild hello_vsi.csolution.yml --packs --rebuild --verbose \
                 --context hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }} \
                 --toolchain ${{ matrix.compiler.name }} \
                 --log hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+
             if [ $? -eq 0 ]; then
-               echo "Command succeeded"
+               echo "Build succeeded"
             else 
-               echo "Command failed"
+               echo "Build failed"
                exit 1
             fi
+
       # ----------------------------------------------------------------
       # Upload build log
       # ----------------------------------------------------------------
