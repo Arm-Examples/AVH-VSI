@@ -72,7 +72,7 @@ jobs:
                 --context hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }} \
                 --toolchain ${{ matrix.compiler.name }} \
                 | tee hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
-            if ["$?"]
+            if "$?"
             then 
                  exit 1
             else 
