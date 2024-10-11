@@ -72,7 +72,7 @@ jobs:
             cbuild hello_vsi.csolution.yml --packs --rebuild --verbose \
                 --context hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }} \
                 --toolchain ${{ matrix.compiler.name }} \
-                | tee hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
+                --log hello_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
             if [ $? -eq 0 ]; then
                echo "Command succeeded"
             else 
