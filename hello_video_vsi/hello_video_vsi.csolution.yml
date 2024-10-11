@@ -6,10 +6,10 @@ solution:
 
   build-types:
     - type: lcd_out
+      define:
+      - LCD_OUT
 
   target-types:
-    - type: Corstone_315
-      device: SSE-315-FVP
     - type: Corstone_310
       device: SSE-310-MPS3_FVP
     - type: Corstone_300
