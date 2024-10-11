@@ -1,6 +1,6 @@
 # Hello VSI example
 
-This example uses the **VSI** ([Virtual Streaming Interface](https://arm-software.github.io/AVH/main/simulation/html/group__arm__vsi.html)) to simulate a peripheral sensor. The example sensor will send data in form of bytes to the application running on an [AVH FVP Model](https://arm-software.github.io/AVH/main/overview/html/index.html). The virtual peripheral is controlled by a python script `arm_vsi0.py` that reads the data from a text file called `intdata.txt`. This is a minimal example of how to use Arm VSI, and you can modify the python script and the sensor driver in order to match your use case.
+This example uses the [Virtual Streaming Interface (VSI)](https://arm-software.github.io/AVH/main/simulation/html/group__arm__vsi.html)) to simulate a peripheral sensor. The example sensor will send data in form of bytes to the application running on an [AVH FVP Model](https://arm-software.github.io/AVH/main/overview/html/index.html). The virtual peripheral is controlled by a python script `arm_vsi0.py` that reads the data from a text file called `intdata.txt`. This is a minimal example of how to use Arm VSI, and you can modify the python script and the sensor driver in order to match your use case.
 
 
 ## Application operation
@@ -25,7 +25,7 @@ To build the project for **Corstone-315** target with GCC compiler use:
 cbuild hello_vsi.csolution.yml --packs --rebuild --toolchain GCC --context .event+Corstone_315
 ```
 
-To build with the gated fetch flow for the **Corstone-310** target and Arm Compiler 6: 
+To build with the gated fetch flow for the **Corstone-310** target and Arm Compiler 6:
 
 ```bash
 cbuild hello_vsi.csolution.yml --packs --rebuild --toolchain AC6 --context .gated+Corstone_310
@@ -37,7 +37,7 @@ To run the application from command line, use corresponding AVH FVP and provide 
 
 For example:
 
-To run on the Corstone -315 the event-based firmware built with GCC compiler, with exit after running 40 seconds (wall-time), use:
+To run on the Corstone-315 the event-based firmware built with GCC compiler, with exit after running 40 seconds (wall-time), use:
 
 ```bash
 FVP_Corstone_SSE-315 -a ./out/hello_vsi/Corstone_315/event/GCC/hello_vsi.elf -C mps4_board.v_path=./source/vsi/data_sensor_py/ --timelimit 40
