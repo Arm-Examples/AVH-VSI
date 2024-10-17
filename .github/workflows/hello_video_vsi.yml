@@ -59,13 +59,21 @@ jobs:
           path: /home/runner/.cache/arm/packs/.Download
 
       # ----------------------------------------------------------------
+      # Initialize and update the index of CMSIS packs available online
+      # ----------------------------------------------------------------
+      - name: Initialize CMSIS pack root folder
+        run: |
+          cpackget init https://www.keil.com/pack/index.pidx
+          cpackget update-index
+
+      # ----------------------------------------------------------------
       # Build executable for a specific target compiler pair
       # ----------------------------------------------------------------
       - name: Build context .${{ matrix.build.type }}+${{ matrix.target.type }} with ${{ matrix.compiler.name }}
         working-directory: ./hello_video_vsi
         run: |
             echo "Building Arm Virtual Hardware hello_video_vsi example with ${{ matrix.compiler.name }} by using the build-type ${{ matrix.build.type }} and the target type ${{ matrix.target.type }}..."
-            cpackget update-index
+
             cbuild hello_video_vsi.csolution.yml --packs --rebuild \
                 --context hello_video_vsi.${{ matrix.build.type }}+${{ matrix.target.type }} \
                 --toolchain ${{ matrix.compiler.name }} \

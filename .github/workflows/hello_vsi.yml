@@ -61,6 +61,9 @@ jobs:
           key: cmsis-packs-download
           path: /home/runner/.cache/arm/packs/.Download
 
+      # ----------------------------------------------------------------
+      # Initialize and update the index of CMSIS packs available online
+      # ----------------------------------------------------------------
       - name: Initialize CMSIS pack root folder
         run: |
           cpackget init https://www.keil.com/pack/index.pidx
