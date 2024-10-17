@@ -55,11 +55,11 @@ jobs:
       - name: Activate Arm tool license
         uses: ARM-software/cmsis-actions/armlm@v1
 
-      - name: Cache packs
+      - name: Cache downloaded packs
         uses: actions/cache@v4
         with:
-          key: cmsis-packs
-          path: /home/runner/.cache/arm/packs
+          key: cmsis-packs-download
+          path: /home/runner/.cache/arm/packs/.Download
 
       # ----------------------------------------------------------------
       # Build executable for a specific target compiler pair
