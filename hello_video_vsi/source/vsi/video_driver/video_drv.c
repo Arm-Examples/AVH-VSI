@@ -38,7 +38,7 @@
 #error "Maximum 2 Video Input channels are supported!"
 #endif
 #ifndef VIDEO_OUTPUT_CHANNELS
-#define VIDEO_OUTPUT_CHANNELS   0
+#define VIDEO_OUTPUT_CHANNELS   1
 #endif
 #if    (VIDEO_OUTPUT_CHANNELS > 2)
 #error "Maximum 2 Video Output channels are supported!"

@@ -19,7 +19,6 @@ project:
     - ./source/vsi
     - ./source/vsi/video_driver
 
-
   setups:
     - setup: Corstone_310
       for-context: +Corstone_310

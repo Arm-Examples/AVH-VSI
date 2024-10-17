@@ -8,6 +8,9 @@ solution:
     - type: lcd_out
       define:
       - LCD_OUT
+    - type: vsi_out
+      define:
+      - VSI_OUT
 
   target-types:
     - type: Corstone_310
