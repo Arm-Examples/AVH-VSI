@@ -1,23 +1,45 @@
+# A solution is a collection of related projects that share same base configuration.
 solution:
+
   created-by: uv2csolution@1.2.0
-  created-for: CMSIS-Toolbox@2.0.0
-  compiler: AC6
-  cdefault: # use default setup of toolchain specific controls.
+  created-for: CMSIS-Toolbox@2.6.0
+  description: Hello Video example for the Virtual Streaming Interface
+  cdefault:
 
-  build-types:
-    - type: lcd_out
-      define:
-      - LCD_OUT
+  # List of tested compilers that can be selected.
+  select-compiler:
+    - compiler: AC6
+    - compiler: GCC
 
+  # List the packs that define the device and/or board.
+  packs:
+    - pack: ARM::CMSIS
+    - pack: ARM::CMSIS-RTX
+    - pack: ARM::CMSIS-Compiler
+    - pack: ARM::V2M_MPS3_SSE_310_BSP
+    - pack: ARM::V2M_MPS3_SSE_300_BSP
+
+  # List different targets that are used to deploy the solution.
   target-types:
     - type: Corstone_310
       device: SSE-310-MPS3_FVP
+
     - type: Corstone_300
       device: SSE-300-MPS3
       define:
-      - CORSTONE300_FVP
+        - CORSTONE300_FVP
 
+  # List of different build configurations.
+  build-types:
+    - type: lcd_out
+      debug: on
+      define:
+        - LCD_OUT
+
+  # Set output directory.
   output-dirs:
-    outdir:  $SolutionDir()$/out/$Project$/$TargetType$/$BuildType$/$Compiler$
+    outdir: $SolutionDir()$/out/$Project$/$TargetType$/$BuildType$/$Compiler$
+
+  # List related projects.
   projects:
-      - project: ./hello_video_vsi.cproject.yml
+    - project: ./hello_video_vsi.cproject.yml

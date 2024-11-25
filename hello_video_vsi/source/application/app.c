@@ -1,4 +1,4 @@
-/* Copyright 2022 Arm Limited. All Rights Reserved.
+/* Copyright 2022-2024 Arm Limited. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -12,7 +12,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
-
 
 #ifdef _RTE_
 #include "RTE_Components.h"
@@ -43,7 +42,7 @@ limitations under the License.
 #define FRAME_RATE (30U)
 
 #define INPUT_IMAGE "./samples/typing.mp4"  // Input file path
-//#define INPUT_IMAGE "./samples/couple.bmp"   // Input file path
+// #define INPUT_IMAGE "./samples/couple.bmp"  // Input file path
 
 __attribute__((section(".ARM.__at_0x60000000")))
  __attribute__((aligned(4)))
@@ -168,9 +167,9 @@ void app_run()
 }
 
 /*---------------------------------------------------------------------------
- * User application main thread
+ * Application main thread
  *---------------------------------------------------------------------------*/
-__NO_RETURN void app_main(void *argument)
+__NO_RETURN void app_main_thread (void *argument)
 {
   (void)argument;
 
@@ -180,4 +179,14 @@ __NO_RETURN void app_main(void *argument)
   log_info("Application run ended");
 
   for (;;){;}
+}
+
+/*-----------------------------------------------------------------------------
+ * Application initialization
+ *----------------------------------------------------------------------------*/
+int app_main (void) {
+  osKernelInitialize();                         // Initialize CMSIS-RTOS2
+  osThreadNew(app_main_thread, NULL, NULL);
+  osKernelStart();                              // Start thread execution
+  return 0;
 }

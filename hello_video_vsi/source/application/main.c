@@ -16,42 +16,20 @@
  * limitations under the License.
  *---------------------------------------------------------------------------*/
 
-#include "RTE_Components.h"
-#include CMSIS_device_header
-#include "cmsis_os2.h"
-
-#ifdef RTE_Compiler_EventRecorder
-#include "EventRecorder.h"
-#endif
-
 #include <stdio.h>
 
-extern int stdout_init(void);
-extern void app_main(void *argument);
-
-osThreadId_t app_main_tid;
+extern int stdout_init  (void);
+extern int app_main     (void);
 
 /*---------------------------------------------------------------------------
  * main function
  *---------------------------------------------------------------------------*/
 int main(void)
 {
-  SystemCoreClockUpdate();     // System Initialization
-
   stdout_init();               // Initialize STDOUT for printing
   printf("\r\n= App is started =\r\n");
 
-#if defined(RTE_Compiler_EventRecorder) && \
-  (defined(__MICROLIB) ||                \
-   !(defined(RTE_CMSIS_RTOS2_RTX5) || defined(RTE_CMSIS_RTOS2_FreeRTOS)))
-  EventRecorderInitialize(EventRecordAll, 1U);      // Initialize EventRecorder if present
-#endif
-   
-  osKernelInitialize();        // Initialize CMSIS-RTOS2
-
-  app_main_tid = osThreadNew(app_main, NULL, NULL); // Create application thread
-
-  osKernelStart();             // Start RTOS scheduler
+  app_main();                  // Execute Application main
 
   for (;;) {}
 }

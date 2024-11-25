@@ -1,35 +1,37 @@
+# A project translates into one executable or library.
 project:
-
-  packs:
-    - pack: ARM::CMSIS@6.1.0
-    - pack: ARM::CMSIS-RTX@5.9.0
-    - pack: ARM::CMSIS-Compiler@2.1.0
-    - pack: ARM::CMSIS-View@1.2.0
-    - pack: ARM::SSE_320_BSP@1.0.0
-      for-context: +Corstone_320
-    - pack: ARM::SSE_315_BSP@1.0.0
-      for-context: +Corstone_315
-    - pack: ARM::DMA350@1.0.0
-      for-context:
-      - +Corstone_320
-      - +Corstone_315
-    - pack: ARM::V2M_MPS3_SSE_310_BSP@1.4.0
-      for-context: +Corstone_310
-    - pack: ARM::V2M_MPS3_SSE_300_BSP@1.5.0
-      for-context: +Corstone_300
-
 
   processor:
     trustzone: off
 
-  debug: on
+  # List components to use for your application.
+  # A software component is a re-usable unit that may be configurable.
+  components:
+    - component: CMSIS:CORE
+    - component: CMSIS Driver:USART
+    - component: CMSIS:OS Tick:SysTick
+    - component: CMSIS:RTOS2:Keil RTX5&Source
+    - component: CMSIS-View:Event Recorder
+    - component: CMSIS-Compiler:CORE
+    - component: CMSIS-Compiler:STDOUT:Custom
+    - component: Device:Definition
+    - component: Device:Native Driver:IO
+    - component: Device:Native Driver:PPC
+    - component: Device:Native Driver:SysCounter
+    - component: Device:Native Driver:SysTimer
+    - component: Device:Native Driver:Timeout
+    - component: Device:Native Driver:UART
+    - component: Device:Startup&C Startup
+    - component: Device:USART Retarget
 
+  # Add path to a project or a layer.
   add-path:
     - ./source/application
     - ./source/micro_logger
     - ./source/vsi
     - ./source/vsi/data_sensor
 
+  # List of source groups and files added to a project or a layer.
   groups:
     - group: App
       files:
@@ -43,21 +45,3 @@ project:
       files:
         - file: ./source/micro_logger/micro_logger.h
         - file: ./source/micro_logger/micro_logger.c
-
-  components:
-    - component: ARM::CMSIS:CORE
-    - component: ARM::CMSIS Driver:USART
-    - component: ARM::CMSIS:OS Tick:SysTick
-    - component: ARM::CMSIS:RTOS2:Keil RTX5&Source
-    - component: ARM::CMSIS-View:Event Recorder
-    - component: ARM::CMSIS-Compiler:CORE
-    - component: ARM::CMSIS-Compiler:STDOUT:Custom
-    - component: ARM::Device:Definition
-    - component: ARM::Device:Native Driver:IO
-    - component: ARM::Device:Native Driver:PPC
-    - component: ARM::Device:Native Driver:SysCounter
-    - component: ARM::Device:Native Driver:SysTimer
-    - component: ARM::Device:Native Driver:Timeout
-    - component: ARM::Device:Native Driver:UART
-    - component: ARM::Device:Startup&C Startup
-    - component: ARM::Device:USART Retarget

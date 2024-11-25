@@ -1,4 +1,4 @@
-/* Copyright 2022 Arm Limited. All Rights Reserved.
+/* Copyright 2022-2024 Arm Limited. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,26 +23,24 @@ limitations under the License.
 #endif
 #endif
 
-
-
 #include <stdlib.h>
 #include <stdint.h>
 
-#include CMSIS_device_header  // Device-specific defines and CMSIS-Core
-#include "cmsis_os2.h"        // CMSIS-RTOS2 API
-#include "micro_logger.h"     // Application logging engine to UART
-#include "sensor_drv.h"       // Sensor Driver API
+#include CMSIS_device_header    // Device-specific defines and CMSIS-Core
+#include "cmsis_os2.h"          // CMSIS-RTOS2 API
+#include "micro_logger.h"       // Application logging engine to UART
+#include "sensor_drv.h"         // Sensor Driver API
 
-#define DATA_NUM_TYPE uint8_t                 // Data type of a numeric element in sensor reading (sample)
-#define DATA_SAMPLE_RATE  (20)                // Amount of samples per second
-#define DATA_NUM_ELEMENTS (20)                // Amount of samples in a DMA block
+#define DATA_NUM_TYPE uint8_t   // Data type of a numeric element in sensor reading (sample)
+#define DATA_SAMPLE_RATE  (20)  // Amount of samples per second
+#define DATA_NUM_ELEMENTS (20)  // Amount of samples in a DMA block
 
-#define SENSOR_BLOCK_NUM (1)                  // Amount of DMA blocks in DMA buffer,(must be 2^n)
+#define SENSOR_BLOCK_NUM (1)    // Amount of DMA blocks in DMA buffer,(must be 2^n)
 #define SENSOR_BLOCK_SIZE (DATA_NUM_ELEMENTS * sizeof(DATA_NUM_TYPE)) // Size of DMA block in bytes, ( must be multiple of 4)
 
 #define SENSOR_BUFFER_SIZE (SENSOR_BLOCK_NUM * SENSOR_BLOCK_SIZE)     // Size of DMA buffer
 
-extern osThreadId_t app_main_tid;
+osThreadId_t app_main_tid;
 
 __attribute__((aligned(4)))
 DATA_NUM_TYPE sensor_data[SENSOR_BLOCK_SIZE];
@@ -52,25 +50,28 @@ DATA_NUM_TYPE sensor_dma_buffer[SENSOR_BUFFER_SIZE];
 
 extern void int_array_to_string(size_t num, DATA_NUM_TYPE* src, char* dst);
 
-uint8_t is_sensor_ready = 0;
-
-
 void sensor_event(uint32_t event);
+
+uint8_t   is_sensor_ready  = 0;
+uint32_t  sensor_data_size = 0;
+
+
+
 
 /*---------------------------------------------------------------------------
  * User application initialization
  *---------------------------------------------------------------------------*/
 void app_init()
 {
-   // sensor_data = (DATA_NUM_TYPE*)malloc(DATA_NUM_ELEMENTS * sizeof(DATA_NUM_TYPE));  // Allocating memory for storing sensor data
+  // sensor_data = (DATA_NUM_TYPE*)malloc(DATA_NUM_ELEMENTS * sizeof(DATA_NUM_TYPE));  // Allocating memory for storing sensor data
 
-    /* Initializing sensor driver with callback */
-    if (SensorDrv_Initialize(sensor_event)) {
-      log_error("Failed to initialise sensor driver");
-    }
+  /* Initializing sensor driver with callback */
+  if (SensorDrv_Initialize(sensor_event)) {
+    log_error("Failed to initialise sensor driver");
+  }
 }
 
-uint32_t sensor_data_size = 0;
+
 /*---------------------------------------------------------------------------
  * User application run
  *---------------------------------------------------------------------------*/
@@ -116,14 +117,14 @@ void app_run()
 #ifdef __EVENT_DRIVEN
     /* waiting for the flag indicating data reception event;
        on timeout/error exit from the loop */
-    uint32_t timeout = 2*((DATA_NUM_ELEMENTS*1000)/DATA_SAMPLE_RATE);  //double the time expected for sensor reading in ms
+    uint32_t timeout = 2*((DATA_NUM_ELEMENTS*1000)/DATA_SAMPLE_RATE); //double the time expected for sensor reading in ms
     if (0 > (int)osThreadFlagsWait(0x1U, osFlagsWaitAny, timeout)) {break;}
 #endif
 
 #ifdef __GATED_FETCH
-    osDelay(10000U);                 // delay between fetching sensor data
+    osDelay(10000U);                                                  // delay between fetching sensor data
 
-    SensorDrv_Control(SENSOR_DRV_CONTROL_RX_RESUME); // resume sensor rx operation
+    SensorDrv_Control(SENSOR_DRV_CONTROL_RX_RESUME);                  // resume sensor rx operation
     rx_count = SensorDrv_GetRxCount();
 
     /* wait until number of received blocks is incremented */
@@ -131,11 +132,11 @@ void app_run()
       osDelay(1U);
     }
 
-    SensorDrv_Control(SENSOR_DRV_CONTROL_RX_PAUSE);           // pause sensor rx operation
+    SensorDrv_Control(SENSOR_DRV_CONTROL_RX_PAUSE);                   // pause sensor rx operation
 
-    memcpy(sensor_data, sensor_dma_buffer, sensor_data_size); // copy from sensor DMA buffer
+    memcpy(sensor_data, sensor_dma_buffer, sensor_data_size);         // copy from sensor DMA buffer
 
-    if(SensorDrv_GetStatus().rx_active == 0U) {break;}        // exit if sensor rx operation is disabled (end of data)
+    if(SensorDrv_GetStatus().rx_active == 0U) {break;}                // exit if sensor rx operation is disabled (end of data)
 #endif
 
     /* Print out received sensor samples */
@@ -190,11 +191,10 @@ void sensor_event(uint32_t event)
 #endif
 }
 
-
 /*---------------------------------------------------------------------------
  * Application main thread
  *---------------------------------------------------------------------------*/
-__NO_RETURN void app_main(void *argument)
+__NO_RETURN void app_main_thread (void *argument)
 {
   (void)argument;
 
@@ -204,4 +204,14 @@ __NO_RETURN void app_main(void *argument)
   log_info("Application run ended");
 
   for (;;){;}
+}
+
+/*-----------------------------------------------------------------------------
+ * Application initialization
+ *----------------------------------------------------------------------------*/
+int app_main (void) {
+  osKernelInitialize();                         // Initialize CMSIS-RTOS2
+  app_main_tid = osThreadNew(app_main_thread, NULL, NULL);
+  osKernelStart();                              // Start thread execution
+  return 0;
 }
