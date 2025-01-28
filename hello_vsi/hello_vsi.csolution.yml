@@ -1,25 +1,36 @@
 # Copyright (c) 2024 Arm Limited. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+# A solution is a collection of related projects that share same base configuration.
 solution:
+
   created-by: uv2csolution@1.2.0
-  created-for: CMSIS-Toolbox@2.4.0
+  created-for: CMSIS-Toolbox@2.6.0
   description: Hello example for the Virtual Streaming Interface
+  cdefault:
 
-  # Use default setup of toolchain specific controls.
-  cdefault: 
+  # List of tested compilers that can be selected.
+  select-compiler:
+    - compiler: AC6
+    - compiler: GCC
 
-  build-types:
-    - type: event
-      define:
-      - __EVENT_DRIVEN
+  # List the packs that define the device and/or board.
+  packs:
+    - pack: ARM::CMSIS
+    - pack: ARM::CMSIS-RTX
+    - pack: ARM::CMSIS-Compiler
+    - pack: ARM::CMSIS-View
+    - pack: ARM::SSE_320_BSP
+    - pack: ARM::SSE_315_BSP
+    - pack: ARM::DMA350
+      for-context:
+        - +Corstone_320
+        - +Corstone_315
+    - pack: ARM::V2M_MPS3_SSE_310_BSP
+    - pack: ARM::V2M_MPS3_SSE_300_BSP
 
-    - type: gated
-      define:
-      - __GATED_FETCH
-
+  # List different targets that are used to deploy the solution.
   target-types:
-
     - type: Corstone_320
       device: SSE-320-FVP
 
@@ -32,10 +43,24 @@ solution:
     - type: Corstone_300
       device: SSE-300-MPS3
       define:
-      - CORSTONE300_FVP
+        - CORSTONE300_FVP
 
+  # List of different build configurations.
+  build-types:
+    - type: event
+      debug: on
+      define:
+        - __EVENT_DRIVEN
+
+    - type: gated
+      debug: on
+      define:
+        - __GATED_FETCH
+
+  # Set output directory.
   output-dirs:
-    outdir:  $SolutionDir()$/out/$Project$/$TargetType$/$BuildType$/$Compiler$
+    outdir: $SolutionDir()$/out/$Project$/$TargetType$/$BuildType$/$Compiler$
 
+  # List related projects.
   projects:
-      - project: ./hello_vsi.cproject.yml
+    - project: ./hello_vsi.cproject.yml
