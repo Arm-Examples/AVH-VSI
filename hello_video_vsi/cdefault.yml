@@ -64,3 +64,18 @@ default:
         - --entry=Reset_Handler
         - --strict
         - --diag_suppress=6314,6848
+
+    - for-compiler: GCC
+      C-CPP:
+        - -masm-syntax-unified
+        - -fomit-frame-pointer
+        - -ffunction-sections
+        - -fdata-sections
+      C:
+        - -std=gnu11
+      Link:
+        - --specs=nano.specs
+        - -Wl,-Map=$elf()$.map
+        - -Wl,--gc-sections
+        - -Wl,--no-warn-rwx-segment
+        - --entry=Reset_Handler
