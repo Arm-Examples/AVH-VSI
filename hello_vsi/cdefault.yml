@@ -18,7 +18,6 @@
 
   # Note that we need AC6@6.18 or higher to compile for Corstone-310 target.
 default:
-  compiler: AC6
 
   misc:
     - for-compiler: AC6
