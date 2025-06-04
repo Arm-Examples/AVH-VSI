@@ -1,4 +1,4 @@
-/* Copyright 2022 Arm Limited. All Rights Reserved.
+/* Copyright 2022, 2025 Arm Limited. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -43,10 +43,9 @@ limitations under the License.
 #define FRAME_RATE (30U)
 
 #define INPUT_IMAGE "./samples/typing.mp4"  // Input file path
-#define VIDEO_DRV_MODE VIDEO_DRV_MODE_CONTINUOS // Use for video file
 
 //#define INPUT_IMAGE "./samples/couple.bmp"   // Input file path
-//#define VIDEO_DRV_MODE VIDEO_DRV_MODE_SINGLE // Use for single image file
+
 
 __attribute__((section(".ARM.__at_0x60000000")))
 __attribute__((aligned(4)))
@@ -109,7 +108,7 @@ void app_run()
    }
 
    /* Start video capture */
-   if (VideoDrv_StreamStart(VIDEO_DRV_IN0, VIDEO_DRV_MODE) != VIDEO_DRV_OK) {
+   if (VideoDrv_StreamStart(VIDEO_DRV_IN0, VIDEO_DRV_MODE_CONTINUOS) != VIDEO_DRV_OK) {
      log_error("Failed to start frame capture");
      return;
    }
@@ -126,6 +125,12 @@ void app_run()
          log_info("Overflow");
        }
      } while (status.buf_empty != 0U);
+
+     /* Stop video stream upon end of stream status */
+     if (status.eos != 0U) {
+       VideoDrv_StreamStop(VIDEO_DRV_IN0);
+       break;
+     }
 
      /* Get input video frame buffer */
      imgFrame = VideoDrv_GetFrameBuf(VIDEO_DRV_IN0);
@@ -150,7 +155,7 @@ void app_run()
       /* Release input frame */
       VideoDrv_ReleaseFrame(VIDEO_DRV_IN0);
 
-     /* Stop video stream upon end of stream status */
+     /* Exit the loop when reaching end of stream */
      if (status.eos != 0U) {
        VideoDrv_StreamStop(VIDEO_DRV_IN0);
        break;

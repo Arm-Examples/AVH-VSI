@@ -28,7 +28,7 @@ jobs:
 
         target: [
           {type: Corstone_310,  model: FVP_Corstone_SSE-310,  board: mps3_board},
-          {type: Corstone_300,  model: FVP_Corstone_SSE-300,  board: mps3_board},
+          {type: Corstone_300,  model: FVP_Corstone_SSE-300,  board: mps3_board}
         ]
 
         build: [
