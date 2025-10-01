@@ -7,7 +7,8 @@ solution:
   description: Hello example for the Virtual Streaming Interface
 
   # Use default setup of toolchain specific controls.
-  cdefault: 
+  cdefault:
+  compiler: AC6
 
   build-types:
     - type: event

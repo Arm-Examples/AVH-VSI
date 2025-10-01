@@ -1,8 +1,9 @@
 solution:
   created-by: uv2csolution@1.2.0
   created-for: CMSIS-Toolbox@2.0.0
+
+  cdefault: # use default setup of toolchain-specific controls.
   compiler: AC6
-  cdefault: # use default setup of toolchain specific controls.
 
   build-types:
     - type: lcd_out
