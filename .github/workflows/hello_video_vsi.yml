@@ -97,10 +97,3 @@ jobs:
             ./hello_video_vsi/hello_video_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}_${{ matrix.compiler.name }}.build.log
             ./hello_video_vsi/tmp/hello_video_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}/src/hello_video_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}-stamp/hello_video_vsi.${{ matrix.build.type }}+${{ matrix.target.type }}-configure-*.log
 
-      # ----------------------------------------------------------------
-      # Directory structure of the project folder
-      # ----------------------------------------------------------------
-      - name: Directory structure of ./hello_video_vsi folder
-        run: |
-              echo "Diagnosis"
-              tree ./hello_video_vsi

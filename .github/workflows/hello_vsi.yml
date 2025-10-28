@@ -127,11 +127,3 @@ jobs:
         with:
           name: fvp_stdout_${{ matrix.build.type }}_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log
           path: ./hello_vsi/fvp_stdout_${{ matrix.build.type }}_${{ matrix.target.model }}_${{ matrix.compiler.name }}.simulation.log
-
-      # ----------------------------------------------------------------
-      # Directory structure of the project folder
-      # ----------------------------------------------------------------
-      - name: Directory structure of ./hello_vsi folder
-        run: |
-              echo "Diagnosis"
-              tree ./hello_vsi
