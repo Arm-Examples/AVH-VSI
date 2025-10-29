@@ -23,11 +23,12 @@ This repository contains simple examples demonstrating the use of virtual periph
 
 ## Build a project
 
-The projects are provided in [csolution format](https://github.com/Open-CMSIS-Pack/cmsis-toolbox/blob/main/docs/YML-Input-Format.md) and can be open for editing and building in **Keil MDK for VS Code** or **Keil uVision** IDEs. Corresponding IDE documentation pages explain this in more details:
- - [Keil Studio VS Code Get started with an example project](https://developer.arm.com/documentation/108029/latest/Get-started-with-an-example-project)
- - [uVision Open Project menu](https://developer.arm.com/documentation/101407/latest/User-Interface/Project-Menu-and-Commands)
+The projects are provided in [csolution format](https://github.com/Open-CMSIS-Pack/cmsis-toolbox/blob/main/docs/YML-Input-Format.md) and can be opened for editing and building in **Keil MDK for VS Code** or **Keil uVision** IDEs. Corresponding IDE documentation pages explain this in more detail:
 
-You can also use *cbuild* utility from [CMSIS-Toolbox](https://github.com/Open-CMSIS-Pack/cmsis-toolbox/blob/main/docs/build-operation.md) to build the project in command line.
+- [Keil Studio VS Code Get started with an example project](https://developer.arm.com/documentation/108029/latest/Get-started-with-an-example-project)
+- [uVision Open Project menu](https://developer.arm.com/documentation/101407/latest/User-Interface/Project-Menu-and-Commands)
+
+You can also use the *cbuild* utility from [CMSIS-Toolbox](https://github.com/Open-CMSIS-Pack/cmsis-toolbox/blob/main/docs/build-operation.md) to build the project on the command line.
 
 README files in the project folders provide additional details.
 
