@@ -13,7 +13,7 @@ jobs:
     name: Verify CMSIS Compliance
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: Arm-Examples/verify-cmsis-example-action@latest
         name: Verify CMSIS Compliance for hello_vsi
         with:
